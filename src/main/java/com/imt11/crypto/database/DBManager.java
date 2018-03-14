@@ -18,155 +18,156 @@ import java.util.logging.Logger;
  */
 public class DBManager {
 
+
 	private Connection connection = null;
 
-	public DBManager(){}
+    public DBManager(){}
 
-	public Connection createConnection() throws IOException, ClassNotFoundException, SQLException {
-		//String host="jdbc:mysql://node12626-env-4194466.fr-1.paas.massivegrid.net/crypto";
-		String host= SecurityUtil.HOST;
-		String username= SecurityUtil.USERNAME;
-		String password= SecurityUtil.PASSWORD;
-		String driver= SecurityUtil.DRIVER;
+    public Connection createConnection() throws IOException, ClassNotFoundException, SQLException {
+        //String host="jdbc:mysql://node12626-env-4194466.fr-1.paas.massivegrid.net/crypto";
+        String host= SecurityUtil.HOST;
+        String username= SecurityUtil.USERNAME;
+        String password= SecurityUtil.PASSWORD;
+        String driver= SecurityUtil.DRIVER;
 
-		Class.forName(driver);
-		System.out.println("--------------------------");
-		System.out.println("DRIVER: " + driver);
+        Class.forName(driver);
+        System.out.println("--------------------------");
+        System.out.println("DRIVER: " + driver);
 
-		connection = DriverManager.getConnection(host, username, password);
-		System.out.println("CONNECTION: " + connection);
+        connection = DriverManager.getConnection(host, username, password);
+        System.out.println("CONNECTION: " + connection);
 
-		return connection;
-	}
+        return connection;
+    }
 
-	public List<Coin> getAllCoins(){
-		List<Coin> coins = new ArrayList<>();
-		try{
-			Connection connection = createConnection();
+    public List<Coin> getAllCoins(){
+        List<Coin> coins = new ArrayList<>();
+        try{
+            Connection connection = createConnection();
 
-			String query = "SELECT * from coins";
-			Statement statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery(query);
+            String query = "SELECT * from coins";
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
 
-			while(rs.next()){
-				Coin coin = new Coin();
-				coin.setCoin_id(rs.getInt("coin_id"));
-				coin.setCoin_symbol(rs.getString("coin_symbol"));
-				coin.setCoin_name(rs.getString("coin_name"));
-				coins.add(coin);
-			}
+            while(rs.next()){
+                Coin coin = new Coin();
+                coin.setCoin_id(rs.getInt("coin_id"));
+                coin.setCoin_symbol(rs.getString("coin_symbol"));
+                coin.setCoin_name(rs.getString("coin_name"));
+                coins.add(coin);
+            }
 
-			statement.close();
+            statement.close();
 
 
-		}catch (IOException ex) {
-			Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (ClassNotFoundException ex) {
-			Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-		}
+        }catch (IOException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
 
-		return coins;
-	}
+        return coins;
+    }
 
-	public Auth getCredentials(String uname, String pass) throws IOException, ClassNotFoundException, SQLException{
-			Auth auth = new Auth();
-			Connection connection = createConnection();
-			String query = "SELECT * FROM crypto.auth WHERE username=? AND password=?";
+    public Auth getCredentials(String uname, String pass) throws IOException, ClassNotFoundException, SQLException{
+        Auth auth = new Auth();
+        Connection connection = createConnection();
+        String query = "SELECT * FROM crypto.auth WHERE username=? AND password=?";
 
-			PreparedStatement preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setString(1, uname);
-			preparedStatement.setString(2, pass);
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, uname);
+        preparedStatement.setString(2, pass);
 
-			System.out.println("Prepared Statement after bind variables set" +" "+preparedStatement.toString());
+        System.out.println("Prepared Statement after bind variables set" +" "+preparedStatement.toString());
 
-			ResultSet rs = preparedStatement.executeQuery();
+        ResultSet rs = preparedStatement.executeQuery();
 
-			while(rs.next()){
-				auth.setAuth_id(rs.getInt("auth_id"));
-				auth.setPassword(rs.getString("password"));
-				auth.setUsername(rs.getString("username"));
-				auth.setPerson_id(rs.getInt("person_id"));
+        while(rs.next()){
+            auth.setAuth_id(rs.getInt("auth_id"));
+            auth.setPassword(rs.getString("password"));
+            auth.setUsername(rs.getString("username"));
+            auth.setPerson_id(rs.getInt("person_id"));
 
-			}
+        }
 
-			preparedStatement.close();
+        preparedStatement.close();
 
-		return auth;
-	}
+        return auth;
+    }
 
-	public Person getPerson(int person_id) throws IOException, ClassNotFoundException, SQLException{
-		Connection connection = createConnection();
-		String query = "SELECT auth.*, person.* FROM person\n" +
-				"JOIN auth ON auth.person_id = person.person_id\n" +
-				"WHERE person.person_id =" + person_id;
-		Statement st = connection.createStatement();
-		//  result set
-		ResultSet rs = st.executeQuery(query);
-		Person person=null;
-		while(rs.next()){
-			person = new Person();
-			person.setPerson_id(rs.getInt("person_id"));
-			person.setFirst_name(rs.getString("first_name"));
-			person.setLast_name(rs.getString("last_name"));
-		}
+    public Person getPerson(int person_id) throws IOException, ClassNotFoundException, SQLException{
+        Connection connection = createConnection();
+        String query = "SELECT auth.*, person.* FROM person\n" +
+                "JOIN auth ON auth.person_id = person.person_id\n" +
+                "WHERE person.person_id =" + person_id;
+        Statement st = connection.createStatement();
+        //  result set
+        ResultSet rs = st.executeQuery(query);
+        Person person=null;
+        while(rs.next()){
+            person = new Person();
+            person.setPerson_id(rs.getInt("person_id"));
+            person.setFirst_name(rs.getString("first_name"));
+            person.setLast_name(rs.getString("last_name"));
+        }
 
-		return person;
+        return person;
 
-	}
+    }
 
-	public List<Person> getPersonCoins(int personId){
-		List<Person> persons = new ArrayList<>();
-		try{
-			Connection connection = createConnection();
-			// query
-			String query = "SELECT person.first_name, person.last_name, person.person_id, holdings.quantity,\n" +
-					"  holdings.cost, coins.*, state.id, state.abbreviation\n" +
-					"FROM person\n" +
-					"JOIN holdings ON holdings.person_id = person.person_id\n" +
-					"JOIN coins ON holdings.coin_id = coins.coin_id\n" +
-					"JOIN state ON state.id = person.state_id\n" +
-					"WHERE person.person_id =" + personId;
-			// create java statement
-			Statement st = connection.createStatement();
-			//  result set
-			ResultSet rs = st.executeQuery(query);
+    public List<Person> getPersonCoins(int personId){
+        List<Person> persons = new ArrayList<>();
+        try{
+            Connection connection = createConnection();
+            // query
+            String query = "SELECT person.first_name, person.last_name, person.person_id, holdings.quantity,\n" +
+                    "  holdings.cost, coins.*, state.id, state.abbreviation\n" +
+                    "FROM person\n" +
+                    "JOIN holdings ON holdings.person_id = person.person_id\n" +
+                    "JOIN coins ON holdings.coin_id = coins.coin_id\n" +
+                    "JOIN state ON state.id = person.state_id\n" +
+                    "WHERE person.person_id =" + personId;
+            // create java statement
+            Statement st = connection.createStatement();
+            //  result set
+            ResultSet rs = st.executeQuery(query);
 
-			while(rs.next()){
+            while(rs.next()){
 
-				Person person = new Person();
-				person.setPerson_id(rs.getInt("person_id"));
-				person.setFirst_name(rs.getString("first_name"));
-				person.setLast_name(rs.getString("last_name"));
-				person.setQuantity(rs.getDouble("quantity"));
-				person.setCost(rs.getDouble("cost"));
+                Person person = new Person();
+                person.setPerson_id(rs.getInt("person_id"));
+                person.setFirst_name(rs.getString("first_name"));
+                person.setLast_name(rs.getString("last_name"));
+                person.setQuantity(rs.getDouble("quantity"));
+                person.setCost(rs.getDouble("cost"));
 
-				State state = new State();
-				state.setAbbreviation(rs.getString("abbreviation"));
-				state.setId(rs.getInt("id"));
-				person.setState(state);
+                State state = new State();
+                state.setAbbreviation(rs.getString("abbreviation"));
+                state.setId(rs.getInt("id"));
+                person.setState(state);
 
-				Coin coin = new Coin();
-				coin.setCoin_id(rs.getInt("coin_id"));
-				coin.setCoin_name(rs.getString("coin_name"));
-				coin.setCoin_symbol(rs.getString("coin_symbol"));
-				person.setCoin(coin);
+                Coin coin = new Coin();
+                coin.setCoin_id(rs.getInt("coin_id"));
+                coin.setCoin_name(rs.getString("coin_name"));
+                coin.setCoin_symbol(rs.getString("coin_symbol"));
+                person.setCoin(coin);
 
-				persons.add(person);
-			}
+                persons.add(person);
+            }
 
-			st.close();
+            st.close();
 
-		}catch (IOException ex) {
-			Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (ClassNotFoundException ex) {
-			Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-		}
+        }catch (IOException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
 
-		return persons;
-	}
+        return persons;
+    }
 
 }
