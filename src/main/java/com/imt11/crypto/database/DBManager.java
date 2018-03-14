@@ -19,16 +19,13 @@ public class DBManager {
 
 	private Connection connection = null;
 
-	//private final static String createTable = "CREATE TABLE `example` (id INT, data VARCHAR(100))";
-
-
 	public DBManager(){}
 
 	public Connection createConnection() throws IOException, ClassNotFoundException, SQLException {
 		//String host="jdbc:mysql://node12626-env-4194466.fr-1.paas.massivegrid.net/crypto";
-		String host="jdbc:mysql://185.44.64.238:3306/crypto";
-		String username="denny1";
-		String password="2zq46qlnGIWY1Rqq";
+		String host="";
+		String username="";
+		String password="";
 		String driver="com.mysql.jdbc.Driver";
 
 		Class.forName(driver);
@@ -76,7 +73,7 @@ public class DBManager {
 			Auth auth = new Auth();
 			Connection connection = createConnection();
 			String query = "SELECT * FROM crypto.auth WHERE username=? AND password=?";
-			//System.out.println("SQL STATEMENT is: "+ query);
+
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1, uname);
 			preparedStatement.setString(2, pass);
@@ -169,37 +166,6 @@ public class DBManager {
 		}
 
 		return persons;
-	}
-
-	public void runSqlStatement(){
-
-		try {
-			Connection connection = createConnection();
-			//Statement statement = connection.createStatement();
-			//boolean rs = statement.execute(createTable);
-			// the mysql insert statement
-			/*String query = " insert into example (id, data)"
-					               + " values (?, ?)";*/
-
-			// create the mysql insert preparedstatement
-			/*PreparedStatement preparedStmt = connection.prepareStatement(query);
-			preparedStmt.setInt (1, 3);
-			preparedStmt.setString(2, "mycoolrecord");*/
-
-			// execute the preparedstatement
-			//preparedStmt.execute();
-
-			//boolean test = statement.execute(insertTest);
-
-		} catch (IOException ex) {
-			Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (ClassNotFoundException ex) {
-			Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-		}
-
-
 	}
 
 }
