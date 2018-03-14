@@ -4,6 +4,7 @@ import com.imt11.crypto.model.Auth;
 import com.imt11.crypto.model.Coin;
 import com.imt11.crypto.model.Person;
 import com.imt11.crypto.model.State;
+import com.imt11.crypto.util.SecurityUtil;
 
 import java.io.IOException;
 import java.sql.*;
@@ -23,10 +24,10 @@ public class DBManager {
 
 	public Connection createConnection() throws IOException, ClassNotFoundException, SQLException {
 		//String host="jdbc:mysql://node12626-env-4194466.fr-1.paas.massivegrid.net/crypto";
-		String host="";
-		String username="";
-		String password="";
-		String driver="com.mysql.jdbc.Driver";
+		String host= SecurityUtil.HOST;
+		String username= SecurityUtil.USERNAME;
+		String password= SecurityUtil.PASSWORD;
+		String driver= SecurityUtil.DRIVER;
 
 		Class.forName(driver);
 		System.out.println("--------------------------");
