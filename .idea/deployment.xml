@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="tomcat">
+    <serverData>
+      <paths name="tomcat">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/cryptocompare" />
+            <mapping local="$PROJECT_DIR$/src/test" />
+            <mapping local="$PROJECT_DIR$/src/main" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

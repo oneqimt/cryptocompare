@@ -1,0 +1,24 @@
+div {
+    text-align:left;
+    /*display:table-cell;*/
+    vertical-align: 100%;
+    padding: 30px;
+}
+
+
+.holdings{
+    width:100%;
+    height: 200px;
+}
+.holdings:nth-child(odd){
+    background:#fff;
+}
+.holdings:nth-child(even){
+    background:#ccc;
+}
+.no_bg{
+    width:100%;
+    height:200px;
+    background:#f8d6d6
+}
+
