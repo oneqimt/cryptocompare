@@ -11,12 +11,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,14 +42,8 @@ public class CryptoCompareServlet extends HttpServlet {
         DBManager dbManager = new DBManager();
         List<Person> persons = dbManager.getPersonCoins(person_id);
 
-        /*if(persons != null){
-            for(Person person : persons){
-                System.out.println("DENNIS in Servlet :"+person.toString());
-            }
-        }*/
-
         // MAIN
-        String mainjson = getCryptoStringJson(CryptoUtil.getMainCryptoEndpoint(persons));
+        String mainjson = CryptoUtil.getStringJson(CryptoUtil.getMainCryptoEndpoint(persons));
         System.out.println("DENNIS and mainjson is: "+" "+mainjson);
 
         JSONParser mainparser = new JSONParser();
@@ -69,7 +58,7 @@ public class CryptoCompareServlet extends HttpServlet {
         }
 
         // ALTS
-        String altjson = getCryptoStringJson(CryptoUtil.getAltCryptoEndpoint(persons));
+        String altjson = CryptoUtil.getStringJson(CryptoUtil.getAltCryptoEndpoint(persons));
         System.out.println("DENNIS ALT JSON is: "+" "+altjson);
         JSONParser altparser = new JSONParser();
         List<CryptoValue> altcryptos = new ArrayList<>();
@@ -93,34 +82,6 @@ public class CryptoCompareServlet extends HttpServlet {
         }else{
             response.getWriter().print("Cryptos not available!");
         }
-
-    }
-
-    private String getCryptoStringJson(String endpoint){
-
-        StringBuilder sb = new StringBuilder();
-
-        try{
-
-            URL url = new URL(endpoint);
-            URLConnection mainurlConnection = url.openConnection();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(mainurlConnection.getInputStream()));
-
-            String mainLine;
-
-            while ((mainLine = bufferedReader.readLine()) != null){
-                sb.append(mainLine + "\n");
-            }
-
-            bufferedReader.close();
-
-        }catch(MalformedURLException e){
-            e.printStackTrace();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-
-        return sb.toString();
 
     }
 

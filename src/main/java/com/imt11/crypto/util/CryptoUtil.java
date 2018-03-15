@@ -5,8 +5,14 @@ import com.imt11.crypto.model.PercentageDTO;
 import com.imt11.crypto.model.Person;
 import com.imt11.crypto.model.TotalValues;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -70,7 +76,6 @@ private CryptoUtil(){}
 	}
 
 	public static String getAltCryptoEndpoint(List<Person> persons){
-		//String endpoint = "https://min-api.cryptocompare.com/data/pricemulti?fsyms=PPT,CAT,PLR,PAY,LBC,OMG,SALT,BTG,DGB,WILD,DENT,SC,ADA&tsyms=BTC,USD";
 		String main = "https://min-api.cryptocompare.com/data/pricemulti?fsyms=";
 		String coinstr = "";
 		String coda = "&tsyms=BTC,USD";
@@ -109,13 +114,9 @@ private CryptoUtil(){}
 
 	public static String formatDoubleValue(Double val, Double factor){
 		NumberFormat currencyFormat = getCurrencyFormat();
-		//String aggregate = currencyFormat.format(Math.round(val * factor));
-		// TEST
 		double dbl = val * factor;
 		BigDecimal bd = new BigDecimal(Double.toString(dbl));
 		bd = bd.setScale(2, RoundingMode.HALF_UP);
-		//String test = df2.format(dbl);
-		//System.out.println("DJM cost double is: "+" "+test);
 		double roundedDbl = bd.doubleValue();
 		String aggregate = currencyFormat.format(roundedDbl);
 
@@ -164,22 +165,14 @@ private CryptoUtil(){}
 		//System.out.println("DJM cost double is: "+" "+test);
 		double roundedDbl = bd.doubleValue();
 
-
-
 		return roundedDbl;
 	}
 
 	public static String getAltCost(Double cost, Double factor){
 
-		/*double val = Math.round(cost * factor);
-
-		String mycost = getCurrencyFormat().format(val);*/
-		// TEST
 		double dbl = cost * factor;
 		BigDecimal bd = new BigDecimal(Double.toString(dbl));
 		bd = bd.setScale(2, RoundingMode.HALF_UP);
-		//String test = df2.format(dbl);
-		//System.out.println("DJM cost double is: "+" "+test);
 		double roundedDbl = bd.doubleValue();
 		String aggregate = getCurrencyFormat().format(roundedDbl);
 
@@ -235,8 +228,6 @@ private CryptoUtil(){}
 
 				System.out.println("NEW BTC CRYPTO is: "+" "+val.toString());
 			}
-
-			// TODO get totalValue and totalCost
 			try{
 				totalCost =  cf.parse(val.getCost());
 				totalValue = cf.parse(val.getHoldingValue());
@@ -264,12 +255,40 @@ private CryptoUtil(){}
 		grandTotals.setTotalPercentageIncreaseDecrease(display);
 
 
-		System.out.println("TOTAL COST is: "+" "+costdbl);
+		/*System.out.println("TOTAL COST is: "+" "+costdbl);
 		System.out.println("TOTAL VALUE is:"+" "+totaldbl);
 		System.out.println("TOTAL PERCENTAGE INCREASE/DECREASE :"+" "+display);
-		System.out.println("TOTALINCREASE/DECREASE :"+" "+grandTotals.getIncreaseDecrease());
+		System.out.println("TOTALINCREASE/DECREASE :"+" "+grandTotals.getIncreaseDecrease());*/
 
 		return grandTotals;
+
+	}
+
+	public static String getStringJson(String endpoint){
+
+		StringBuilder sb = new StringBuilder();
+
+		try{
+
+			URL url = new URL(endpoint);
+			URLConnection mainurlConnection = url.openConnection();
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(mainurlConnection.getInputStream()));
+
+			String mainLine;
+
+			while ((mainLine = bufferedReader.readLine()) != null){
+				sb.append(mainLine + "\n");
+			}
+
+			bufferedReader.close();
+
+		}catch(MalformedURLException e){
+			e.printStackTrace();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+
+		return sb.toString();
 
 	}
 

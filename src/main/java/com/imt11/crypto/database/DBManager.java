@@ -25,10 +25,10 @@ public class DBManager {
 
     public Connection createConnection() throws IOException, ClassNotFoundException, SQLException {
         //String host="jdbc:mysql://node12626-env-4194466.fr-1.paas.massivegrid.net/crypto";
-        String host= SecurityUtil.HOST;
-        String username= SecurityUtil.USERNAME;
-        String password= SecurityUtil.PASSWORD;
-        String driver= SecurityUtil.DRIVER;
+        String host= SecurityUtil.getInstance().getHost();
+        String username= SecurityUtil.getInstance().getUsername();
+        String password= SecurityUtil.getInstance().getPassword();
+        String driver= SecurityUtil.getInstance().getDriver();
 
         Class.forName(driver);
         System.out.println("--------------------------");
