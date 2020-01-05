@@ -19,16 +19,17 @@ import java.util.logging.Logger;
 public class DBManager {
 
 
-	private Connection connection = null;
+    private Connection connection = null;
 
-    public DBManager(){}
+    public DBManager() {
+    }
 
     public Connection createConnection() throws IOException, ClassNotFoundException, SQLException {
 
-        String host= SecurityUtil.getInstance().getHost();
-        String username= SecurityUtil.getInstance().getUsername();
-        String password= SecurityUtil.getInstance().getPassword();
-        String driver= SecurityUtil.getInstance().getDriver();
+        String host = SecurityUtil.getInstance().getHost();
+        String username = SecurityUtil.getInstance().getUsername();
+        String password = SecurityUtil.getInstance().getPassword();
+        String driver = SecurityUtil.getInstance().getDriver();
 
         Class.forName(driver);
         System.out.println("--------------------------");
@@ -40,16 +41,16 @@ public class DBManager {
         return connection;
     }
 
-    public List<Coin> getAllCoins(){
+    public List<Coin> getAllCoins() {
         List<Coin> coins = new ArrayList<>();
-        try{
+        try {
             Connection connection = createConnection();
 
             String query = "SELECT * from coins";
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
 
-            while(rs.next()){
+            while (rs.next()) {
                 Coin coin = new Coin();
                 coin.setCoin_id(rs.getInt("coin_id"));
                 coin.setCoin_symbol(rs.getString("coin_symbol"));
@@ -60,7 +61,7 @@ public class DBManager {
             statement.close();
 
 
-        }catch (IOException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -71,7 +72,7 @@ public class DBManager {
         return coins;
     }
 
-    public Auth getCredentials(String uname, String pass) throws IOException, ClassNotFoundException, SQLException{
+    public Auth getCredentials(String uname, String pass) throws IOException, ClassNotFoundException, SQLException {
         Auth auth = new Auth();
         Connection connection = createConnection();
         String query = "SELECT * FROM crypto.auth WHERE username=? AND password=?";
@@ -82,7 +83,7 @@ public class DBManager {
 
         ResultSet rs = preparedStatement.executeQuery();
 
-        while(rs.next()){
+        while (rs.next()) {
             auth.setAuth_id(rs.getInt("auth_id"));
             auth.setPassword(rs.getString("password"));
             auth.setUsername(rs.getString("username"));
@@ -95,7 +96,7 @@ public class DBManager {
         return auth;
     }
 
-    public Person getPerson(int person_id) throws IOException, ClassNotFoundException, SQLException{
+    public Person getPerson(int person_id) throws IOException, ClassNotFoundException, SQLException {
         Connection connection = createConnection();
         String query = "SELECT auth.*, person.* FROM person\n" +
                 "JOIN auth ON auth.person_id = person.person_id\n" +
@@ -103,8 +104,8 @@ public class DBManager {
         Statement st = connection.createStatement();
         //  result set
         ResultSet rs = st.executeQuery(query);
-        Person person=null;
-        while(rs.next()){
+        Person person = null;
+        while (rs.next()) {
             person = new Person();
             person.setPerson_id(rs.getInt("person_id"));
             person.setFirst_name(rs.getString("first_name"));
@@ -115,9 +116,9 @@ public class DBManager {
 
     }
 
-    public List<Person> getPersonCoins(int personId){
+    public List<Person> getPersonCoins(int personId) {
         List<Person> persons = new ArrayList<>();
-        try{
+        try {
             Connection connection = createConnection();
             // query
             String query = "SELECT person.first_name, person.last_name, person.person_id, holdings.quantity,\n" +
@@ -132,7 +133,7 @@ public class DBManager {
             //  result set
             ResultSet rs = st.executeQuery(query);
 
-            while(rs.next()){
+            while (rs.next()) {
 
                 Person person = new Person();
                 person.setPerson_id(rs.getInt("person_id"));
@@ -159,7 +160,7 @@ public class DBManager {
 
             st.close();
 
-        }catch (IOException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
