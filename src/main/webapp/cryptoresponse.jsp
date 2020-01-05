@@ -52,8 +52,12 @@
                 }
             %>
             <h3><%=firstname%> <%=lastname%> Crypto Holdings Dashboard (Alpha Version 0.1)  </h3>
-            <form action="logout" method="post">
-            <input type="submit" value="Logout">
+            <form action="totals" method="get">
+                Person ID : <input type="text" name="person_id"><br><br>
+                <input type="submit" value="Totals">
+            </form>
+            <%--<form action="totals" method="get">
+            <input type="submit" value="Totals">--%>
         </form></div>
         <% List<CryptoValue> cryptos = (ArrayList<CryptoValue>)request.getAttribute("cryptos"); %>
         <% TotalValues grandtotals = (TotalValues)request.getAttribute("grandtotals"); %>

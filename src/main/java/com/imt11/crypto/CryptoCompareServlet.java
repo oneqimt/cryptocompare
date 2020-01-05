@@ -79,16 +79,15 @@ public class CryptoCompareServlet extends HttpServlet {
         if (combinedList != null) {
 
             String testjson = this.gson.toJson(combinedList);
-            System.out.println("DENNIS and FINAL RESPONSE is: "+" "+testjson);
             PrintWriter out = response.getWriter();
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             out.print(testjson);
             out.flush();
             // FOR WEB
-            request.setAttribute("cryptos", combinedList);
+            /*request.setAttribute("cryptos", combinedList);
             request.setAttribute("grandtotals", grandTotals);
-            request.getRequestDispatcher("cryptoresponse.jsp").forward(request, response);
+            request.getRequestDispatcher("cryptoresponse.jsp").forward(request, response);*/
         } else {
             response.getWriter().print("Cryptos not available!");
         }

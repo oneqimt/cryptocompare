@@ -68,8 +68,6 @@ private CryptoUtil(){}
 
 		String endpoint = main + coinstr + coda;
 
-		System.out.println("ENDPOUNT is: "+endpoint);
-
 		return endpoint;
 	}
 
@@ -91,8 +89,6 @@ private CryptoUtil(){}
 		}
 		coinstr = String.join(",", symbols);
 		String endpoint = main + coinstr + coda;
-
-		System.out.println("ALT ENDPOUNT is: "+endpoint);
 
 		return endpoint;
 	}

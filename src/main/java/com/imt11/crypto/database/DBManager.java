@@ -42,10 +42,10 @@ public class DBManager {
         return connection;
     }
 
-    public Boolean updateGrandTotals(int person_id, TotalValues totalValues){
+    public Boolean updateGrandTotals(int person_id, TotalValues totalValues) {
         Boolean success = false;
 
-        try{
+        try {
             Connection connection = createConnection();
             PreparedStatement ps = connection.prepareStatement("UPDATE grand_totals SET total_cost = ?, " +
                     "total_value = ?, total_change = ?, increase_decrease = ? WHERE person_id = ?");
@@ -59,7 +59,7 @@ public class DBManager {
             ps.executeUpdate();
             ps.close();
 
-        }catch (IOException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -70,6 +70,35 @@ public class DBManager {
 
         return success;
 
+    }
+
+    public TotalValues getTotalValues(int personId) {
+        TotalValues totalValues = new TotalValues();
+        try {
+            Connection connection = createConnection();
+
+            String query = "SELECT * from grand_totals WHERE person_id="+personId;
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            while(rs.next()){
+                totalValues.setTotalCost(rs.getString("total_cost"));
+                totalValues.setTotalValue(rs.getString("total_value"));
+                totalValues.setTotalPercentageIncreaseDecrease(rs.getString("total_change"));
+                totalValues.setIncreaseDecrease(rs.getString("increase_decrease"));
+            }
+
+
+            statement.close();
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return totalValues;
     }
 
     public List<Coin> getAllCoins() {
