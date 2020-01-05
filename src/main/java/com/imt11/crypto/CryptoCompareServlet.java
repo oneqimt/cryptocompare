@@ -1,5 +1,6 @@
 package com.imt11.crypto;
 
+import com.google.gson.Gson;
 import com.imt11.crypto.database.DBManager;
 import com.imt11.crypto.model.CryptoValue;
 import com.imt11.crypto.model.Person;
@@ -12,6 +13,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
         initParams = {@WebInitParam(name="person_id", value="0")})
 
 public class CryptoCompareServlet extends HttpServlet {
+    private Gson gson = new Gson();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -36,7 +39,6 @@ public class CryptoCompareServlet extends HttpServlet {
         //getServletConfig().getInitParameter("person_id")
         // passed in from index.html
         int person_id = Integer.parseInt(request.getParameter("person_id"));
-        System.out.println("PERSON_ID is :"+" "+person_id);
 
         // get database info first
         DBManager dbManager = new DBManager();
@@ -44,7 +46,6 @@ public class CryptoCompareServlet extends HttpServlet {
 
         // MAIN
         String mainjson = CryptoUtil.getStringJson(CryptoUtil.getMainCryptoEndpoint(persons));
-        System.out.println("DENNIS and mainjson is: "+" "+mainjson);
 
         JSONParser mainparser = new JSONParser();
         List<CryptoValue> maincryptos = new ArrayList<>();
@@ -59,7 +60,6 @@ public class CryptoCompareServlet extends HttpServlet {
 
         // ALTS
         String altjson = CryptoUtil.getStringJson(CryptoUtil.getAltCryptoEndpoint(persons));
-        System.out.println("DENNIS ALT JSON is: "+" "+altjson);
         JSONParser altparser = new JSONParser();
         List<CryptoValue> altcryptos = new ArrayList<>();
         try{
@@ -75,10 +75,19 @@ public class CryptoCompareServlet extends HttpServlet {
 
         TotalValues grandTotals = CryptoUtil.getGrandTotals(combinedList);
 
+
         if(combinedList != null){
-            request.setAttribute("cryptos", combinedList);
+
+            String testjson = this.gson.toJson(combinedList);
+            PrintWriter out = response.getWriter();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            out.print(testjson);
+            out.flush();
+            // FOR WEB
+            /*request.setAttribute("cryptos", combinedList);
             request.setAttribute("grandtotals", grandTotals);
-            request.getRequestDispatcher("cryptoresponse.jsp").forward(request, response);
+            request.getRequestDispatcher("cryptoresponse.jsp").forward(request, response);*/
         }else{
             response.getWriter().print("Cryptos not available!");
         }
@@ -87,7 +96,7 @@ public class CryptoCompareServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = request.getParameter("name");
-        if (name == null) name = "World";
+        if (name == null) name = "Test";
         request.setAttribute("user", name);
         request.getRequestDispatcher("response.jsp").forward(request, response);
     }

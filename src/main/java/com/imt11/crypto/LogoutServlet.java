@@ -16,22 +16,9 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "LogoutServlet", urlPatterns = {"/logout"}, loadOnStartup =3)
 public class LogoutServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-        out.println("thank you!!, Your session was destroyed successfully!!");
-        String contextPath = request.getContextPath();
-        String requestURI = request.getRequestURI();
-        StringBuffer requestURL = request.getRequestURL();
-        String pathInfo = request.getPathInfo();
-        String pathtranslated = request.getPathTranslated();
-        String servletpath = request.getServletPath();
-        System.out.println("LOGOUT CONTEXT PATH is: "+" "+contextPath);
-        System.out.println("LOGOUT REQUEST URI is: "+" "+requestURI);
-        System.out.println("LOGOUT REQUEST URL is: "+" "+requestURL);
-        System.out.println("LOGOUT PATH INFO is: "+" "+pathInfo);
-        System.out.println("LOGOUT PATH TRANSLATED is: "+" "+pathtranslated);
-        System.out.println("LOGOUT SERVLET PATH is: "+" "+ servletpath);
+        // CLEAR session
         HttpSession session = request.getSession(false);
+
         if(session != null){
 
             session.removeAttribute("user");
@@ -40,8 +27,19 @@ public class LogoutServlet extends HttpServlet {
             session.setMaxInactiveInterval(1);
             session.invalidate();
         }
+        // SEND response to client
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        out.println("SUCCESS");
+        out.flush();
 
-        response.sendRedirect("index.html");
+        System.out.println("SESSION ENDED response is: "+" "+response.toString());
+
+
+
+        //response.sendRedirect("index.html");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

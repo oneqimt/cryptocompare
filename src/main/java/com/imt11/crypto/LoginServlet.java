@@ -1,9 +1,9 @@
 package com.imt11.crypto;
 
+import com.google.gson.Gson;
 import com.imt11.crypto.database.DBManager;
 import com.imt11.crypto.model.Auth;
 import com.imt11.crypto.model.Person;
-import com.imt11.crypto.util.CryptoUtil;
 import com.imt11.crypto.util.SecurityUtil;
 
 import org.json.simple.JSONObject;
@@ -14,9 +14,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,9 +33,12 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"}, loadOnStartup = 1)
 public class LoginServlet extends HttpServlet {
+
+    private Gson gson = new Gson();
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         // LOAD BASELINE DATA first
+        System.out.println("In Login Servlet");
         InputStream resourceAsStream = LoginServlet.class.getResourceAsStream("/baseline.json"); // works!
         if(resourceAsStream != null){
             InputStreamReader streamReader = new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8);
@@ -101,20 +104,16 @@ public class LoginServlet extends HttpServlet {
                         session.setAttribute("lastname", person.getLast_name());
                     }
                     session.setMaxInactiveInterval(30 * 60); // 30 minutes
-                    /*String contextPath = request.getContextPath();
-                    String requestURI = request.getRequestURI();
-                    StringBuffer requestURL = request.getRequestURL();
-                    String pathInfo = request.getPathInfo();
-                    String pathtranslated = request.getPathTranslated();
-                    String servletpath = request.getServletPath();*/
-                    /*System.out.println("CONTEXT PATH is: "+" "+contextPath);
-                    System.out.println("REQUEST URI is: "+" "+requestURI);
-                    System.out.println("REQUEST URL is: "+" "+requestURL);
-                    System.out.println("PATH INFO is: "+" "+pathInfo);
-                    System.out.println("PATH TRANSLATED is: "+" "+pathtranslated);
-                    System.out.println("SERVLET PATH is: "+" "+ servletpath);*/
 
-                    response.sendRedirect(request.getContextPath()+"/holdings?person_id="+auth.getPerson_id());
+                    String personjson = this.gson.toJson(person);
+                    System.out.println("PERSON is : "+" "+personjson);
+                    PrintWriter out = response.getWriter();
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    out.print(personjson);
+                    out.flush();
+
+                    //response.sendRedirect(request.getContextPath()+"/holdings?person_id="+auth.getPerson_id());
                 }
             }else{
                 System.out.println("BAIL NO DICE");

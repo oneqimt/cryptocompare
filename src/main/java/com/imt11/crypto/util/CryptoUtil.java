@@ -80,7 +80,6 @@ private CryptoUtil(){}
 		String coinstr = "";
 		String coda = "&tsyms=BTC,USD";
 		List<String> symbols = new ArrayList<>();
-		List<Person> cleanPersons = new ArrayList<>();
 		for (Person person : persons){
 			// don't add the main coins in
 			String symbol = person.getCoin().getCoin_symbol();

@@ -154,6 +154,8 @@ public class DBManager {
                 coin.setCoin_symbol(rs.getString("coin_symbol"));
                 person.setCoin(coin);
 
+                //TODO add holdings...
+
                 persons.add(person);
             }
 

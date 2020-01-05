@@ -14,12 +14,13 @@
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="cryptocompare_main" />
-          <element id="dir-copy" path="$PROJECT_DIR$/out/production/resources" />
+          <element id="dir-copy" path="$PROJECT_DIR$/build/resources/main" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Gradle: com.googlecode.json-simple:json-simple:1.1.1" />
           <element id="library" level="project" name="Gradle: junit:junit:4.10" />
           <element id="library" level="project" name="Gradle: org.hamcrest:hamcrest-core:1.1" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.2/3edcfe49d2c6053a70a2a47e4e1c2f94998a49cf/gson-2.8.2.jar" />
         </element>
       </element>
     </root>
