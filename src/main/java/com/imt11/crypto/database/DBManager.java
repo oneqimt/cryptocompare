@@ -24,7 +24,7 @@ public class DBManager {
     public DBManager(){}
 
     public Connection createConnection() throws IOException, ClassNotFoundException, SQLException {
-        //String host="jdbc:mysql://node12626-env-4194466.fr-1.paas.massivegrid.net/crypto";
+
         String host= SecurityUtil.getInstance().getHost();
         String username= SecurityUtil.getInstance().getUsername();
         String password= SecurityUtil.getInstance().getPassword();
@@ -79,8 +79,6 @@ public class DBManager {
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, uname);
         preparedStatement.setString(2, pass);
-
-        System.out.println("Prepared Statement after bind variables set" +" "+preparedStatement.toString());
 
         ResultSet rs = preparedStatement.executeQuery();
 
