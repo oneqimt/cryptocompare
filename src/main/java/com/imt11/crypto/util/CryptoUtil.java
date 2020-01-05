@@ -43,9 +43,7 @@ public class CryptoUtil {
 private CryptoUtil(){}
 
 	public static String getMainCryptoEndpoint(List<Person> persons){
-		//String endpoint = "https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,LTC,BCH&tsyms=USD&e=Coinbase";
 
-		// https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,BCH,ETH,LTC&tsyms=USD&e=Coinbase
 		String main = "https://min-api.cryptocompare.com/data/pricemulti?fsyms=";
 		String coinstr = "";
 		String coda = "&tsyms=USD&e=Coinbase";
@@ -124,25 +122,17 @@ private CryptoUtil(){}
 
 	public static PercentageDTO getPercentage(Double quantityHeld, Double costPerUnit, Double currentValue){
 
-		/*System.out.println("UTL quantityHeld : "+" "+quantityHeld);
-		System.out.println("UTL costPerUnit : "+" "+costPerUnit);
-		System.out.println("UTL currentValue : "+" "+currentValue);*/
-
 		double cost = Math.round(quantityHeld * costPerUnit);
-		//System.out.println("UTL COST is:"+" "+cost);
+
 		double value = Math.round(quantityHeld * currentValue);
-		//System.out.println("UTL VALUE"+" "+value);
 
 		double testdbl = value - cost;
-		//System.out.println("UTL VALUE-COST is: "+" "+testdbl);
 
 		double perc = (testdbl / cost);
 		perc *= 100;
 		String finalPercStr = df2.format(perc);
-		//System.out.println("UTL TEST PERCENT INCREASE/DECREASE is:"+" "+finalPercStr);
 
-		String display = finalPercStr + "%";
-		//System.out.println("UTL TEST DISPLAY PERCENT is: "+" "+display);
+		String display = finalPercStr + PERCENT;
 
 		PercentageDTO dto = new PercentageDTO();
 		dto.setValueString(display);
@@ -250,7 +240,7 @@ private CryptoUtil(){}
 		}
 		String finalPercStr = df2.format(perc);
 
-		String display = finalPercStr + "%";
+		String display = finalPercStr + PERCENT;
 		grandTotals.setTotalPercentageIncreaseDecrease(display);
 
 

@@ -83,7 +83,7 @@ public class ParserUtil {
                     ethCrypto.setIncreaseDecrease(CryptoUtil.DECREASE);
                 }
                 cryptos.add(ethCrypto);
-                System.out.println("ETH CryptoValue is:" + " " + ethCrypto.toString());
+
             }
 
             if(symbol.equalsIgnoreCase(CryptoUtil.BCH_SYMBOL)){
@@ -103,7 +103,6 @@ public class ParserUtil {
                 bchCrypto.setQuantity(person.getQuantity());
 
                 cryptos.add(bchCrypto);
-                System.out.println("BCH CryptoValue is:" + " " + bchCrypto.toString());
             }
 
             if(symbol.equalsIgnoreCase(CryptoUtil.LTC_SYMBOL)){
@@ -128,7 +127,6 @@ public class ParserUtil {
                     ltcCrypto.setIncreaseDecrease(CryptoUtil.DECREASE);
                 }
                 cryptos.add(ltcCrypto);
-                System.out.println("LTC CryptoValue is:" + " " + ltcCrypto.toString());
             }
         }
         return cryptos;
@@ -170,7 +168,6 @@ public class ParserUtil {
                         cryptoValue.setPercentage("SEE BITCOIN");
                     }
                     cryptos.add(cryptoValue);
-                    System.out.println("CryptoValue is:" + " " + cryptoValue.toString());
                 }
             }
 
