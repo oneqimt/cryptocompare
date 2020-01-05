@@ -62,7 +62,7 @@ public class ParserUtil {
                 cryptos.add(btcCrypto);
                 System.out.println("BTC CryptoValue is:" + " " + btcCrypto.toString());
             }
-            if(symbol.equalsIgnoreCase(CryptoUtil.ETH_SYMBOL)){
+            if (symbol.equalsIgnoreCase(CryptoUtil.ETH_SYMBOL)) {
                 CryptoValue ethCrypto = new CryptoValue();
                 Coin ethcoin = new Coin();
                 ethcoin.setCoin_id(person.getCoin().getCoin_id());
@@ -86,7 +86,7 @@ public class ParserUtil {
 
             }
 
-            if(symbol.equalsIgnoreCase(CryptoUtil.BCH_SYMBOL)){
+            if (symbol.equalsIgnoreCase(CryptoUtil.BCH_SYMBOL)) {
                 CryptoValue bchCrypto = new CryptoValue();
                 Coin bchcoin = new Coin();
                 bchcoin.setCoin_id(person.getCoin().getCoin_id());
@@ -105,7 +105,7 @@ public class ParserUtil {
                 cryptos.add(bchCrypto);
             }
 
-            if(symbol.equalsIgnoreCase(CryptoUtil.LTC_SYMBOL)){
+            if (symbol.equalsIgnoreCase(CryptoUtil.LTC_SYMBOL)) {
                 CryptoValue ltcCrypto = new CryptoValue();
                 Coin ltccoin = new Coin();
                 ltccoin.setCoin_id(person.getCoin().getCoin_id());
@@ -138,12 +138,12 @@ public class ParserUtil {
 
         for (Person person : persons) {
             String symbol = person.getCoin().getCoin_symbol();
-            if(!symbol.equalsIgnoreCase(CryptoUtil.BTC_SYMBOL)
+            if (!symbol.equalsIgnoreCase(CryptoUtil.BTC_SYMBOL)
                     && !symbol.equalsIgnoreCase(CryptoUtil.BCH_SYMBOL)
                     && !symbol.equalsIgnoreCase(CryptoUtil.ETH_SYMBOL)
-                    && !symbol.equalsIgnoreCase(CryptoUtil.LTC_SYMBOL)){
-                JSONObject obj = (JSONObject)jsonObject.get(symbol);
-                if(obj != null){
+                    && !symbol.equalsIgnoreCase(CryptoUtil.LTC_SYMBOL)) {
+                JSONObject obj = (JSONObject) jsonObject.get(symbol);
+                if (obj != null) {
                     CryptoValue cryptoValue = new CryptoValue();
                     Coin coin = new Coin();
                     coin.setCoin_name(person.getCoin().getCoin_name());
@@ -155,7 +155,7 @@ public class ParserUtil {
                     cryptoValue.setHoldingValue(CryptoUtil.formatDoubleValue(person.getQuantity(), dbl));
                     cryptoValue.setCost(CryptoUtil.getAltCost(person.getCost(), person.getQuantity()));
                     cryptoValue.setQuantity(person.getQuantity());
-                    if(!symbol.equalsIgnoreCase(CryptoUtil.BTG_SYMBOL)){
+                    if (!symbol.equalsIgnoreCase(CryptoUtil.BTG_SYMBOL)) {
                         PercentageDTO dto = CryptoUtil.getPercentage(person.getQuantity(), person.getCost(), dbl);
                         cryptoValue.setPercentage(dto.getValueString());
                         if (dto.getValueDouble() >= 0.0) {
@@ -163,7 +163,7 @@ public class ParserUtil {
                         } else {
                             cryptoValue.setIncreaseDecrease(CryptoUtil.DECREASE);
                         }
-                    }else{
+                    } else {
                         cryptoValue.setIncreaseDecrease(CryptoUtil.INCREASE);
                         cryptoValue.setPercentage("SEE BITCOIN");
                     }

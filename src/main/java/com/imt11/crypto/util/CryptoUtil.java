@@ -215,7 +215,6 @@ private CryptoUtil(){}
 					val.setIncreaseDecrease(CryptoUtil.DECREASE);
 				}
 
-				System.out.println("NEW BTC CRYPTO is: "+" "+val.toString());
 			}
 			try{
 				totalCost =  cf.parse(val.getCost());

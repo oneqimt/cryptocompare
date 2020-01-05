@@ -13,13 +13,15 @@ import javax.servlet.http.HttpSession;
 /**
  * @author Dennis Miller
  */
-@WebServlet(name = "LogoutServlet", urlPatterns = {"/logout"}, loadOnStartup =3)
+@WebServlet(name = "LogoutServlet", urlPatterns = {"/logout"}, loadOnStartup = 3)
 public class LogoutServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        System.out.println("in LOGOUT");
         // CLEAR session
         HttpSession session = request.getSession(false);
 
-        if(session != null){
+        if (session != null) {
 
             session.removeAttribute("user");
             session.removeAttribute("firstname");
@@ -35,9 +37,7 @@ public class LogoutServlet extends HttpServlet {
         out.println("SUCCESS");
         out.flush();
 
-        System.out.println("SESSION ENDED response is: "+" "+response.toString());
-
-
+        System.out.println("SESSION ENDED response is: " + " " + response.toString());
 
         //response.sendRedirect("index.html");
     }

@@ -4,6 +4,7 @@ import com.imt11.crypto.model.Auth;
 import com.imt11.crypto.model.Coin;
 import com.imt11.crypto.model.Person;
 import com.imt11.crypto.model.State;
+import com.imt11.crypto.model.TotalValues;
 import com.imt11.crypto.util.SecurityUtil;
 
 import java.io.IOException;
@@ -39,6 +40,36 @@ public class DBManager {
         System.out.println("CONNECTION: " + connection);
 
         return connection;
+    }
+
+    public Boolean updateGrandTotals(int person_id, TotalValues totalValues){
+        Boolean success = false;
+
+        try{
+            Connection connection = createConnection();
+            PreparedStatement ps = connection.prepareStatement("UPDATE grand_totals SET total_cost = ?, " +
+                    "total_value = ?, total_change = ?, increase_decrease = ? WHERE person_id = ?");
+
+            ps.setString(1, totalValues.getTotalCost());
+            ps.setString(2, totalValues.getTotalValue());
+            ps.setString(3, totalValues.getTotalPercentageIncreaseDecrease());
+            ps.setString(4, totalValues.getIncreaseDecrease());
+            ps.setInt(5, person_id);
+
+            ps.executeUpdate();
+            ps.close();
+
+        }catch (IOException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+
+        return success;
+
     }
 
     public List<Coin> getAllCoins() {
