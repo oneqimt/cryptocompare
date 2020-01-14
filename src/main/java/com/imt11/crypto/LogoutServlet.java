@@ -15,9 +15,10 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "LogoutServlet", urlPatterns = {"/logout"}, loadOnStartup = 3)
 public class LogoutServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws  IOException {
 
         System.out.println("in LOGOUT");
+
         // CLEAR session
         HttpSession session = request.getSession(false);
 
@@ -29,15 +30,17 @@ public class LogoutServlet extends HttpServlet {
             session.setMaxInactiveInterval(1);
             session.invalidate();
         }
+
         // SEND response to client
+        Boolean success = true;
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        out.println("SUCCESS");
+        out.println(success);
         out.flush();
 
-        System.out.println("SESSION ENDED response is: " + " " + response.toString());
+
+        System.out.println("SESSION ENDED response is: " + " " + response.getHeaderNames().toString());
 
         //response.sendRedirect("index.html");
     }

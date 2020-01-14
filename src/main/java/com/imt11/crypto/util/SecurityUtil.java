@@ -1,7 +1,5 @@
 package com.imt11.crypto.util;
 
-import javax.print.DocFlavor;
-
 /**
  * @author Dennis Miller
  */
@@ -13,6 +11,7 @@ public class SecurityUtil {
     private String username;
     private String password;
     private String driver;
+    private String cryptoControlApi;
 
     private SecurityUtil(){
 
@@ -56,5 +55,13 @@ public class SecurityUtil {
 
     public void setDriver(String driver) {
         this.driver = driver;
+    }
+
+    public String getCryptoControlApi() {
+        return cryptoControlApi;
+    }
+
+    public void setCryptoControlApi(String cryptoControlApi) {
+        this.cryptoControlApi = cryptoControlApi;
     }
 }

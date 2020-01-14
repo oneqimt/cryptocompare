@@ -5,6 +5,7 @@ package com.imt11.crypto.model;
  */
 public class TotalValues {
 
+	private int personId;
 	private String totalCost;
 	private String totalValue;
 	private String totalPercentageIncreaseDecrease;
@@ -42,10 +43,19 @@ public class TotalValues {
 		this.increaseDecrease = increaseDecrease;
 	}
 
+	public int getPersonId() {
+		return personId;
+	}
+
+	public void setPersonId(int personId) {
+		this.personId = personId;
+	}
+
 	@Override
 	public String toString() {
 		return "TotalValues{" +
-				"totalCost='" + totalCost + '\'' +
+				"personId=" + personId +
+				", totalCost='" + totalCost + '\'' +
 				", totalValue='" + totalValue + '\'' +
 				", totalPercentageIncreaseDecrease='" + totalPercentageIncreaseDecrease + '\'' +
 				", increaseDecrease='" + increaseDecrease + '\'' +

@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -53,10 +54,12 @@ public class LoginServlet extends HttpServlet {
                 String username = (String)baseline.get("username");
                 String password = (String)baseline.get("password");
                 String driver = (String)baseline.get("driver");
+                String cryptoControlApiKey = (String)baseline.get("crypto_control_api_key");
                 SecurityUtil.getInstance().setDriver(driver);
                 SecurityUtil.getInstance().setHost(host);
                 SecurityUtil.getInstance().setPassword(password);
                 SecurityUtil.getInstance().setUsername(username);
+                SecurityUtil.getInstance().setCryptoControlApi(cryptoControlApiKey);
             }catch(ParseException e){
                 e.printStackTrace();
             }
@@ -104,15 +107,15 @@ public class LoginServlet extends HttpServlet {
                     }
                     session.setMaxInactiveInterval(30 * 60); // 30 minutes
 
-                    /*String personjson = this.gson.toJson(person);
+                    String personjson = this.gson.toJson(person);
                     System.out.println("PERSON is : "+" "+personjson);
                     PrintWriter out = response.getWriter();
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
                     out.print(personjson);
-                    out.flush();*/
+                    out.flush();
 
-                    response.sendRedirect(request.getContextPath()+"/holdings?person_id="+auth.getPerson_id());
+                    //response.sendRedirect(request.getContextPath()+"/holdings?person_id="+auth.getPerson_id());
                 }
             }else{
                 System.out.println("BAIL NO DICE");

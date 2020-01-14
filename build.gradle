@@ -14,4 +14,5 @@ dependencies {
     providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
     compile 'com.googlecode.json-simple:json-simple:1.1.1'
     implementation 'com.google.code.gson:gson:2.8.2'
+    compile 'io.cryptocontrol:crypto-news-api:2.5.0'
 }

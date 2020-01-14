@@ -34,27 +34,14 @@
                         firstname = (String) session.getAttribute("firstname");
                         lastname = (String) session.getAttribute("lastname");
                         System.out.print("Hello, " + firstname + lastname +"  Welcome to ur Profile");
-                        String contextPath = request.getContextPath();
-                        String requestURI = request.getRequestURI();
-                        StringBuffer requestURL = request.getRequestURL();
-                        String pathInfo = request.getPathInfo();
-                        String pathtranslated = request.getPathTranslated();
-                        String servletpath = request.getServletPath();
-                        System.out.println("JSP CONTEXT PATH is: "+" "+contextPath);
-                        System.out.println("JSP REQUEST URI is: "+" "+requestURI);
-                        System.out.println("JSP REQUEST URL is: "+" "+requestURL);
-                        System.out.println("JSP PATH INFO is: "+" "+pathInfo);
-                        System.out.println("JSP PATH TRANSLATED is: "+" "+pathtranslated);
-                        System.out.println("JSP SERVLET PATH is: "+" "+ servletpath);
                     } else {
                         response.sendRedirect(request.getContextPath()+"/index.html");
                     }
                 }
             %>
             <h3><%=firstname%> <%=lastname%> Crypto Holdings Dashboard (Alpha Version 0.1)  </h3>
-            <form action="totals" method="get">
-                Person ID : <input type="text" name="person_id"><br><br>
-                <input type="submit" value="Totals">
+            <form action="logout" method="post">
+                <input type="submit" value="Logout">
             </form>
             <%--<form action="totals" method="get">
             <input type="submit" value="Totals">--%>

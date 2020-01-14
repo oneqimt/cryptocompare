@@ -85,6 +85,7 @@ public class DBManager {
                 totalValues.setTotalValue(rs.getString("total_value"));
                 totalValues.setTotalPercentageIncreaseDecrease(rs.getString("total_change"));
                 totalValues.setIncreaseDecrease(rs.getString("increase_decrease"));
+                totalValues.setPersonId(rs.getInt("person_id"));
             }
 
 
