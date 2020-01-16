@@ -8,6 +8,7 @@ public class Coin {
     private int coin_id;
     private String coin_name;
     private String coin_symbol;
+    private String name_id;
 
     public Coin() {
     }
@@ -36,12 +37,21 @@ public class Coin {
         this.coin_symbol = coin_symbol;
     }
 
+    public String getName_id() {
+        return name_id;
+    }
+
+    public void setName_id(String name_id) {
+        this.name_id = name_id;
+    }
+
     @Override
     public String toString() {
         return "Coin{" +
                 "coin_id=" + coin_id +
                 ", coin_name='" + coin_name + '\'' +
                 ", coin_symbol='" + coin_symbol + '\'' +
+                ", name_id='" + name_id + '\'' +
                 '}';
     }
 }

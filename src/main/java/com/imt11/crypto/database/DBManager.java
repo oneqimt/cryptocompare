@@ -116,6 +116,7 @@ public class DBManager {
                 coin.setCoin_id(rs.getInt("coin_id"));
                 coin.setCoin_symbol(rs.getString("coin_symbol"));
                 coin.setCoin_name(rs.getString("coin_name"));
+                coin.setName_id(rs.getString("name_id"));
                 coins.add(coin);
             }
 
@@ -212,6 +213,7 @@ public class DBManager {
                 coin.setCoin_id(rs.getInt("coin_id"));
                 coin.setCoin_name(rs.getString("coin_name"));
                 coin.setCoin_symbol(rs.getString("coin_symbol"));
+                coin.setName_id(rs.getString("name_id"));
                 person.setCoin(coin);
 
                 //TODO add holdings...

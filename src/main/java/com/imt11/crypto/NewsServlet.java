@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import io.cryptocontrol.cryptonewsapi.CryptoControlApi;
-import io.cryptocontrol.cryptonewsapi.models.Article;
 
 /**
  * @author Dennis Miller
@@ -73,7 +72,7 @@ public class NewsServlet extends HttpServlet {
 
         }
 
-        if (articles.size() > 0) {
+        /*if (articles.size() > 0) {
             for (Article article : articles) {
                 System.out.println("OUTER LOOP of arraylist: " + " " + article.getTitle());
                 Article.Source source = article.getSource();
@@ -89,7 +88,7 @@ public class NewsServlet extends HttpServlet {
                 }
 
             }
-        }
+        }*/
 
 
     }

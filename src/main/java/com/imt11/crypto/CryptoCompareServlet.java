@@ -84,6 +84,8 @@ public class CryptoCompareServlet extends HttpServlet {
             response.setCharacterEncoding("UTF-8");
             out.print(testjson);
             out.flush();
+
+
             // FOR WEB
             /*request.setAttribute("cryptos", combinedList);
             request.setAttribute("grandtotals", grandTotals);

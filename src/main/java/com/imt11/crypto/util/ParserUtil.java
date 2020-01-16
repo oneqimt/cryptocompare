@@ -39,6 +39,7 @@ public class ParserUtil {
                 btccoin.setCoin_id(person.getCoin().getCoin_id());
                 btccoin.setCoin_symbol(symbol);
                 btccoin.setCoin_name(person.getCoin().getCoin_name());
+                btccoin.setName_id(person.getCoin().getName_id());
                 btcCrypto.setCoin(btccoin);
                 btcCrypto.setUSD(currencyFormat.format(btc.get(CryptoUtil.USD)));
                 Double btcDbl = Double.valueOf(btc.get(CryptoUtil.USD).toString());
@@ -68,6 +69,7 @@ public class ParserUtil {
                 ethcoin.setCoin_id(person.getCoin().getCoin_id());
                 ethcoin.setCoin_symbol(symbol);
                 ethcoin.setCoin_name(person.getCoin().getCoin_name());
+                ethcoin.setName_id(person.getCoin().getName_id());
                 ethCrypto.setCoin(ethcoin);
                 ethCrypto.setUSD(currencyFormat.format(eth.get(CryptoUtil.USD)));
                 Double ethDbl = Double.valueOf(eth.get(CryptoUtil.USD).toString());
@@ -92,6 +94,7 @@ public class ParserUtil {
                 bchcoin.setCoin_id(person.getCoin().getCoin_id());
                 bchcoin.setCoin_symbol(symbol);
                 bchcoin.setCoin_name(person.getCoin().getCoin_name());
+                bchcoin.setName_id(person.getCoin().getName_id());
                 bchCrypto.setCoin(bchcoin);
                 bchCrypto.setCoin(bchcoin);
                 bchCrypto.setUSD(currencyFormat.format(bch.get(CryptoUtil.USD)));
@@ -111,6 +114,7 @@ public class ParserUtil {
                 ltccoin.setCoin_id(person.getCoin().getCoin_id());
                 ltccoin.setCoin_symbol(symbol);
                 ltccoin.setCoin_name(person.getCoin().getCoin_name());
+                ltccoin.setName_id(person.getCoin().getName_id());
                 ltcCrypto.setCoin(ltccoin);
                 ltcCrypto.setCoin(ltccoin);
                 ltcCrypto.setUSD(currencyFormat.format(ltc.get(CryptoUtil.USD)));
@@ -149,6 +153,7 @@ public class ParserUtil {
                     coin.setCoin_name(person.getCoin().getCoin_name());
                     coin.setCoin_symbol(symbol);
                     coin.setCoin_id(person.getCoin().getCoin_id());
+                    coin.setName_id(person.getCoin().getName_id());
                     cryptoValue.setCoin(coin);
                     cryptoValue.setUSD(currencyFormat.format(obj.get(CryptoUtil.USD)));
                     Double dbl = Double.valueOf(obj.get(CryptoUtil.USD).toString());
