@@ -12,6 +12,7 @@ public class SecurityUtil {
     private String password;
     private String driver;
     private String cryptoControlApi;
+    private String cryptoCompareApi;
 
     private SecurityUtil(){
 
@@ -63,5 +64,13 @@ public class SecurityUtil {
 
     public void setCryptoControlApi(String cryptoControlApi) {
         this.cryptoControlApi = cryptoControlApi;
+    }
+
+    public String getCryptoCompareApi() {
+        return cryptoCompareApi;
+    }
+
+    public void setCryptoCompareApi(String cryptoCompareApi) {
+        this.cryptoCompareApi = cryptoCompareApi;
     }
 }

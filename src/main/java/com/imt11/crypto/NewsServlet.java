@@ -46,14 +46,12 @@ public class NewsServlet extends HttpServlet {
                 @Override
                 public void onSuccess(List<io.cryptocontrol.cryptonewsapi.models.Article> body) {
                     for (io.cryptocontrol.cryptonewsapi.models.Article article : body) {
-                        System.out.println(article.getTitle());
                         articles.add(article);
                     }
                 }
 
                 @Override
                 public void onFailure(Exception e) {
-
                     e.printStackTrace();
                     System.out.println("FAIL and error is : " + " " + e.getLocalizedMessage());
 

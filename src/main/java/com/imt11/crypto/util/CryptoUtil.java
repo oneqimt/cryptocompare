@@ -47,6 +47,7 @@ private CryptoUtil(){}
 		String main = "https://min-api.cryptocompare.com/data/pricemulti?fsyms=";
 		String coinstr = "";
 		String coda = "&tsyms=USD&e=Coinbase";
+		String apiKey = "&apiKey="+SecurityUtil.getInstance().getCryptoCompareApi();
 		List<String> symbols = new ArrayList<>();
 		for(Person person : persons){
 			String symbol = person.getCoin().getCoin_symbol();
@@ -66,7 +67,7 @@ private CryptoUtil(){}
 
 		coinstr = String.join(",", symbols);
 
-		String endpoint = main + coinstr + coda;
+		String endpoint = main + coinstr + coda + apiKey;
 
 		return endpoint;
 	}
@@ -75,6 +76,7 @@ private CryptoUtil(){}
 		String main = "https://min-api.cryptocompare.com/data/pricemulti?fsyms=";
 		String coinstr = "";
 		String coda = "&tsyms=BTC,USD";
+		String apiKey = "&apiKey="+SecurityUtil.getInstance().getCryptoCompareApi();
 		List<String> symbols = new ArrayList<>();
 		for (Person person : persons){
 			// don't add the main coins in
@@ -88,7 +90,7 @@ private CryptoUtil(){}
 
 		}
 		coinstr = String.join(",", symbols);
-		String endpoint = main + coinstr + coda;
+		String endpoint = main + coinstr + coda + apiKey;
 
 		return endpoint;
 	}
@@ -255,6 +257,7 @@ private CryptoUtil(){}
 		try{
 
 			URL url = new URL(endpoint);
+
 			URLConnection mainurlConnection = url.openConnection();
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(mainurlConnection.getInputStream()));
 

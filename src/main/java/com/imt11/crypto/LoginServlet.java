@@ -55,11 +55,13 @@ public class LoginServlet extends HttpServlet {
                 String password = (String)baseline.get("password");
                 String driver = (String)baseline.get("driver");
                 String cryptoControlApiKey = (String)baseline.get("crypto_control_api_key");
+                String cryptoCompareApiKey = (String)baseline.get("crypto_compare_api_key");
                 SecurityUtil.getInstance().setDriver(driver);
                 SecurityUtil.getInstance().setHost(host);
                 SecurityUtil.getInstance().setPassword(password);
                 SecurityUtil.getInstance().setUsername(username);
                 SecurityUtil.getInstance().setCryptoControlApi(cryptoControlApiKey);
+                SecurityUtil.getInstance().setCryptoCompareApi(cryptoCompareApiKey);
             }catch(ParseException e){
                 e.printStackTrace();
             }
@@ -114,7 +116,6 @@ public class LoginServlet extends HttpServlet {
                     response.setCharacterEncoding("UTF-8");
                     out.print(personjson);
                     out.flush();
-
                     //response.sendRedirect(request.getContextPath()+"/holdings?person_id="+auth.getPerson_id());
                 }
             }else{
