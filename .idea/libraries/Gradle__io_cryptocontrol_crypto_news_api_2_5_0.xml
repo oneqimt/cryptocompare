@@ -3,7 +3,9 @@
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.cryptocontrol/crypto-news-api/2.5.0/6dba159397085edaf0660a43a88fa592f3a0ce2b/crypto-news-api-2.5.0.jar!/" />
     </CLASSES>
-    <JAVADOC />
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.cryptocontrol/crypto-news-api/2.5.0/3397bc2d16aac86d05377dde51f04e6b96691c8a/crypto-news-api-2.5.0-javadoc.jar!/" />
+    </JAVADOC>
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.cryptocontrol/crypto-news-api/2.5.0/2124b8148494ab2c4e3c85b536449135d902db45/crypto-news-api-2.5.0-sources.jar!/" />
     </SOURCES>

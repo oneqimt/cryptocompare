@@ -16,8 +16,6 @@ import java.util.List;
  */
 public class ParserUtil {
 
-    private static final String TAG = ParserUtil.class.getSimpleName();
-
     private ParserUtil() {
     }
 
@@ -43,16 +41,16 @@ public class ParserUtil {
                 btcCrypto.setCoin(btccoin);
                 btcCrypto.setUSD(currencyFormat.format(btc.get(CryptoUtil.USD)));
                 Double btcDbl = Double.valueOf(btc.get(CryptoUtil.USD).toString());
-                btcCrypto.setHoldingValue(CryptoUtil.formatDoubleValue(person.getQuantity(), btcDbl));
-                btcCrypto.setCost(CryptoUtil.formatDoubleValue(person.getQuantity(), person.getCost()));
-                btcCrypto.setQuantity(person.getQuantity());
+                btcCrypto.setHoldingValue(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), btcDbl));
+                btcCrypto.setCost(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), person.getHoldings().getCost()));
+                btcCrypto.setQuantity(person.getHoldings().getQuantity());
 
                 // Add BCH here
                 Double bchval = Double.valueOf(bch.get(CryptoUtil.USD).toString());
                 // add bch to btcDbl
                 Double aggregateDBl = btcDbl + bchval;
 
-                PercentageDTO btcdto = CryptoUtil.getPercentage(person.getQuantity(), person.getCost(), aggregateDBl);
+                PercentageDTO btcdto = CryptoUtil.getPercentage(person.getHoldings().getQuantity(), person.getHoldings().getCost(), aggregateDBl);
                 btcCrypto.setPercentage(btcdto.getValueString());
                 if (btcdto.getValueDouble() >= 0.0) {
                     btcCrypto.setIncreaseDecrease(CryptoUtil.INCREASE);
@@ -73,11 +71,11 @@ public class ParserUtil {
                 ethCrypto.setCoin(ethcoin);
                 ethCrypto.setUSD(currencyFormat.format(eth.get(CryptoUtil.USD)));
                 Double ethDbl = Double.valueOf(eth.get(CryptoUtil.USD).toString());
-                ethCrypto.setHoldingValue(CryptoUtil.formatDoubleValue(person.getQuantity(), ethDbl));
-                ethCrypto.setCost(CryptoUtil.formatDoubleValue(person.getQuantity(), person.getCost()));
-                ethCrypto.setQuantity(person.getQuantity());
+                ethCrypto.setHoldingValue(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), ethDbl));
+                ethCrypto.setCost(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), person.getHoldings().getCost()));
+                ethCrypto.setQuantity(person.getHoldings().getQuantity());
 
-                PercentageDTO ethdto = CryptoUtil.getPercentage(person.getQuantity(), person.getCost(), ethDbl);
+                PercentageDTO ethdto = CryptoUtil.getPercentage(person.getHoldings().getQuantity(), person.getHoldings().getCost(), ethDbl);
                 ethCrypto.setPercentage(ethdto.getValueString());
                 if (ethdto.getValueDouble() >= 0.0) {
                     ethCrypto.setIncreaseDecrease(CryptoUtil.INCREASE);
@@ -99,11 +97,11 @@ public class ParserUtil {
                 bchCrypto.setCoin(bchcoin);
                 bchCrypto.setUSD(currencyFormat.format(bch.get(CryptoUtil.USD)));
                 Double bchDbl = Double.valueOf(bch.get(CryptoUtil.USD).toString());
-                bchCrypto.setHoldingValue(CryptoUtil.formatDoubleValue(bchDbl, person.getQuantity()));
-                bchCrypto.setCost(CryptoUtil.formatDoubleValue(person.getQuantity(), person.getCost()));
+                bchCrypto.setHoldingValue(CryptoUtil.formatDoubleValue(bchDbl, person.getHoldings().getQuantity()));
+                bchCrypto.setCost(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), person.getHoldings().getCost()));
                 bchCrypto.setIncreaseDecrease(CryptoUtil.INCREASE);
                 bchCrypto.setPercentage("SEE BITCOIN");
-                bchCrypto.setQuantity(person.getQuantity());
+                bchCrypto.setQuantity(person.getHoldings().getQuantity());
 
                 cryptos.add(bchCrypto);
             }
@@ -119,11 +117,11 @@ public class ParserUtil {
                 ltcCrypto.setCoin(ltccoin);
                 ltcCrypto.setUSD(currencyFormat.format(ltc.get(CryptoUtil.USD)));
                 Double ltcDbl = Double.valueOf(ltc.get(CryptoUtil.USD).toString());
-                ltcCrypto.setHoldingValue(CryptoUtil.formatDoubleValue(person.getQuantity(), ltcDbl));
-                ltcCrypto.setCost(CryptoUtil.formatDoubleValue(person.getQuantity(), person.getCost()));
-                ltcCrypto.setQuantity(person.getQuantity());
+                ltcCrypto.setHoldingValue(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), ltcDbl));
+                ltcCrypto.setCost(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), person.getHoldings().getCost()));
+                ltcCrypto.setQuantity(person.getHoldings().getQuantity());
 
-                PercentageDTO ltcdto = CryptoUtil.getPercentage(person.getQuantity(), person.getCost(), ltcDbl);
+                PercentageDTO ltcdto = CryptoUtil.getPercentage(person.getHoldings().getQuantity(), person.getHoldings().getCost(), ltcDbl);
                 ltcCrypto.setPercentage(ltcdto.getValueString());
                 if (ltcdto.getValueDouble() >= 0.0) {
                     ltcCrypto.setIncreaseDecrease(CryptoUtil.INCREASE);
@@ -157,11 +155,11 @@ public class ParserUtil {
                     cryptoValue.setCoin(coin);
                     cryptoValue.setUSD(currencyFormat.format(obj.get(CryptoUtil.USD)));
                     Double dbl = Double.valueOf(obj.get(CryptoUtil.USD).toString());
-                    cryptoValue.setHoldingValue(CryptoUtil.formatDoubleValue(person.getQuantity(), dbl));
-                    cryptoValue.setCost(CryptoUtil.getAltCost(person.getCost(), person.getQuantity()));
-                    cryptoValue.setQuantity(person.getQuantity());
+                    cryptoValue.setHoldingValue(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), dbl));
+                    cryptoValue.setCost(CryptoUtil.getAltCost(person.getHoldings().getCost(), person.getHoldings().getQuantity()));
+                    cryptoValue.setQuantity(person.getHoldings().getQuantity());
                     if (!symbol.equalsIgnoreCase(CryptoUtil.BTG_SYMBOL)) {
-                        PercentageDTO dto = CryptoUtil.getPercentage(person.getQuantity(), person.getCost(), dbl);
+                        PercentageDTO dto = CryptoUtil.getPercentage(person.getHoldings().getQuantity(), person.getHoldings().getCost(), dbl);
                         cryptoValue.setPercentage(dto.getValueString());
                         if (dto.getValueDouble() >= 0.0) {
                             cryptoValue.setIncreaseDecrease(CryptoUtil.INCREASE);

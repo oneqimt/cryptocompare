@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 /**
  * @author Dennis Miller
  */
-@WebServlet(name = "LogoutServlet", urlPatterns = {"/logout"}, loadOnStartup = 3)
+@WebServlet(name = "LogoutServlet", urlPatterns = {"/logout"})
 public class LogoutServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws  IOException {
 

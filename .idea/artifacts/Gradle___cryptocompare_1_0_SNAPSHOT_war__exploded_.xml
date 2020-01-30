@@ -18,14 +18,14 @@
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Gradle: com.googlecode.json-simple:json-simple:1.1.1" />
+          <element id="library" level="project" name="Gradle: io.cryptocontrol:crypto-news-api:2.5.0" />
           <element id="library" level="project" name="Gradle: com.google.code.gson:gson:2.8.2" />
           <element id="library" level="project" name="Gradle: junit:junit:4.10" />
+          <element id="library" level="project" name="Gradle: org.apache.httpcomponents:httpclient:4.5.5" />
           <element id="library" level="project" name="Gradle: org.hamcrest:hamcrest-core:1.1" />
-          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.cryptocontrol/crypto-news-api/2.5.0/6dba159397085edaf0660a43a88fa592f3a0ce2b/crypto-news-api-2.5.0.jar" />
-          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.5/1603dfd56ebcd583ccdf337b6c3984ac55d89e58/httpclient-4.5.5.jar" />
-          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.9/a86ce739e5a7175b4b234c290a00a5fdb80957a0/httpcore-4.4.9.jar" />
-          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar" />
-          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.10/4b95f4897fa13f2cd904aee711aeafc0c5295cd8/commons-codec-1.10.jar" />
+          <element id="library" level="project" name="Gradle: org.apache.httpcomponents:httpcore:4.4.9" />
+          <element id="library" level="project" name="Gradle: commons-logging:commons-logging:1.2" />
+          <element id="library" level="project" name="Gradle: commons-codec:commons-codec:1.10" />
         </element>
       </element>
     </root>

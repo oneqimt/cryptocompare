@@ -14,6 +14,7 @@ public class SecurityUtil {
     private String cryptoControlApi;
     private String cryptoCompareApi;
 
+
     private SecurityUtil(){
 
     }

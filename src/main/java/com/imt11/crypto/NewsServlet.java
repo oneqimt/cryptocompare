@@ -20,7 +20,7 @@ import io.cryptocontrol.cryptonewsapi.CryptoControlApi;
 /**
  * @author Dennis Miller
  */
-@WebServlet(name = "NewsServlet", urlPatterns = {"/coinnews"}, loadOnStartup = 4,
+@WebServlet(name = "NewsServlet", urlPatterns = {"/coinnews"},
         initParams = {@WebInitParam(name = "coin_name", value = "")})
 public class NewsServlet extends HttpServlet {
 
@@ -45,9 +45,11 @@ public class NewsServlet extends HttpServlet {
 
                 @Override
                 public void onSuccess(List<io.cryptocontrol.cryptonewsapi.models.Article> body) {
-                    for (io.cryptocontrol.cryptonewsapi.models.Article article : body) {
-                        articles.add(article);
-                    }
+
+                    articles.addAll(body);
+                    /*for (io.cryptocontrol.cryptonewsapi.models.Article article : body) {
+
+                    }*/
                 }
 
                 @Override

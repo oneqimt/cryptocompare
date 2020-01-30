@@ -1,31 +1,32 @@
 package com.imt11.crypto.database;
 
-import com.imt11.crypto.model.Auth;
 import com.imt11.crypto.model.Coin;
+import com.imt11.crypto.model.Holdings;
 import com.imt11.crypto.model.Person;
 import com.imt11.crypto.model.State;
 import com.imt11.crypto.model.TotalValues;
 import com.imt11.crypto.util.SecurityUtil;
 
-import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Dennis Miller
  */
 public class DBManager {
 
-
-    private Connection connection = null;
-
     public DBManager() {
     }
 
-    public Connection createConnection() throws IOException, ClassNotFoundException, SQLException {
+    public Connection createConnection() throws ClassNotFoundException, SQLException {
+
+        Connection connection;
 
         String host = SecurityUtil.getInstance().getHost();
         String username = SecurityUtil.getInstance().getUsername();
@@ -42,8 +43,7 @@ public class DBManager {
         return connection;
     }
 
-    public Boolean updateGrandTotals(int person_id, TotalValues totalValues) {
-        Boolean success = false;
+    public void updateGrandTotals(int person_id, TotalValues totalValues) {
 
         try {
             Connection connection = createConnection();
@@ -58,17 +58,12 @@ public class DBManager {
 
             ps.executeUpdate();
             ps.close();
+            connection.close();
 
-        } catch (IOException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+
+        } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
         }
-
-
-        return success;
 
     }
 
@@ -77,10 +72,10 @@ public class DBManager {
         try {
             Connection connection = createConnection();
 
-            String query = "SELECT * from grand_totals WHERE person_id="+personId;
+            String query = "SELECT * from grand_totals WHERE person_id=" + personId;
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
-            while(rs.next()){
+            while (rs.next()) {
                 totalValues.setTotalCost(rs.getString("total_cost"));
                 totalValues.setTotalValue(rs.getString("total_value"));
                 totalValues.setTotalPercentageIncreaseDecrease(rs.getString("total_change"));
@@ -88,95 +83,18 @@ public class DBManager {
                 totalValues.setPersonId(rs.getInt("person_id"));
             }
 
-
             statement.close();
+            rs.close();
+            connection.close();
 
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
 
         return totalValues;
     }
 
-    public List<Coin> getAllCoins() {
-        List<Coin> coins = new ArrayList<>();
-        try {
-            Connection connection = createConnection();
 
-            String query = "SELECT * from coins";
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(query);
-
-            while (rs.next()) {
-                Coin coin = new Coin();
-                coin.setCoin_id(rs.getInt("coin_id"));
-                coin.setCoin_symbol(rs.getString("coin_symbol"));
-                coin.setCoin_name(rs.getString("coin_name"));
-                coin.setName_id(rs.getString("name_id"));
-                coins.add(coin);
-            }
-
-            statement.close();
-
-
-        } catch (IOException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-
-        return coins;
-    }
-
-    public Auth getCredentials(String uname, String pass) throws IOException, ClassNotFoundException, SQLException {
-        Auth auth = new Auth();
-        Connection connection = createConnection();
-        String query = "SELECT * FROM crypto.auth WHERE username=? AND password=?";
-
-        PreparedStatement preparedStatement = connection.prepareStatement(query);
-        preparedStatement.setString(1, uname);
-        preparedStatement.setString(2, pass);
-
-        ResultSet rs = preparedStatement.executeQuery();
-
-        while (rs.next()) {
-            auth.setAuth_id(rs.getInt("auth_id"));
-            auth.setPassword(rs.getString("password"));
-            auth.setUsername(rs.getString("username"));
-            auth.setPerson_id(rs.getInt("person_id"));
-
-        }
-
-        preparedStatement.close();
-
-        return auth;
-    }
-
-    public Person getPerson(int person_id) throws IOException, ClassNotFoundException, SQLException {
-        Connection connection = createConnection();
-        String query = "SELECT auth.*, person.* FROM person\n" +
-                "JOIN auth ON auth.person_id = person.person_id\n" +
-                "WHERE person.person_id =" + person_id;
-        Statement st = connection.createStatement();
-        //  result set
-        ResultSet rs = st.executeQuery(query);
-        Person person = null;
-        while (rs.next()) {
-            person = new Person();
-            person.setPerson_id(rs.getInt("person_id"));
-            person.setFirst_name(rs.getString("first_name"));
-            person.setLast_name(rs.getString("last_name"));
-        }
-
-        return person;
-
-    }
 
     public List<Person> getPersonCoins(int personId) {
         List<Person> persons = new ArrayList<>();
@@ -201,9 +119,14 @@ public class DBManager {
                 person.setPerson_id(rs.getInt("person_id"));
                 person.setFirst_name(rs.getString("first_name"));
                 person.setLast_name(rs.getString("last_name"));
-                person.setQuantity(rs.getDouble("quantity"));
-                person.setCost(rs.getDouble("cost"));
 
+                Holdings holdings = new Holdings();
+                holdings.setQuantity(rs.getDouble("quantity"));
+                holdings.setCost(rs.getDouble("cost"));
+                person.setHoldings(holdings);
+                /*person.setQuantity(rs.getDouble("quantity"));
+                person.setCost(rs.getDouble("cost"));
+*/
                 State state = new State();
                 state.setAbbreviation(rs.getString("abbreviation"));
                 state.setId(rs.getInt("id"));
@@ -222,12 +145,10 @@ public class DBManager {
             }
 
             st.close();
+            rs.close();
+            connection.close();
 
-        } catch (IOException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
         }
 

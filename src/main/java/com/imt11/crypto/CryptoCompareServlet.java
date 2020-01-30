@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author Dennis Miller
  */
-@WebServlet(name = "CryptoCompareServlet", urlPatterns = {"/holdings"}, loadOnStartup = 2,
+@WebServlet(name = "CryptoCompareServlet", urlPatterns = {"/holdings"},
         initParams = {@WebInitParam(name = "person_id", value = "0")})
 
 public class CryptoCompareServlet extends HttpServlet {
@@ -76,23 +76,19 @@ public class CryptoCompareServlet extends HttpServlet {
         dbManager.updateGrandTotals(person_id, grandTotals);
 
 
-        if (combinedList != null) {
+        String testjson = this.gson.toJson(combinedList);
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        out.print(testjson);
+        out.flush();
+        out.close();
 
-            String testjson = this.gson.toJson(combinedList);
-            PrintWriter out = response.getWriter();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            out.print(testjson);
-            out.flush();
 
-
-            // FOR WEB
+        // FOR WEB
             /*request.setAttribute("cryptos", combinedList);
             request.setAttribute("grandtotals", grandTotals);
             request.getRequestDispatcher("cryptoresponse.jsp").forward(request, response);*/
-        } else {
-            response.getWriter().print("Cryptos not available!");
-        }
 
     }
 

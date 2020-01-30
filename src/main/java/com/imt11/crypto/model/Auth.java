@@ -9,6 +9,8 @@ public class Auth {
     private String username;
     private String password;
     private int person_id;
+    private String role;
+    private int enabled;
 
     public Auth() {
     }
@@ -45,6 +47,22 @@ public class Auth {
         this.person_id = person_id;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public int getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(int enabled) {
+        this.enabled = enabled;
+    }
+
     @Override
     public String toString() {
         return "Auth{" +
@@ -52,6 +70,8 @@ public class Auth {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", person_id=" + person_id +
+                ", role='" + role + '\'' +
+                ", enabled=" + enabled +
                 '}';
     }
 }

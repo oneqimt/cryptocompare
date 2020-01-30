@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author Dennis Miller
  */
-@WebServlet(name = "TotalServlet", urlPatterns = {"/totals"}, loadOnStartup = 4,
+@WebServlet(name = "TotalServlet", urlPatterns = {"/totals"},
         initParams = {@WebInitParam(name = "person_id", value = "0")})
 public class TotalServlet extends HttpServlet {
 
