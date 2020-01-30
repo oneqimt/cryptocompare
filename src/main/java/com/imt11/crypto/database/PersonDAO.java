@@ -95,10 +95,10 @@ public class PersonDAO {
         return status;
     }
 
-    public Person getPersonByEmail(String email){
+    public Person getPersonByEmail(String email) {
         Person person = null;
 
-        try{
+        try {
             DBManager db = new DBManager();
             Connection connection = db.createConnection();
             String sql = "SELECT * FROM person WHERE email =?";
@@ -106,9 +106,9 @@ public class PersonDAO {
             ps.setString(1, email);
 
             ResultSet rs = ps.executeQuery();
-            if (!rs.isBeforeFirst() ) {
+            if (!rs.isBeforeFirst()) {
                 System.out.println("OK PERSON DOES NOT EXIST in DATABASE, ADD THEM");
-            }else {
+            } else {
                 person = new Person();
                 person.setPerson_id(rs.getInt(1));
                 person.setFirst_name(rs.getString(2));
@@ -127,7 +127,7 @@ public class PersonDAO {
             rs.close();
             connection.close();
 
-        }catch(ClassNotFoundException | SQLException e){
+        } catch (ClassNotFoundException | SQLException e) {
             e.getLocalizedMessage();
         }
 
@@ -139,7 +139,9 @@ public class PersonDAO {
         try {
             DBManager db = new DBManager();
             Connection connection = db.createConnection();
-            String sql = "SELECT * FROM person WHERE person_id=?";
+
+
+            String sql = new StringBuilder().append("SELECT person.person_id,\n").append("       person.first_name,\n").append("       person.last_name,\n").append("       person.email,\n").append("       person.phone,\n").append("       person.address,\n").append("       person.city,\n").append("       person.zip,\n").append("       state.id,\n").append("       state.name,\n").append("       state.country,\n").append("       state.abbreviation\n").append("FROM person\n").append("         JOIN state ON state.id = person.state_id\n").append("WHERE person.person_id =?").toString();
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, personId);
 
@@ -153,10 +155,14 @@ public class PersonDAO {
                 person.setPhone(rs.getString(5));
                 person.setAddress(rs.getString(6));
                 person.setCity(rs.getString(7));
+                person.setZip(rs.getString(8));
                 State state = new State();
-                state.setId(rs.getInt(8));
+                state.setId(rs.getInt(9));
+                state.setName(rs.getString(10));
+                state.setCountry(rs.getString(11));
+                state.setAbbreviation(rs.getString(12));
                 person.setState(state);
-                person.setZip(rs.getString(9));
+
 
             }
             ps.close();

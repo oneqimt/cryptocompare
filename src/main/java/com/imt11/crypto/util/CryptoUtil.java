@@ -16,7 +16,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
@@ -64,7 +63,6 @@ public class CryptoUtil {
 			}
 			JSONParser parser = new JSONParser();
 			JSONObject baseline = (JSONObject) parser.parse(sb.toString());
-			System.out.println("BASELINE data is: "+" "+baseline);
 			String host = (String) baseline.get("host");
 			String username = (String) baseline.get("username");
 			String password = (String) baseline.get("password");
@@ -220,7 +218,9 @@ public class CryptoUtil {
                 } catch (java.text.ParseException e) {
                     e.printStackTrace();
                 }
-                btgval = btgnum.doubleValue();
+                if (btgnum != null) {
+                    btgval = btgnum.doubleValue();
+                }
             }
             if (val.getCoin().getCoin_name().equalsIgnoreCase(CryptoUtil.BTC_SYMBOL)) {
                 try {
@@ -228,7 +228,9 @@ public class CryptoUtil {
                 } catch (java.text.ParseException e) {
                     e.printStackTrace();
                 }
-                btcval = btcnum.doubleValue();
+                if (btcnum != null) {
+                    btcval = btcnum.doubleValue();
+                }
             }
         }
         // add BTG to total BTC
@@ -258,8 +260,12 @@ public class CryptoUtil {
             } catch (java.text.ParseException e) {
                 e.printStackTrace();
             }
-            costdbl += totalCost.doubleValue();
-            totaldbl += totalValue.doubleValue();
+            if (totalCost != null) {
+                costdbl += totalCost.doubleValue();
+            }
+            if (totalValue != null) {
+                totaldbl += totalValue.doubleValue();
+            }
 
         }
 
@@ -302,13 +308,11 @@ public class CryptoUtil {
             String mainLine;
 
             while ((mainLine = bufferedReader.readLine()) != null) {
-                sb.append(mainLine + "\n");
+                sb.append(mainLine).append("\n");
             }
 
             bufferedReader.close();
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

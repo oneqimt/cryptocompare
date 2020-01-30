@@ -38,7 +38,7 @@ public class LogoutServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         out.println(success);
         out.flush();
-
+        out.close();
 
         System.out.println("SESSION ENDED response is: " + " " + response.getHeaderNames().toString());
 

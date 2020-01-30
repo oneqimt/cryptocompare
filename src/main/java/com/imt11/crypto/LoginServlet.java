@@ -47,7 +47,7 @@ public class LoginServlet extends HttpServlet {
 
         Auth auth = null;
         Person person = null;
-        PersonDAO dao = new PersonDAO();
+        PersonDAO personDAO = new PersonDAO();
         AuthDAO authDAO = new AuthDAO();
         try {
             auth = authDAO.getCredentials(cleanusername, cleanpassword);
@@ -57,7 +57,7 @@ public class LoginServlet extends HttpServlet {
 
         if (auth != null && auth.getPassword() != null && !auth.getPassword().equals("")) {
 
-            person = dao.getPersonById(auth.getPerson_id());
+            person = personDAO.getPersonById(auth.getPerson_id());
         }
 
         if (auth != null && auth.getUsername() != null && auth.getPassword() != null) {
@@ -79,6 +79,8 @@ public class LoginServlet extends HttpServlet {
                 response.setCharacterEncoding("UTF-8");
                 out.print(personjson);
                 out.flush();
+                out.close();
+                // WEB
                 //response.sendRedirect(request.getContextPath()+"/holdings?person_id="+auth.getPerson_id());
             }
         } else {
