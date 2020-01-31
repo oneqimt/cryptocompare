@@ -1,13 +1,19 @@
 package com.imt11.crypto.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * @author Dennis Miller
  */
 public class Person {
 
+    @SerializedName("personId")
     private int person_id;
+    @SerializedName("firstName")
     private String first_name;
+    @SerializedName("lastName")
     private String last_name;
+
     private String email;
     private String phone;
     private String address;

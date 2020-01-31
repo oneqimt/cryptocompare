@@ -40,6 +40,7 @@ public class SignUpServlet extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         Gson gson = new Gson();
+
         SignUp signUp = gson.fromJson(reader, SignUp.class);
         System.out.println("In SIGN UP SERVLET and signup sent is: " + " " + signUp.toString());
 
@@ -57,7 +58,9 @@ public class SignUpServlet extends HttpServlet {
             // GET LAST INSERTED AUTH ID
             int new_auth_id = authDao.getAuthLastInsertedId();
             signUp.getAuth().setAuth_id(new_auth_id);
-            out.print(signUp);
+
+            String jsonsignup = gson.toJson(signUp);
+            out.print(jsonsignup);
             out.flush();
             out.close();
 
