@@ -32,3 +32,6 @@ out/
 src/main/resources/
 src/main/webapp/WEB-INF/classes/
 src/test/
+.DS_Store
+src/.DS_Store
+src/main/.DS_Store
