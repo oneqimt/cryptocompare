@@ -30,6 +30,8 @@ public class AuthDAO {
             auth.setPassword(rs.getString("password"));
             auth.setUsername(rs.getString("username"));
             auth.setPerson_id(rs.getInt("person_id"));
+            auth.setRole(rs.getString("role"));
+            auth.setEnabled(rs.getInt("enabled"));
 
         }
         preparedStatement.close();

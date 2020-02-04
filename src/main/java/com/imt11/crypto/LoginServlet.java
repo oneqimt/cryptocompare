@@ -5,6 +5,7 @@ import com.imt11.crypto.database.AuthDAO;
 import com.imt11.crypto.database.PersonDAO;
 import com.imt11.crypto.model.Auth;
 import com.imt11.crypto.model.Person;
+import com.imt11.crypto.model.SignUp;
 import com.imt11.crypto.util.CryptoUtil;
 
 import org.json.simple.parser.ParseException;
@@ -47,6 +48,7 @@ public class LoginServlet extends HttpServlet {
 
         Auth auth = null;
         Person person = null;
+        SignUp signUp;
         PersonDAO personDAO = new PersonDAO();
         AuthDAO authDAO = new AuthDAO();
         try {
@@ -72,8 +74,12 @@ public class LoginServlet extends HttpServlet {
                 }
                 session.setMaxInactiveInterval(30 * 60); // 30 minutes
 
-                String personjson = this.gson.toJson(person);
-                System.out.println("PERSON is : " + " " + personjson);
+                signUp = new SignUp();
+                signUp.setPerson(person);
+                signUp.setAuth(auth);
+
+                String personjson = this.gson.toJson(signUp);
+                System.out.println("SIGNUP in LOGIN is : " + " " + personjson);
                 PrintWriter out = response.getWriter();
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");

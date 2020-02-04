@@ -110,17 +110,17 @@ public class PersonDAO {
                 System.out.println("OK PERSON DOES NOT EXIST in DATABASE, ADD THEM");
             } else {
                 person = new Person();
-                person.setPerson_id(rs.getInt(1));
-                person.setFirst_name(rs.getString(2));
-                person.setLast_name(rs.getString(3));
-                person.setEmail(rs.getString(4));
-                person.setPhone(rs.getString(5));
-                person.setAddress(rs.getString(6));
-                person.setCity(rs.getString(7));
+                person.setPerson_id(rs.getInt("person_id"));
+                person.setFirst_name(rs.getString("first_name"));
+                person.setLast_name(rs.getString("last_name"));
+                person.setEmail(rs.getString("email"));
+                person.setPhone(rs.getString("phone"));
+                person.setAddress(rs.getString("address"));
+                person.setCity(rs.getString("city"));
                 State state = new State();
-                state.setId(rs.getInt(8));
+                state.setId(rs.getInt("state_id"));
                 person.setState(state);
-                person.setZip(rs.getString(9));
+                person.setZip(rs.getString("zip"));
             }
 
             ps.close();
@@ -140,27 +140,34 @@ public class PersonDAO {
             DBManager db = new DBManager();
             Connection connection = db.createConnection();
 
+            String sql = "SELECT person.*,\n" +
+                    "       state.id,\n" +
+                    "       state.name,\n" +
+                    "       state.country,\n" +
+                    "       state.abbreviation\n" +
+                    "FROM person\n" +
+                    "        JOIN state ON state.id = person.state_id\n" +
+                    "WHERE person.person_id = ?";
 
-            String sql = new StringBuilder().append("SELECT person.person_id,\n").append("       person.first_name,\n").append("       person.last_name,\n").append("       person.email,\n").append("       person.phone,\n").append("       person.address,\n").append("       person.city,\n").append("       person.zip,\n").append("       state.id,\n").append("       state.name,\n").append("       state.country,\n").append("       state.abbreviation\n").append("FROM person\n").append("         JOIN state ON state.id = person.state_id\n").append("WHERE person.person_id =?").toString();
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, personId);
 
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                person.setPerson_id(rs.getInt(1));
-                person.setFirst_name(rs.getString(2));
-                person.setLast_name(rs.getString(3));
-                person.setEmail(rs.getString(4));
-                person.setPhone(rs.getString(5));
-                person.setAddress(rs.getString(6));
-                person.setCity(rs.getString(7));
-                person.setZip(rs.getString(8));
+                person.setPerson_id(rs.getInt("person_id"));
+                person.setFirst_name(rs.getString("first_name"));
+                person.setLast_name(rs.getString("last_name"));
+                person.setEmail(rs.getString("email"));
+                person.setPhone(rs.getString("phone"));
+                person.setAddress(rs.getString("address"));
+                person.setCity(rs.getString("city"));
+                person.setZip(rs.getString("zip"));
                 State state = new State();
-                state.setId(rs.getInt(9));
-                state.setName(rs.getString(10));
-                state.setCountry(rs.getString(11));
-                state.setAbbreviation(rs.getString(12));
+                state.setId(rs.getInt("id"));
+                state.setName(rs.getString("name"));
+                state.setCountry(rs.getString("country"));
+                state.setAbbreviation(rs.getString("abbreviation"));
                 person.setState(state);
 
 
