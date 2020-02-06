@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -38,8 +37,6 @@ public class LoginServlet extends HttpServlet {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        response.setContentType("text/html");
 
         String un = request.getParameter("uname");
         String pwd = request.getParameter("pass");
@@ -90,12 +87,8 @@ public class LoginServlet extends HttpServlet {
                 //response.sendRedirect(request.getContextPath()+"/holdings?person_id="+auth.getPerson_id());
             }
         } else {
-
-            // NOTE : could return a little better response to client
-            System.out.println("BAIL NO DICE");
-            RequestDispatcher rd = request.getRequestDispatcher("index.html");
-            System.out.println("<font color=red>Either user name or password is wrong.</font>");
-            rd.include(request, response);
+            //401 :specifically for use when authentication is required and has failed or has not yet been provided.
+            response.sendError(401);
         }
 
     }

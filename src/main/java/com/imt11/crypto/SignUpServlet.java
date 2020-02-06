@@ -46,7 +46,7 @@ public class SignUpServlet extends HttpServlet {
 
         // INSERT INTO PERSON
         Person exists = personDAO.getPersonByEmail(signUp.getPerson().getEmail());
-        if (exists == null){
+        if (exists == null) {
             personDAO.savePerson(signUp.getPerson());
             // GET PERSON LAST INSERTED ID
             int new_person_id = personDAO.getPersonLastInsertedId();
@@ -65,12 +65,10 @@ public class SignUpServlet extends HttpServlet {
             out.close();
 
 
-        }else{
+        } else {
             System.out.println("PERSON already exists");
-            out.print("PERSON ALREADY EXISTS");
-            out.flush();
-            out.close();
-
+            //403 : attempting a prohibited action (e.g. creating a duplicate record where only one is allowed).
+            response.sendError(403);
         }
 
     }
