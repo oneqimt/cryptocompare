@@ -53,7 +53,7 @@ public class CryptoUtil {
     }
 
     public static void loadBaselineData() throws IOException, ParseException {
-		InputStream resourceAsStream = LoginServlet.class.getResourceAsStream("/baseline.json"); // works!
+		InputStream resourceAsStream = LoginServlet.class.getResourceAsStream("/baseline.json");
 		if (resourceAsStream != null) {
 			InputStreamReader streamReader = new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8);
 			BufferedReader reader = new BufferedReader(streamReader);
@@ -69,6 +69,14 @@ public class CryptoUtil {
 			String driver = (String) baseline.get("driver");
 			String cryptoControlApiKey = (String) baseline.get("crypto_control_api_key");
 			String cryptoCompareApiKey = (String) baseline.get("crypto_compare_api_key");
+			String smtpHost = (String) baseline.get("smtp_host");
+			String smtpPort = (String) baseline.get("smtp_port");
+			String smtpPassword = (String) baseline.get("smtp_password");
+			String smtpSenderEmail = (String) baseline.get("smtp_sender_email");
+			SecurityUtil.getInstance().setSmtpHost(smtpHost);
+			SecurityUtil.getInstance().setSmtpPort(smtpPort);
+			SecurityUtil.getInstance().setSmtpPassword(smtpPassword);
+			SecurityUtil.getInstance().setSmtpSenderEmail(smtpSenderEmail);
 			SecurityUtil.getInstance().setDriver(driver);
 			SecurityUtil.getInstance().setHost(host);
 			SecurityUtil.getInstance().setPassword(password);

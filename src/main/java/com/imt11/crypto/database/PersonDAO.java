@@ -97,6 +97,40 @@ public class PersonDAO {
 
     public Person getPersonByEmail(String email) {
         Person person = null;
+        try{
+            DBManager dbManager = new DBManager();
+            Connection connection = dbManager.createConnection();
+            String sql = "SELECT * FROM person WHERE email =?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, email);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                person = new Person();
+                person.setPerson_id(rs.getInt(1));
+                person.setFirst_name(rs.getString(2));
+                person.setLast_name(rs.getString(3));
+                person.setEmail(rs.getString(4));
+                person.setPhone(rs.getString(5));
+                person.setAddress(rs.getString(6));
+                person.setCity(rs.getString(7));
+                State state = new State();
+                state.setId(rs.getInt(8));
+                person.setState(state);
+                person.setZip(rs.getString(9));
+
+            }
+
+        }catch (ClassNotFoundException | SQLException e){
+            e.getLocalizedMessage();
+            e.printStackTrace();
+        }
+
+        return person;
+    }
+
+    public Person checkIfPersonExists(String email) {
+        Person person = null;
 
         try {
             DBManager db = new DBManager();

@@ -13,7 +13,10 @@ public class SecurityUtil {
     private String driver;
     private String cryptoControlApi;
     private String cryptoCompareApi;
-
+    private String smtpHost;
+    private String smtpPort;
+    private String smtpPassword;
+    private String smtpSenderEmail;
 
     private SecurityUtil(){
 
@@ -73,5 +76,37 @@ public class SecurityUtil {
 
     public void setCryptoCompareApi(String cryptoCompareApi) {
         this.cryptoCompareApi = cryptoCompareApi;
+    }
+
+    public String getSmtpHost() {
+        return smtpHost;
+    }
+
+    public void setSmtpHost(String smtpHost) {
+        this.smtpHost = smtpHost;
+    }
+
+    public String getSmtpPort() {
+        return smtpPort;
+    }
+
+    public void setSmtpPort(String smtpPort) {
+        this.smtpPort = smtpPort;
+    }
+
+    public String getSmtpPassword() {
+        return smtpPassword;
+    }
+
+    public void setSmtpPassword(String smtpPassword) {
+        this.smtpPassword = smtpPassword;
+    }
+
+    public String getSmtpSenderEmail() {
+        return smtpSenderEmail;
+    }
+
+    public void setSmtpSenderEmail(String smtpSenderEmail) {
+        this.smtpSenderEmail = smtpSenderEmail;
     }
 }

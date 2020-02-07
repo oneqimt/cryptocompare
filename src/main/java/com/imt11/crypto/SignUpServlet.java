@@ -45,7 +45,7 @@ public class SignUpServlet extends HttpServlet {
         System.out.println("In SIGN UP SERVLET and signup sent is: " + " " + signUp.toString());
 
         // INSERT INTO PERSON
-        Person exists = personDAO.getPersonByEmail(signUp.getPerson().getEmail());
+        Person exists = personDAO.checkIfPersonExists(signUp.getPerson().getEmail());
         if (exists == null) {
             personDAO.savePerson(signUp.getPerson());
             // GET PERSON LAST INSERTED ID
@@ -63,7 +63,6 @@ public class SignUpServlet extends HttpServlet {
             out.print(jsonsignup);
             out.flush();
             out.close();
-
 
         } else {
             System.out.println("PERSON already exists");

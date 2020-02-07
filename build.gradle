@@ -16,4 +16,6 @@ dependencies {
     compile 'com.googlecode.json-simple:json-simple:1.1.1'
     implementation 'com.google.code.gson:gson:2.8.5'
     compile 'io.cryptocontrol:crypto-news-api:2.5.0'
+    compile 'javax.mail:mail:1.4.7'
+    compile 'org.apache.commons:commons-lang3:3.9'
 }

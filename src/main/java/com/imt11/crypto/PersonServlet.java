@@ -56,7 +56,7 @@ public class PersonServlet extends HttpServlet {
 
         }else if(action.equalsIgnoreCase(CryptoUtil.SAVE)){
             // check to see if they are not already in DB
-            Person exists = dao.getPersonByEmail(person.getEmail());
+            Person exists = dao.checkIfPersonExists(person.getEmail());
             if (exists == null){
                 // call save
                 status = dao.savePerson(person);

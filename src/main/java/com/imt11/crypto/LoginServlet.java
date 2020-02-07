@@ -83,6 +83,7 @@ public class LoginServlet extends HttpServlet {
                 out.print(personjson);
                 out.flush();
                 out.close();
+
                 // WEB
                 //response.sendRedirect(request.getContextPath()+"/holdings?person_id="+auth.getPerson_id());
             }
