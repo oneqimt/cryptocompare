@@ -17,6 +17,8 @@ public class SecurityUtil {
     private String smtpPort;
     private String smtpPassword;
     private String smtpSenderEmail;
+    private String coinMarketCapProdApiKey;
+    private String coinMarketCapTestApiKey;
 
     private SecurityUtil(){
 
@@ -108,5 +110,21 @@ public class SecurityUtil {
 
     public void setSmtpSenderEmail(String smtpSenderEmail) {
         this.smtpSenderEmail = smtpSenderEmail;
+    }
+
+    public String getCoinMarketCapProdApiKey() {
+        return coinMarketCapProdApiKey;
+    }
+
+    public void setCoinMarketCapProdApiKey(String coinMarketCapProdApiKey) {
+        this.coinMarketCapProdApiKey = coinMarketCapProdApiKey;
+    }
+
+    public String getCoinMarketCapTestApiKey() {
+        return coinMarketCapTestApiKey;
+    }
+
+    public void setCoinMarketCapTestApiKey(String coinMarketCapTestApiKey) {
+        this.coinMarketCapTestApiKey = coinMarketCapTestApiKey;
     }
 }

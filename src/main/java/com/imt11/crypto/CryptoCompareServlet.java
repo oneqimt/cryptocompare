@@ -2,6 +2,8 @@ package com.imt11.crypto;
 
 import com.google.gson.Gson;
 import com.imt11.crypto.database.DBManager;
+import com.imt11.crypto.database.HoldingsDAO;
+import com.imt11.crypto.model.CoinMarketCapLatest;
 import com.imt11.crypto.model.CryptoValue;
 import com.imt11.crypto.model.Person;
 import com.imt11.crypto.model.TotalValues;
@@ -14,6 +16,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +35,34 @@ import javax.servlet.http.HttpServletResponse;
 
 public class CryptoCompareServlet extends HttpServlet {
     private Gson gson = new Gson();
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        String action = request.getParameter("action");
+        if (action.equalsIgnoreCase(CryptoUtil.GET_SLUGS)){
+
+            PrintWriter out = response.getWriter();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            Gson gson = new Gson();
+            HoldingsDAO holdingsDAO = new HoldingsDAO();
+            String responseStr = "";
+            try{
+                responseStr = holdingsDAO.getLatestFromCoinMarketCap();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+
+            CoinMarketCapLatest coinMarketCapLatest= gson.fromJson(responseStr, CoinMarketCapLatest.class);
+
+            String responseObj = gson.toJson(coinMarketCapLatest);
+
+            out.print(responseObj);
+            out.flush();
+            out.close();
+        }
+
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -91,13 +122,5 @@ public class CryptoCompareServlet extends HttpServlet {
             request.getRequestDispatcher("cryptoresponse.jsp").forward(request, response);*/
 
     }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String name = request.getParameter("name");
-        if (name == null) name = "Test";
-        request.setAttribute("user", name);
-        request.getRequestDispatcher("response.jsp").forward(request, response);
-    }
-
 
 }

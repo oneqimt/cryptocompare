@@ -38,7 +38,7 @@ public class CryptoUtil {
     public static final String SAVE = "save";
     public static final String UPDATE = "update";
     public static final String DELETE = "delete";
-    public static final String GET = "get";
+    public static final String GET_SLUGS = "getslugs";
     public static double BTC = 12.83;
     public static String USD = "USD";
     public static String BTC_SYMBOL = "BTC";
@@ -73,6 +73,10 @@ public class CryptoUtil {
 			String smtpPort = (String) baseline.get("smtp_port");
 			String smtpPassword = (String) baseline.get("smtp_password");
 			String smtpSenderEmail = (String) baseline.get("smtp_sender_email");
+			String coinMarketCapProdApiKey = (String)baseline.get("coin_market_cap_prod_api_key");
+			String coinMarketCapTestApiKey = (String)baseline.get("coin_market_cap_test_api_key");
+			SecurityUtil.getInstance().setCoinMarketCapProdApiKey(coinMarketCapProdApiKey);
+			SecurityUtil.getInstance().setCoinMarketCapTestApiKey(coinMarketCapTestApiKey);
 			SecurityUtil.getInstance().setSmtpHost(smtpHost);
 			SecurityUtil.getInstance().setSmtpPort(smtpPort);
 			SecurityUtil.getInstance().setSmtpPassword(smtpPassword);
