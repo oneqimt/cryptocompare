@@ -5,6 +5,7 @@ import com.imt11.crypto.database.DBManager;
 import com.imt11.crypto.database.HoldingsDAO;
 import com.imt11.crypto.model.CoinMarketCapLatest;
 import com.imt11.crypto.model.CryptoValue;
+import com.imt11.crypto.model.Holdings;
 import com.imt11.crypto.model.Person;
 import com.imt11.crypto.model.TotalValues;
 import com.imt11.crypto.util.CryptoUtil;
@@ -14,6 +15,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
@@ -38,29 +40,79 @@ public class CryptoCompareServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String action = request.getParameter("action");
-        if (action.equalsIgnoreCase(CryptoUtil.GET_SLUGS)){
+        int status = 0;
 
-            PrintWriter out = response.getWriter();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            Gson gson = new Gson();
-            HoldingsDAO holdingsDAO = new HoldingsDAO();
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        Gson gson = new Gson();
+        HoldingsDAO holdingsDAO = new HoldingsDAO();
+
+        BufferedReader reader = request.getReader();
+        Holdings holding = gson.fromJson(reader, Holdings.class);
+        System.out.println("In CryptoCompareServlet and holding sent is: " + " " + holding.toString());
+
+        String action = request.getParameter("action");
+        if (action.equalsIgnoreCase(CryptoUtil.ADD_HOLDING)) {
+            // /holdings?action=addholding
+            Holdings exists = holdingsDAO.checkIfHoldingExists(holding);
+            if (exists == null) {
+                // call save
+                status = holdingsDAO.addHolding(holding);
+                int new_holdings_id = holdingsDAO.getHoldingLastInsertedId();
+                holding.setHolding_id(new_holdings_id);
+                System.out.println("new_holdings_id is: " + " " + new_holdings_id);
+                if (status > 0) {
+                    System.out.println("ADDED HOLDING");
+                    String str = gson.toJson(holding);
+                    out.print(str);
+                }
+            } else {
+                System.out.println("HOLDING already exists");
+                out.print("HOLDING ALREADY EXISTS");
+            }
+
+        } else if (action.equalsIgnoreCase(CryptoUtil.DELETE_HOLDING)) {
+
+            //call delete
+            status = holdingsDAO.deleteHolding(holding);
+            if (status >0 ){
+                System.out.println("HOLDING DELETED");
+                String str = gson.toJson(holding);
+                out.print(str);
+            }
+
+        } else if (action.equalsIgnoreCase(CryptoUtil.UPDATE_HOLDING)) {
+
+            // call update
+            status = holdingsDAO.updateHolding(holding);
+            if (status > 0){
+                System.out.println("HOLDING UPDATED");
+                String str = gson.toJson(holding);
+                out.print(str);
+            }
+
+        } else {
+            // just get the list
+            // action is "getslugs"
+            // /holdings?action=getslugs
             String responseStr = "";
-            try{
+            try {
                 responseStr = holdingsDAO.getLatestFromCoinMarketCap();
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
 
-            CoinMarketCapLatest coinMarketCapLatest= gson.fromJson(responseStr, CoinMarketCapLatest.class);
+            CoinMarketCapLatest coinMarketCapLatest = gson.fromJson(responseStr, CoinMarketCapLatest.class);
 
             String responseObj = gson.toJson(coinMarketCapLatest);
 
             out.print(responseObj);
-            out.flush();
-            out.close();
         }
+
+
+        out.flush();
+        out.close();
 
     }
 

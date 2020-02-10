@@ -43,7 +43,8 @@ public class PersonServlet extends HttpServlet {
             status = dao.updatePerson(person);
             if (status > 0){
                 System.out.println("UPDATE PERSON");
-                out.print(person);
+                String str = gson.toJson(person);
+                out.print(str);
             }
 
         }else if (action.equalsIgnoreCase(CryptoUtil.DELETE)){
@@ -51,7 +52,8 @@ public class PersonServlet extends HttpServlet {
             status = dao.deletePerson(person);
             if (status >0 ){
                 System.out.println("DELETE PERSON");
-                out.print(person);
+                String str = gson.toJson(person);
+                out.print(str);
             }
 
         }else if(action.equalsIgnoreCase(CryptoUtil.SAVE)){
@@ -65,7 +67,8 @@ public class PersonServlet extends HttpServlet {
                 System.out.println("new_person_id is: "+" "+new_person_id);
                 if (status > 0){
                     System.out.println("SAVE PERSON");
-                    out.print(person);
+                    String str = gson.toJson(person);
+                    out.print(str);
                 }
             }else {
                 System.out.println("PERSON already exists");
@@ -73,10 +76,11 @@ public class PersonServlet extends HttpServlet {
             }
 
         }else{
-            // it is a get
+            // just get the person
             Person newperson = dao.getPersonById(person.getPerson_id());
             System.out.println("GET PERSON");
-            out.print(newperson);
+            String str = gson.toJson(newperson);
+            out.print(str);
         }
 
         out.flush();

@@ -1,18 +1,14 @@
 package com.imt11.crypto.model;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * @author Dennis Miller
  */
 public class Holdings {
-    @SerializedName("holdingId")
+
     private int holding_id;
-    @SerializedName("coinId")
     private int coin_id;
     private double quantity;
     private double cost;
-    @SerializedName("personId")
     private int person_id;
 
     public Holdings() {

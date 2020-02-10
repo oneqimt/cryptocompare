@@ -39,6 +39,10 @@ public class CryptoUtil {
     public static final String UPDATE = "update";
     public static final String DELETE = "delete";
     public static final String GET_SLUGS = "getslugs";
+    public static final String ADD_HOLDING = "addholding";
+    public static final String DELETE_HOLDING = "deleteholding";
+    public static final String UPDATE_HOLDING = "updateholding";
+
     public static double BTC = 12.83;
     public static String USD = "USD";
     public static String BTC_SYMBOL = "BTC";

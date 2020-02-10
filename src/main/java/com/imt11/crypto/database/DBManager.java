@@ -34,11 +34,8 @@ public class DBManager {
         String driver = SecurityUtil.getInstance().getDriver();
 
         Class.forName(driver);
-        System.out.println("--------------------------");
-        System.out.println("DRIVER: " + driver);
 
         connection = DriverManager.getConnection(host, username, password);
-        System.out.println("CONNECTION: " + connection);
 
         return connection;
     }

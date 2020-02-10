@@ -76,7 +76,6 @@ public class LoginServlet extends HttpServlet {
                 signUp.setAuth(auth);
 
                 String personjson = this.gson.toJson(signUp);
-                System.out.println("SIGNUP in LOGIN is : " + " " + personjson);
                 PrintWriter out = response.getWriter();
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
