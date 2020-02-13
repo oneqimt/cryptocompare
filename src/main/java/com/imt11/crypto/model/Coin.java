@@ -1,5 +1,7 @@
 package com.imt11.crypto.model;
 
+import java.util.Objects;
+
 /**
  * @author Dennis Miller
  */
@@ -8,7 +10,8 @@ public class Coin {
     private int coin_id;
     private String coin_name;
     private String coin_symbol;
-    private String name_id;
+    private int cmc_id;
+    private String slug;
 
     public Coin() {
     }
@@ -37,12 +40,37 @@ public class Coin {
         this.coin_symbol = coin_symbol;
     }
 
-    public String getName_id() {
-        return name_id;
+    public int getCmc_id() {
+        return cmc_id;
     }
 
-    public void setName_id(String name_id) {
-        this.name_id = name_id;
+    public void setCmc_id(int cmc_id) {
+        this.cmc_id = cmc_id;
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Coin coin = (Coin) o;
+        return coin_id == coin.coin_id &&
+                cmc_id == coin.cmc_id &&
+                Objects.equals(coin_name, coin.coin_name) &&
+                Objects.equals(coin_symbol, coin.coin_symbol) &&
+                Objects.equals(slug, coin.slug);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(coin_id, coin_name, coin_symbol, cmc_id, slug);
     }
 
     @Override
@@ -51,7 +79,8 @@ public class Coin {
                 "coin_id=" + coin_id +
                 ", coin_name='" + coin_name + '\'' +
                 ", coin_symbol='" + coin_symbol + '\'' +
-                ", name_id='" + name_id + '\'' +
+                ", cmc_id=" + cmc_id +
+                ", slug='" + slug + '\'' +
                 '}';
     }
 }

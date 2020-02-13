@@ -121,9 +121,7 @@ public class DBManager {
                 holdings.setQuantity(rs.getDouble("quantity"));
                 holdings.setCost(rs.getDouble("cost"));
                 person.setHoldings(holdings);
-                /*person.setQuantity(rs.getDouble("quantity"));
-                person.setCost(rs.getDouble("cost"));
-*/
+
                 State state = new State();
                 state.setAbbreviation(rs.getString("abbreviation"));
                 state.setId(rs.getInt("id"));
@@ -133,10 +131,9 @@ public class DBManager {
                 coin.setCoin_id(rs.getInt("coin_id"));
                 coin.setCoin_name(rs.getString("coin_name"));
                 coin.setCoin_symbol(rs.getString("coin_symbol"));
-                coin.setName_id(rs.getString("name_id"));
+                coin.setCmc_id(rs.getInt("cmc_id"));
+                coin.setSlug(rs.getString("slug"));
                 person.setCoin(coin);
-
-                //TODO add holdings...
 
                 persons.add(person);
             }

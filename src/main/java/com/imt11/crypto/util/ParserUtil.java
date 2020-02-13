@@ -31,105 +31,126 @@ public class ParserUtil {
         // if person has these main coins, parse them
         for (Person person : persons) {
             String symbol = person.getCoin().getCoin_symbol();
-            if (symbol.equalsIgnoreCase(CryptoUtil.BTC_SYMBOL)) {
-                CryptoValue btcCrypto = new CryptoValue();
-                Coin btccoin = new Coin();
-                btccoin.setCoin_id(person.getCoin().getCoin_id());
-                btccoin.setCoin_symbol(symbol);
-                btccoin.setCoin_name(person.getCoin().getCoin_name());
-                btccoin.setName_id(person.getCoin().getName_id());
-                btcCrypto.setCoin(btccoin);
-                btcCrypto.setUSD(currencyFormat.format(btc.get(CryptoUtil.USD)));
-                Double btcDbl = Double.valueOf(btc.get(CryptoUtil.USD).toString());
-                btcCrypto.setHoldingValue(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), btcDbl));
-                btcCrypto.setCost(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), person.getHoldings().getCost()));
-                btcCrypto.setQuantity(person.getHoldings().getQuantity());
+            if (btc != null) {
+                if (symbol.equalsIgnoreCase(CryptoUtil.BTC_SYMBOL)) {
+                    CryptoValue btcCrypto = new CryptoValue();
+                    Coin btccoin = new Coin();
+                    btccoin.setCoin_id(person.getCoin().getCoin_id());
+                    btccoin.setCoin_symbol(symbol);
+                    btccoin.setCoin_name(person.getCoin().getCoin_name());
+                    btccoin.setCmc_id(person.getCoin().getCmc_id());
+                    btccoin.setSlug(person.getCoin().getSlug());
+                    btcCrypto.setCoin(btccoin);
+                    btcCrypto.setUSD(currencyFormat.format(btc.get(CryptoUtil.USD)));
+                    Double btcDbl = Double.valueOf(btc.get(CryptoUtil.USD).toString());
+                    btcCrypto.setHoldingValue(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), btcDbl));
+                    btcCrypto.setCost(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), person.getHoldings().getCost()));
+                    btcCrypto.setQuantity(person.getHoldings().getQuantity());
 
-                // Add BCH here
-                Double bchval = Double.valueOf(bch.get(CryptoUtil.USD).toString());
-                // add bch to btcDbl
-                Double aggregateDBl = btcDbl + bchval;
+                    double aggregateDBl;
+                    if (bch != null) {
+                        // Add BCH here
+                        Double bchval = Double.valueOf(bch.get(CryptoUtil.USD).toString());
+                        // add bch to btcDbl
+                        aggregateDBl = btcDbl + bchval;
+                    } else {
+                        aggregateDBl = btcDbl;
+                    }
 
-                PercentageDTO btcdto = CryptoUtil.getPercentage(person.getHoldings().getQuantity(), person.getHoldings().getCost(), aggregateDBl);
-                btcCrypto.setPercentage(btcdto.getValueString());
-                if (btcdto.getValueDouble() >= 0.0) {
-                    btcCrypto.setIncreaseDecrease(CryptoUtil.INCREASE);
-                } else {
-                    btcCrypto.setIncreaseDecrease(CryptoUtil.DECREASE);
+
+                    PercentageDTO btcdto = CryptoUtil.getPercentage(person.getHoldings().getQuantity(), person.getHoldings().getCost(), aggregateDBl);
+                    btcCrypto.setPercentage(btcdto.getValueString());
+                    if (btcdto.getValueDouble() >= 0.0) {
+                        btcCrypto.setIncreaseDecrease(CryptoUtil.INCREASE);
+                    } else {
+                        btcCrypto.setIncreaseDecrease(CryptoUtil.DECREASE);
+                    }
+
+                    cryptos.add(btcCrypto);
+                    System.out.println("BTC CryptoValue is:" + " " + btcCrypto.toString());
                 }
 
-                cryptos.add(btcCrypto);
-                System.out.println("BTC CryptoValue is:" + " " + btcCrypto.toString());
             }
-            if (symbol.equalsIgnoreCase(CryptoUtil.ETH_SYMBOL)) {
-                CryptoValue ethCrypto = new CryptoValue();
-                Coin ethcoin = new Coin();
-                ethcoin.setCoin_id(person.getCoin().getCoin_id());
-                ethcoin.setCoin_symbol(symbol);
-                ethcoin.setCoin_name(person.getCoin().getCoin_name());
-                ethcoin.setName_id(person.getCoin().getName_id());
-                ethCrypto.setCoin(ethcoin);
-                ethCrypto.setUSD(currencyFormat.format(eth.get(CryptoUtil.USD)));
-                Double ethDbl = Double.valueOf(eth.get(CryptoUtil.USD).toString());
-                ethCrypto.setHoldingValue(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), ethDbl));
-                ethCrypto.setCost(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), person.getHoldings().getCost()));
-                ethCrypto.setQuantity(person.getHoldings().getQuantity());
 
-                PercentageDTO ethdto = CryptoUtil.getPercentage(person.getHoldings().getQuantity(), person.getHoldings().getCost(), ethDbl);
-                ethCrypto.setPercentage(ethdto.getValueString());
-                if (ethdto.getValueDouble() >= 0.0) {
-                    ethCrypto.setIncreaseDecrease(CryptoUtil.INCREASE);
-                } else {
-                    ethCrypto.setIncreaseDecrease(CryptoUtil.DECREASE);
+            if (eth != null) {
+                if (symbol.equalsIgnoreCase(CryptoUtil.ETH_SYMBOL)) {
+                    CryptoValue ethCrypto = new CryptoValue();
+                    Coin ethcoin = new Coin();
+                    ethcoin.setCoin_id(person.getCoin().getCoin_id());
+                    ethcoin.setCoin_symbol(symbol);
+                    ethcoin.setCoin_name(person.getCoin().getCoin_name());
+                    ethcoin.setCmc_id(person.getCoin().getCmc_id());
+                    ethcoin.setSlug(person.getCoin().getSlug());
+                    ethCrypto.setCoin(ethcoin);
+                    ethCrypto.setUSD(currencyFormat.format(eth.get(CryptoUtil.USD)));
+                    Double ethDbl = Double.valueOf(eth.get(CryptoUtil.USD).toString());
+                    ethCrypto.setHoldingValue(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), ethDbl));
+                    ethCrypto.setCost(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), person.getHoldings().getCost()));
+                    ethCrypto.setQuantity(person.getHoldings().getQuantity());
+
+                    PercentageDTO ethdto = CryptoUtil.getPercentage(person.getHoldings().getQuantity(), person.getHoldings().getCost(), ethDbl);
+                    ethCrypto.setPercentage(ethdto.getValueString());
+                    if (ethdto.getValueDouble() >= 0.0) {
+                        ethCrypto.setIncreaseDecrease(CryptoUtil.INCREASE);
+                    } else {
+                        ethCrypto.setIncreaseDecrease(CryptoUtil.DECREASE);
+                    }
+                    cryptos.add(ethCrypto);
+
                 }
-                cryptos.add(ethCrypto);
-
             }
 
-            if (symbol.equalsIgnoreCase(CryptoUtil.BCH_SYMBOL)) {
-                CryptoValue bchCrypto = new CryptoValue();
-                Coin bchcoin = new Coin();
-                bchcoin.setCoin_id(person.getCoin().getCoin_id());
-                bchcoin.setCoin_symbol(symbol);
-                bchcoin.setCoin_name(person.getCoin().getCoin_name());
-                bchcoin.setName_id(person.getCoin().getName_id());
-                bchCrypto.setCoin(bchcoin);
-                bchCrypto.setCoin(bchcoin);
-                bchCrypto.setUSD(currencyFormat.format(bch.get(CryptoUtil.USD)));
-                Double bchDbl = Double.valueOf(bch.get(CryptoUtil.USD).toString());
-                bchCrypto.setHoldingValue(CryptoUtil.formatDoubleValue(bchDbl, person.getHoldings().getQuantity()));
-                bchCrypto.setCost(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), person.getHoldings().getCost()));
-                bchCrypto.setIncreaseDecrease(CryptoUtil.INCREASE);
-                bchCrypto.setPercentage("SEE BITCOIN");
-                bchCrypto.setQuantity(person.getHoldings().getQuantity());
+            if (bch != null) {
+                if (symbol.equalsIgnoreCase(CryptoUtil.BCH_SYMBOL)) {
+                    CryptoValue bchCrypto = new CryptoValue();
+                    Coin bchcoin = new Coin();
+                    bchcoin.setCoin_id(person.getCoin().getCoin_id());
+                    bchcoin.setCoin_symbol(symbol);
+                    bchcoin.setCoin_name(person.getCoin().getCoin_name());
+                    bchcoin.setCmc_id(person.getCoin().getCmc_id());
+                    bchcoin.setSlug(person.getCoin().getSlug());
+                    bchCrypto.setCoin(bchcoin);
+                    bchCrypto.setCoin(bchcoin);
+                    bchCrypto.setUSD(currencyFormat.format(bch.get(CryptoUtil.USD)));
+                    Double bchDbl = Double.valueOf(bch.get(CryptoUtil.USD).toString());
+                    bchCrypto.setHoldingValue(CryptoUtil.formatDoubleValue(bchDbl, person.getHoldings().getQuantity()));
+                    bchCrypto.setCost(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), person.getHoldings().getCost()));
+                    bchCrypto.setIncreaseDecrease(CryptoUtil.INCREASE);
+                    bchCrypto.setPercentage("SEE BITCOIN");
+                    bchCrypto.setQuantity(person.getHoldings().getQuantity());
 
-                cryptos.add(bchCrypto);
-            }
-
-            if (symbol.equalsIgnoreCase(CryptoUtil.LTC_SYMBOL)) {
-                CryptoValue ltcCrypto = new CryptoValue();
-                Coin ltccoin = new Coin();
-                ltccoin.setCoin_id(person.getCoin().getCoin_id());
-                ltccoin.setCoin_symbol(symbol);
-                ltccoin.setCoin_name(person.getCoin().getCoin_name());
-                ltccoin.setName_id(person.getCoin().getName_id());
-                ltcCrypto.setCoin(ltccoin);
-                ltcCrypto.setCoin(ltccoin);
-                ltcCrypto.setUSD(currencyFormat.format(ltc.get(CryptoUtil.USD)));
-                Double ltcDbl = Double.valueOf(ltc.get(CryptoUtil.USD).toString());
-                ltcCrypto.setHoldingValue(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), ltcDbl));
-                ltcCrypto.setCost(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), person.getHoldings().getCost()));
-                ltcCrypto.setQuantity(person.getHoldings().getQuantity());
-
-                PercentageDTO ltcdto = CryptoUtil.getPercentage(person.getHoldings().getQuantity(), person.getHoldings().getCost(), ltcDbl);
-                ltcCrypto.setPercentage(ltcdto.getValueString());
-                if (ltcdto.getValueDouble() >= 0.0) {
-                    ltcCrypto.setIncreaseDecrease(CryptoUtil.INCREASE);
-                } else {
-                    ltcCrypto.setIncreaseDecrease(CryptoUtil.DECREASE);
+                    cryptos.add(bchCrypto);
                 }
-                cryptos.add(ltcCrypto);
+
             }
+            if (ltc != null) {
+                if (symbol.equalsIgnoreCase(CryptoUtil.LTC_SYMBOL)) {
+                    CryptoValue ltcCrypto = new CryptoValue();
+                    Coin ltccoin = new Coin();
+                    ltccoin.setCoin_id(person.getCoin().getCoin_id());
+                    ltccoin.setCoin_symbol(symbol);
+                    ltccoin.setCoin_name(person.getCoin().getCoin_name());
+                    ltccoin.setCmc_id(person.getCoin().getCmc_id());
+                    ltccoin.setSlug(person.getCoin().getSlug());
+                    ltcCrypto.setCoin(ltccoin);
+                    ltcCrypto.setCoin(ltccoin);
+                    ltcCrypto.setUSD(currencyFormat.format(ltc.get(CryptoUtil.USD)));
+                    Double ltcDbl = Double.valueOf(ltc.get(CryptoUtil.USD).toString());
+                    ltcCrypto.setHoldingValue(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), ltcDbl));
+                    ltcCrypto.setCost(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), person.getHoldings().getCost()));
+                    ltcCrypto.setQuantity(person.getHoldings().getQuantity());
+
+                    PercentageDTO ltcdto = CryptoUtil.getPercentage(person.getHoldings().getQuantity(), person.getHoldings().getCost(), ltcDbl);
+                    ltcCrypto.setPercentage(ltcdto.getValueString());
+                    if (ltcdto.getValueDouble() >= 0.0) {
+                        ltcCrypto.setIncreaseDecrease(CryptoUtil.INCREASE);
+                    } else {
+                        ltcCrypto.setIncreaseDecrease(CryptoUtil.DECREASE);
+                    }
+                    cryptos.add(ltcCrypto);
+                }
+            }
+
         }
         return cryptos;
     }
@@ -151,7 +172,8 @@ public class ParserUtil {
                     coin.setCoin_name(person.getCoin().getCoin_name());
                     coin.setCoin_symbol(symbol);
                     coin.setCoin_id(person.getCoin().getCoin_id());
-                    coin.setName_id(person.getCoin().getName_id());
+                    coin.setCmc_id(person.getCoin().getCmc_id());
+                    coin.setSlug(person.getCoin().getSlug());
                     cryptoValue.setCoin(coin);
                     cryptoValue.setUSD(currencyFormat.format(obj.get(CryptoUtil.USD)));
                     Double dbl = Double.valueOf(obj.get(CryptoUtil.USD).toString());

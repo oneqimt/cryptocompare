@@ -3,7 +3,6 @@ package com.imt11.crypto;
 import com.google.gson.Gson;
 import com.imt11.crypto.database.DBManager;
 import com.imt11.crypto.database.HoldingsDAO;
-import com.imt11.crypto.model.CoinMarketCapLatest;
 import com.imt11.crypto.model.CryptoValue;
 import com.imt11.crypto.model.Holdings;
 import com.imt11.crypto.model.Person;
@@ -18,7 +17,6 @@ import org.json.simple.parser.ParseException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +74,7 @@ public class CryptoCompareServlet extends HttpServlet {
 
             //call delete
             status = holdingsDAO.deleteHolding(holding);
-            if (status >0 ){
+            if (status > 0) {
                 System.out.println("HOLDING DELETED");
                 String str = gson.toJson(holding);
                 out.print(str);
@@ -86,34 +84,19 @@ public class CryptoCompareServlet extends HttpServlet {
 
             // call update
             status = holdingsDAO.updateHolding(holding);
-            if (status > 0){
+            if (status > 0) {
                 System.out.println("HOLDING UPDATED");
                 String str = gson.toJson(holding);
                 out.print(str);
             }
 
         } else {
-            // just get the list
-            // action is "getslugs"
-            // /holdings?action=getslugs
-            String responseStr = "";
-            try {
-                responseStr = holdingsDAO.getLatestFromCoinMarketCap();
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
+            response.sendError(400, "There was no action type sent in the query string");
 
-            CoinMarketCapLatest coinMarketCapLatest = gson.fromJson(responseStr, CoinMarketCapLatest.class);
-
-            String responseObj = gson.toJson(coinMarketCapLatest);
-
-            out.print(responseObj);
         }
-
 
         out.flush();
         out.close();
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -123,6 +106,7 @@ public class CryptoCompareServlet extends HttpServlet {
 
         // get database info first
         DBManager dbManager = new DBManager();
+        // TODO refactor this to return less maybe
         List<Person> persons = dbManager.getPersonCoins(person_id);
 
         // MAIN

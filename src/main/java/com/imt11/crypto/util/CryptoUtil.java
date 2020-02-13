@@ -42,6 +42,7 @@ public class CryptoUtil {
     public static final String ADD_HOLDING = "addholding";
     public static final String DELETE_HOLDING = "deleteholding";
     public static final String UPDATE_HOLDING = "updateholding";
+    public static final String ADD_COIN = "addcoin";
 
     public static double BTC = 12.83;
     public static String USD = "USD";
@@ -51,6 +52,11 @@ public class CryptoUtil {
     public static String BCH_SYMBOL = "BCH";
     public static String BTG_SYMBOL = "BTG";
     private static DecimalFormat df2 = new DecimalFormat(".##");
+    /*400 = Bad Request
+    401 = Unauthorized
+    402 = Payment Required
+    403 = Forbidden
+    404 = Not Found*/
 
 
     private CryptoUtil() {
@@ -126,7 +132,7 @@ public class CryptoUtil {
 
     public static String getAltCryptoEndpoint(List<Person> persons) {
         String main = "https://min-api.cryptocompare.com/data/pricemulti?fsyms=";
-        String coinstr = "";
+        String coinstr;
         String coda = "&tsyms=BTC,USD";
         String apiKey = "&apiKey=" + SecurityUtil.getInstance().getCryptoCompareApi();
         List<String> symbols = new ArrayList<>();
@@ -261,6 +267,7 @@ public class CryptoUtil {
 
             if (val.getCoin().getCoin_name().equalsIgnoreCase(CryptoUtil.BTC_SYMBOL)) {
                 // update holding value and percentage to include BTG
+                // TODO find out why I used hard-coded values here?
                 PercentageDTO btcdto = CryptoUtil.getPercentage(CryptoUtil.BTC, 600.00, aggregate);
                 val.setPercentage(btcdto.getValueString());
                 if (btcdto.getValueDouble() >= 0.0) {

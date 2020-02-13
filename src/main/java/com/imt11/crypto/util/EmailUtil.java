@@ -65,6 +65,6 @@ public class EmailUtil {
 
     public static String getRandomPassword(){
 
-        return RandomStringUtils.randomAlphanumeric(10);
+        return RandomStringUtils.randomAlphanumeric(6);
     }
 }
