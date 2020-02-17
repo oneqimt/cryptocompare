@@ -1,14 +1,12 @@
 package com.imt11.crypto;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.imt11.crypto.database.ManageCoinDAO;
 import com.imt11.crypto.model.Coin;
 import com.imt11.crypto.model.CoinMarketCapCoin;
 import com.imt11.crypto.model.CoinMarketCapLatest;
 import com.imt11.crypto.util.CryptoUtil;
+import com.imt11.crypto.util.ManageCoinUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,8 +14,6 @@ import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -45,9 +41,9 @@ public class ManageCoinsServlet extends HttpServlet {
 
         String action = request.getParameter("action");
         //addcoin
-        if (action.equalsIgnoreCase(CryptoUtil.ADD_COIN)){
+        if (action.equalsIgnoreCase(CryptoUtil.ADD_COIN)) {
             Boolean doesExist = manageCoinDAO.checkIfCoinExists(coin);
-            if (!doesExist){
+            if (!doesExist) {
                 // add it
                 int status = manageCoinDAO.insertCoin(coin);
                 if (status > 0) {
@@ -55,7 +51,7 @@ public class ManageCoinsServlet extends HttpServlet {
                     String str = gson.toJson(coin);
                     out.print(str);
                 }
-            }else{
+            } else {
                 response.sendError(403);
             }
 
@@ -66,7 +62,10 @@ public class ManageCoinsServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        String action = request.getParameter("action");
         String slug = request.getParameter("slug");
+        String coinid = request.getParameter("coinid");
+
         String responseStr = "";
         ManageCoinDAO manageCoinDAO = new ManageCoinDAO();
         Gson gson = new Gson();
@@ -74,71 +73,77 @@ public class ManageCoinsServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-
-        if (slug != null){
+        if (action.equalsIgnoreCase(CryptoUtil.SINGLE_CMC_COIN)) {
             // GETS a SINGLE COIN FROM COINMARKETCAP
-            System.out.println("SLUG IS NOT NULL");
+            System.out.println("GET SINGLE CMC COIN and slug is: " + " " + slug);
             try {
                 responseStr = manageCoinDAO.getCoinFromCoinMarketCap(2, slug);
             } catch (URISyntaxException | IOException e) {
                 e.printStackTrace();
             }
             // we can parse this ourselves
-            JsonParser parser = new JsonParser();
-            JsonElement jsonTree = parser.parse(responseStr);
-            Coin coin = new Coin();
-            if(jsonTree.isJsonObject()){
-                JsonObject jsonObject = jsonTree.getAsJsonObject();
-                JsonElement dataObj = jsonObject.get("data");
-                if (dataObj != null && dataObj.isJsonObject()){
-                    JsonObject mydata = dataObj.getAsJsonObject();
-                    Set<Map.Entry<String, JsonElement>> entrySet = mydata.entrySet();
-                    for(Map.Entry entry : entrySet){
-                        JsonObject valueobj = (JsonObject) entry.getValue();
-                        JsonElement name = valueobj.get("name");
-                        JsonElement id = valueobj.get("id");
-                        JsonElement symbol = valueobj.get("symbol");
-                        JsonElement myslug = valueobj.get("slug");
+            // the reason for this is that the "data" object has the id as the node
+            Coin coin = ManageCoinUtil.parseSingleCoin(responseStr);
+            String coinstr = gson.toJson(coin);
+            out.print(coinstr);
 
-                        coin.setCoin_id(0);
-                        coin.setCoin_name(name.getAsString());
-                        coin.setCoin_symbol(symbol.getAsString());
-                        coin.setCmc_id(Integer.parseInt(id.toString()));
-                        coin.setSlug(myslug.getAsString());
-                    }
-
-                }
-
-            }
-
-            String mycoin = gson.toJson(coin);
-            out.print(mycoin);
-
-
-        }else{
+        } else if (action.equalsIgnoreCase(CryptoUtil.CMC_COINS)) {
             // GET the LATEST COINS FROM COINMARKETCAP
             try {
                 responseStr = manageCoinDAO.getLatestFromCoinMarketCap(2);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
+
             CoinMarketCapLatest coinMarketCapLatest = gson.fromJson(responseStr, CoinMarketCapLatest.class);
-            List<CoinMarketCapCoin> data = coinMarketCapLatest.getData();
-            List<Coin> coins = new ArrayList<>();
-            for (CoinMarketCapCoin marketCapCoin : data) {
+            List<CoinMarketCapCoin> coinMarketCapCoins = coinMarketCapLatest.getData();
+            List<Coin> ourcoins = new ArrayList<>();
+            for (CoinMarketCapCoin coinMarketCapCoin : coinMarketCapCoins){
                 Coin coin = new Coin();
                 coin.setCoin_id(0);
-                coin.setCmc_id(marketCapCoin.getId());
-                coin.setSlug(marketCapCoin.getSlug());
-                coin.setCoin_symbol(marketCapCoin.getSymbol().trim());
-                coin.setCoin_name(marketCapCoin.getName());
-                coins.add(coin);
+                coin.setMarket_cap(coinMarketCapCoin.getQuote().getUSD().getMarket_cap());
+                coin.setSlug(coinMarketCapCoin.getSlug());
+                coin.setCmc_id(coinMarketCapCoin.getId());
+                coin.setCoin_symbol(coinMarketCapCoin.getSymbol());
+                coin.setCoin_name(coinMarketCapCoin.getName());
 
+                ourcoins.add(coin);
             }
 
-            String lastestcoins = gson.toJson(coins);
-            out.print(lastestcoins);
+
+            String latestcoins = gson.toJson(ourcoins);
+            out.print(latestcoins);
+
+
+        } else if (action.equalsIgnoreCase(CryptoUtil.DB_COINS)) {
+
+            System.out.println("ALL DB COINS");
+            List<Coin> coinsFromDB;
+            // GET ALL COINS in DATABASE
+            try {
+                coinsFromDB = manageCoinDAO.getCurrentCoins();
+                String allCoinsFromDB = gson.toJson(coinsFromDB);
+                out.print(allCoinsFromDB);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } else if (action.equalsIgnoreCase(CryptoUtil.SINGLE_DB_COIN)) {
+
+            System.out.println("SINGLE DB COIN and coinid is " + " " + coinid);
+            Coin singleCoin;
+            int numbercoinId = Integer.parseInt(request.getParameter("coinid"));
+            // GET SINGLE COIN FROM DATABASE
+            try {
+                singleCoin = manageCoinDAO.getCoinFromDatabase(numbercoinId);
+                String coinstr = gson.toJson(singleCoin);
+                out.print(coinstr);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
+
         out.flush();
         out.close();
 

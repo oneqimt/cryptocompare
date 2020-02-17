@@ -44,6 +44,11 @@ public class CryptoUtil {
     public static final String UPDATE_HOLDING = "updateholding";
     public static final String ADD_COIN = "addcoin";
 
+    public static final String CMC_COINS = "cmccoins";
+    public static final String SINGLE_CMC_COIN = "singlecmccoin";
+    public static final String DB_COINS = "dbcoins";
+    public static final String SINGLE_DB_COIN = "singledbcoin";
+
     public static double BTC = 12.83;
     public static String USD = "USD";
     public static String BTC_SYMBOL = "BTC";
@@ -57,7 +62,6 @@ public class CryptoUtil {
     402 = Payment Required
     403 = Forbidden
     404 = Not Found*/
-
 
     private CryptoUtil() {
     }
@@ -125,9 +129,7 @@ public class CryptoUtil {
 
         coinstr = String.join(",", symbols);
 
-        String endpoint = main + coinstr + coda + apiKey;
-
-        return endpoint;
+        return main + coinstr + coda + apiKey;
     }
 
     public static String getAltCryptoEndpoint(List<Person> persons) {
@@ -148,21 +150,18 @@ public class CryptoUtil {
 
         }
         coinstr = String.join(",", symbols);
-        String endpoint = main + coinstr + coda + apiKey;
 
-        return endpoint;
+        return main + coinstr + coda + apiKey;
     }
 
     public static NumberFormat getCurrencyFormat() {
         Locale locale = new Locale("en", "US");
-        NumberFormat format = NumberFormat.getCurrencyInstance(locale);
-        return format;
+        return NumberFormat.getCurrencyInstance(locale);
     }
 
     public static NumberFormat getNumberFormat() {
         Locale locale = new Locale("en", "US");
-        NumberFormat format = NumberFormat.getInstance(locale);
-        return format;
+        return NumberFormat.getInstance(locale);
     }
 
     public static String formatDoubleValue(Double val, Double factor) {
@@ -171,9 +170,8 @@ public class CryptoUtil {
         BigDecimal bd = new BigDecimal(Double.toString(dbl));
         bd = bd.setScale(2, RoundingMode.HALF_UP);
         double roundedDbl = bd.doubleValue();
-        String aggregate = currencyFormat.format(roundedDbl);
 
-        return aggregate;
+        return currencyFormat.format(roundedDbl);
     }
 
     public static PercentageDTO getPercentage(Double quantityHeld, Double costPerUnit, Double currentValue) {
@@ -208,9 +206,8 @@ public class CryptoUtil {
         bd = bd.setScale(2, RoundingMode.HALF_UP);
         //String test = df2.format(dbl);
         //System.out.println("DJM cost double is: "+" "+test);
-        double roundedDbl = bd.doubleValue();
 
-        return roundedDbl;
+        return bd.doubleValue();
     }
 
     public static String getAltCost(Double cost, Double factor) {
@@ -219,9 +216,8 @@ public class CryptoUtil {
         BigDecimal bd = new BigDecimal(Double.toString(dbl));
         bd = bd.setScale(2, RoundingMode.HALF_UP);
         double roundedDbl = bd.doubleValue();
-        String aggregate = getCurrencyFormat().format(roundedDbl);
 
-        return aggregate;
+        return getCurrencyFormat().format(roundedDbl);
     }
 
     public static TotalValues getGrandTotals(List<CryptoValue> combinedList) {
@@ -264,10 +260,9 @@ public class CryptoUtil {
         double totaldbl = 0.0;
 
         for (CryptoValue val : combinedList) {
-
-            if (val.getCoin().getCoin_name().equalsIgnoreCase(CryptoUtil.BTC_SYMBOL)) {
-                // update holding value and percentage to include BTG
-                // TODO find out why I used hard-coded values here?
+            // TODO find out why I used hard-coded values here?
+            // update holding value and percentage to include BTG
+           /* if (val.getCoin().getCoin_name().equalsIgnoreCase(CryptoUtil.BTC_SYMBOL)) {
                 PercentageDTO btcdto = CryptoUtil.getPercentage(CryptoUtil.BTC, 600.00, aggregate);
                 val.setPercentage(btcdto.getValueString());
                 if (btcdto.getValueDouble() >= 0.0) {
@@ -275,8 +270,8 @@ public class CryptoUtil {
                 } else {
                     val.setIncreaseDecrease(CryptoUtil.DECREASE);
                 }
+            }*/
 
-            }
             try {
                 totalCost = cf.parse(val.getCost());
                 totalValue = cf.parse(val.getHoldingValue());

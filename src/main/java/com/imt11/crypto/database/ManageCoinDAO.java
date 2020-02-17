@@ -33,7 +33,7 @@ import static com.imt11.crypto.util.ManageCoinUtil.checkUpdateCounts;
 public class ManageCoinDAO {
 
     public String getLatestFromCoinMarketCap(int flag) throws URISyntaxException, IOException {
-        String responseContent = "";
+        String responseContent;
         String testApiKey = SecurityUtil.getInstance().getCoinMarketCapTestApiKey();
         String prodApiKey = SecurityUtil.getInstance().getCoinMarketCapProdApiKey();
 
@@ -41,8 +41,8 @@ public class ManageCoinDAO {
         String apiKey = "";
 
         List<NameValuePair> parameters = new ArrayList<>();
-        parameters.add(new BasicNameValuePair("start", "250"));
-        parameters.add(new BasicNameValuePair("limit", "500"));
+        parameters.add(new BasicNameValuePair("start", "1"));// start at 250 to populate database
+        parameters.add(new BasicNameValuePair("limit", "199"));
         parameters.add(new BasicNameValuePair("convert", "USD"));
 
         switch (flag) {
@@ -79,7 +79,7 @@ public class ManageCoinDAO {
     }
 
     public String getCoinFromCoinMarketCap(int flag, String slug) throws URISyntaxException, IOException {
-        String responseContent = "";
+        String responseContent;
         String testApiKey = SecurityUtil.getInstance().getCoinMarketCapTestApiKey();
         String prodApiKey = SecurityUtil.getInstance().getCoinMarketCapProdApiKey();
         int prodOrTest = 0;
@@ -127,13 +127,14 @@ public class ManageCoinDAO {
         try{
             DBManager db = new DBManager();
             Connection connection = db.createConnection();
-            String sql = "INSERT INTO coins values(?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO coins values(?, ?, ?, ?, ?,?)";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, coin.getCoin_id());
             ps.setString(2, coin.getCoin_name());
             ps.setString(3, coin.getCoin_symbol());
             ps.setInt(4, coin.getCmc_id());
             ps.setString(5, coin.getSlug());
+            ps.setBigDecimal(6, coin.getMarket_cap());
 
             status = ps.executeUpdate();
             ps.close();
@@ -153,7 +154,7 @@ public class ManageCoinDAO {
             DBManager db = new DBManager();
             Connection connection = db.createConnection();
             connection.setAutoCommit(false);
-            String sql = "INSERT INTO coins values(?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO coins values(?, ?, ?, ?, ?,?)";
             PreparedStatement ps = connection.prepareStatement(sql);
 
             for (Coin coin : coins) {
@@ -162,6 +163,7 @@ public class ManageCoinDAO {
                 ps.setString(3, coin.getCoin_symbol());
                 ps.setInt(4, coin.getCmc_id());
                 ps.setString(5, coin.getSlug());
+                ps.setBigDecimal(6, coin.getMarket_cap());
                 ps.addBatch();
             }
 
@@ -182,8 +184,6 @@ public class ManageCoinDAO {
         return insertCounts;
     }
 
-    // TODO INSERT SINGLE COIN
-
     // Cuurent Coins in database
     public List<Coin> getCurrentCoins() {
         List<Coin> currentCoins = new ArrayList<>();
@@ -197,21 +197,55 @@ public class ManageCoinDAO {
 
             while (rs.next()) {
                 Coin coin = new Coin();
-                coin.setCoin_id(0);
+                coin.setCoin_id(rs.getInt("coin_id"));
                 coin.setSlug(rs.getString("slug"));
                 coin.setCmc_id(rs.getInt("cmc_id"));
                 coin.setCoin_name(rs.getString("coin_name"));
                 coin.setCoin_symbol(rs.getString("coin_symbol"));
+                coin.setMarket_cap(rs.getBigDecimal("market_cap"));
 
                 currentCoins.add(coin);
 
             }
+
+            rs.close();
+            statement.close();
+            connection.close();
 
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
 
         return currentCoins;
+    }
+
+    public Coin getCoinFromDatabase(int coinId){
+        Coin coin = new Coin();
+        try{
+            DBManager db = new DBManager();
+            Connection connection = db.createConnection();
+            String sql = "SELECT * FROM coins WHERE coin_id=?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, coinId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                coin.setCoin_id(rs.getInt("coin_id"));
+                coin.setCoin_name(rs.getString("coin_name"));
+                coin.setCoin_symbol(rs.getString("coin_symbol"));
+                coin.setCmc_id(rs.getInt("cmc_id"));
+                coin.setSlug(rs.getString("slug"));
+                coin.setMarket_cap(rs.getBigDecimal("market_cap"));
+            }
+
+            rs.close();
+            ps.close();
+            connection.close();
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return coin;
     }
 
     public Boolean checkIfCoinExists(Coin coin) {

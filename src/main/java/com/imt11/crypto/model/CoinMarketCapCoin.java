@@ -9,6 +9,7 @@ public class CoinMarketCapCoin {
     private String name;
     private String symbol;
     private String slug;
+    private Quote quote;
 
     public int getId() {
         return id;
@@ -42,6 +43,14 @@ public class CoinMarketCapCoin {
         this.slug = slug;
     }
 
+    public Quote getQuote() {
+        return quote;
+    }
+
+    public void setQuote(Quote quote) {
+        this.quote = quote;
+    }
+
     @Override
     public String toString() {
         return "CoinMarketCapCoin{" +
@@ -49,6 +58,7 @@ public class CoinMarketCapCoin {
                 ", name='" + name + '\'' +
                 ", symbol='" + symbol + '\'' +
                 ", slug='" + slug + '\'' +
+                ", quote=" + quote +
                 '}';
     }
 }

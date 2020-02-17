@@ -1,5 +1,6 @@
 package com.imt11.crypto.model;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
@@ -12,6 +13,7 @@ public class Coin {
     private String coin_symbol;
     private int cmc_id;
     private String slug;
+    private BigDecimal market_cap;
 
     public Coin() {
     }
@@ -56,6 +58,14 @@ public class Coin {
         this.slug = slug;
     }
 
+    public BigDecimal getMarket_cap() {
+        return market_cap;
+    }
+
+    public void setMarket_cap(BigDecimal market_cap) {
+        this.market_cap = market_cap;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -65,12 +75,13 @@ public class Coin {
                 cmc_id == coin.cmc_id &&
                 Objects.equals(coin_name, coin.coin_name) &&
                 Objects.equals(coin_symbol, coin.coin_symbol) &&
-                Objects.equals(slug, coin.slug);
+                Objects.equals(slug, coin.slug) &&
+                Objects.equals(market_cap, coin.market_cap);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(coin_id, coin_name, coin_symbol, cmc_id, slug);
+        return Objects.hash(coin_id, coin_name, coin_symbol, cmc_id, slug, market_cap);
     }
 
     @Override
@@ -81,6 +92,7 @@ public class Coin {
                 ", coin_symbol='" + coin_symbol + '\'' +
                 ", cmc_id=" + cmc_id +
                 ", slug='" + slug + '\'' +
+                ", market_cap=" + market_cap +
                 '}';
     }
 }

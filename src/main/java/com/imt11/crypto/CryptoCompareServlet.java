@@ -106,7 +106,7 @@ public class CryptoCompareServlet extends HttpServlet {
 
         // get database info first
         DBManager dbManager = new DBManager();
-        // TODO refactor this to return less maybe
+        // GET PERSON COINS
         List<Person> persons = dbManager.getPersonCoins(person_id);
 
         // MAIN
