@@ -77,7 +77,7 @@ public class ManageCoinsServlet extends HttpServlet {
             // GETS a SINGLE COIN FROM COINMARKETCAP
             System.out.println("GET SINGLE CMC COIN and slug is: " + " " + slug);
             try {
-                responseStr = manageCoinDAO.getCoinFromCoinMarketCap(2, slug);
+                responseStr = manageCoinDAO.getCoinFromCoinMarketCap(1, slug);
             } catch (URISyntaxException | IOException e) {
                 e.printStackTrace();
             }
@@ -90,7 +90,7 @@ public class ManageCoinsServlet extends HttpServlet {
         } else if (action.equalsIgnoreCase(CryptoUtil.CMC_COINS)) {
             // GET the LATEST COINS FROM COINMARKETCAP
             try {
-                responseStr = manageCoinDAO.getLatestFromCoinMarketCap(2);
+                responseStr = manageCoinDAO.getLatestFromCoinMarketCap(1);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
