@@ -14,6 +14,7 @@ public class Coin {
     private int cmc_id;
     private String slug;
     private BigDecimal market_cap;
+    private int cmc_rank;
 
     public Coin() {
     }
@@ -66,6 +67,14 @@ public class Coin {
         this.market_cap = market_cap;
     }
 
+    public int getCmc_rank() {
+        return cmc_rank;
+    }
+
+    public void setCmc_rank(int cmc_rank) {
+        this.cmc_rank = cmc_rank;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -73,6 +82,7 @@ public class Coin {
         Coin coin = (Coin) o;
         return coin_id == coin.coin_id &&
                 cmc_id == coin.cmc_id &&
+                cmc_rank == coin.cmc_rank &&
                 Objects.equals(coin_name, coin.coin_name) &&
                 Objects.equals(coin_symbol, coin.coin_symbol) &&
                 Objects.equals(slug, coin.slug) &&
@@ -81,7 +91,7 @@ public class Coin {
 
     @Override
     public int hashCode() {
-        return Objects.hash(coin_id, coin_name, coin_symbol, cmc_id, slug, market_cap);
+        return Objects.hash(coin_id, coin_name, coin_symbol, cmc_id, slug, market_cap, cmc_rank);
     }
 
     @Override
@@ -93,6 +103,7 @@ public class Coin {
                 ", cmc_id=" + cmc_id +
                 ", slug='" + slug + '\'' +
                 ", market_cap=" + market_cap +
+                ", cmc_rank=" + cmc_rank +
                 '}';
     }
 }

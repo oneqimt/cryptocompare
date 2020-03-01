@@ -49,7 +49,6 @@ public class CryptoUtil {
     public static final String DB_COINS = "dbcoins";
     public static final String SINGLE_DB_COIN = "singledbcoin";
 
-    public static double BTC = 12.83;
     public static String USD = "USD";
     public static String BTC_SYMBOL = "BTC";
     public static String ETH_SYMBOL = "ETH";

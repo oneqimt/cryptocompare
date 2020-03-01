@@ -80,12 +80,14 @@ public class ManageCoinUtil {
                     JsonElement id = valueobj.get("id");
                     JsonElement symbol = valueobj.get("symbol");
                     JsonElement myslug = valueobj.get("slug");
+                    JsonElement cncRank = valueobj.get("cmc_rank");
                     //this is our coin_id which we will not get from CoinMarketCap
                     coin.setCoin_id(0);
                     coin.setCoin_name(name.getAsString());
                     coin.setCoin_symbol(symbol.getAsString());
                     coin.setCmc_id(id.getAsInt());
                     coin.setSlug(myslug.getAsString());
+                    coin.setCmc_rank(cncRank.getAsInt());
 
                     Set<Map.Entry<String, JsonElement>> quoteEntrySet = valueobj.entrySet();
                     for (Map.Entry<String, JsonElement> quoteEntry: quoteEntrySet){

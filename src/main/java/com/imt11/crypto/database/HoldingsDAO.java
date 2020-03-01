@@ -2,6 +2,7 @@ package com.imt11.crypto.database;
 
 import com.imt11.crypto.model.Holdings;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -93,13 +94,14 @@ public class HoldingsDAO {
         try {
             DBManager db = new DBManager();
             Connection connection = db.createConnection();
-            String sql = "UPDATE holdings SET holding_id=?, quantity=?, cost=? WHERE coin_id=? AND person_id=?";
+            String sql = "UPDATE holdings SET quantity=?, cost=? WHERE coin_id=? AND person_id=?";
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, holding.getHolding_id());
-            ps.setDouble(2, holding.getQuantity());
-            ps.setDouble(3, holding.getCost());
-            ps.setInt(4, holding.getCoin_id());
-            ps.setInt(5, holding.getPerson_id());
+            BigDecimal quantityBigDecimal = BigDecimal.valueOf(holding.getQuantity());
+            BigDecimal costBigDecimal = BigDecimal.valueOf(holding.getCost());
+            ps.setBigDecimal(1, quantityBigDecimal);
+            ps.setBigDecimal(2, costBigDecimal);
+            ps.setInt(3, holding.getCoin_id());
+            ps.setInt(4, holding.getPerson_id());
 
             status = ps.executeUpdate();
             ps.close();
@@ -145,6 +147,37 @@ public class HoldingsDAO {
         }
 
         return returnHolding;
+    }
+
+    public Holdings getExistingHolding(Holdings holdings){
+        Holdings myholding = new Holdings();
+        try{
+            DBManager db = new DBManager();
+            Connection connection = db.createConnection();
+            String sql = "SELECT * FROM holdings WHERE coin_id =? AND person_id = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, holdings.getCoin_id());
+            ps.setInt(2, holdings.getPerson_id());
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()){
+                myholding.setHolding_id(rs.getInt("holding_id"));
+                myholding.setCoin_id(rs.getInt("coin_id"));
+                myholding.setQuantity(rs.getDouble("quantity"));
+                myholding.setCost(rs.getDouble("cost"));
+                myholding.setPerson_id(rs.getInt("person_id"));
+
+            }
+
+            rs.close();
+            ps.close();
+            connection.close();
+
+        }catch (ClassNotFoundException | SQLException e) {
+            e.getLocalizedMessage();
+        }
+
+        return myholding;
     }
 
 

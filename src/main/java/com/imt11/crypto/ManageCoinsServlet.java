@@ -42,7 +42,7 @@ public class ManageCoinsServlet extends HttpServlet {
         String action = request.getParameter("action");
         //addcoin
         if (action.equalsIgnoreCase(CryptoUtil.ADD_COIN)) {
-            Boolean doesExist = manageCoinDAO.checkIfCoinExists(coin);
+            Boolean doesExist = manageCoinDAO.checkIfCoinExists(coin.getCmc_id());
             if (!doesExist) {
                 // add it
                 int status = manageCoinDAO.insertCoin(coin);
@@ -106,6 +106,7 @@ public class ManageCoinsServlet extends HttpServlet {
                 coin.setCmc_id(coinMarketCapCoin.getId());
                 coin.setCoin_symbol(coinMarketCapCoin.getSymbol());
                 coin.setCoin_name(coinMarketCapCoin.getName());
+                coin.setCmc_rank(coinMarketCapCoin.getCmc_rank());
 
                 ourcoins.add(coin);
             }

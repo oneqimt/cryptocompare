@@ -9,6 +9,7 @@ public class CoinMarketCapCoin {
     private String name;
     private String symbol;
     private String slug;
+    private int cmc_rank;
     private Quote quote;
 
     public int getId() {
@@ -51,6 +52,14 @@ public class CoinMarketCapCoin {
         this.quote = quote;
     }
 
+    public int getCmc_rank() {
+        return cmc_rank;
+    }
+
+    public void setCmc_rank(int cmc_rank) {
+        this.cmc_rank = cmc_rank;
+    }
+
     @Override
     public String toString() {
         return "CoinMarketCapCoin{" +
@@ -58,6 +67,7 @@ public class CoinMarketCapCoin {
                 ", name='" + name + '\'' +
                 ", symbol='" + symbol + '\'' +
                 ", slug='" + slug + '\'' +
+                ", cmc_rank=" + cmc_rank +
                 ", quote=" + quote +
                 '}';
     }

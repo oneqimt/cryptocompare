@@ -127,7 +127,7 @@ public class ManageCoinDAO {
         try{
             DBManager db = new DBManager();
             Connection connection = db.createConnection();
-            String sql = "INSERT INTO coins values(?, ?, ?, ?, ?,?)";
+            String sql = "INSERT INTO coins values(?, ?, ?, ?, ?,?,?)";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, coin.getCoin_id());
             ps.setString(2, coin.getCoin_name());
@@ -135,6 +135,7 @@ public class ManageCoinDAO {
             ps.setInt(4, coin.getCmc_id());
             ps.setString(5, coin.getSlug());
             ps.setBigDecimal(6, coin.getMarket_cap());
+            ps.setInt(7, coin.getCmc_rank());
 
             status = ps.executeUpdate();
             ps.close();
@@ -146,6 +147,29 @@ public class ManageCoinDAO {
 
         return status;
     }
+
+    public int getCoinLastInsertedId() {
+        int maxId = 0;
+        try {
+            DBManager db = new DBManager();
+            Connection connection = db.createConnection();
+            String sql = "SELECT MAX(coin_id) FROM coins";
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            if (rs.next()) {
+                maxId = rs.getInt(1);
+            }
+            statement.close();
+            rs.close();
+            connection.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+
+        return maxId;
+    }
+
+
     // BATCH INSERT
     public int[] insertCoins(List<Coin> coins) {
         int[] insertCounts = new int[0];
@@ -154,7 +178,7 @@ public class ManageCoinDAO {
             DBManager db = new DBManager();
             Connection connection = db.createConnection();
             connection.setAutoCommit(false);
-            String sql = "INSERT INTO coins values(?, ?, ?, ?, ?,?)";
+            String sql = "INSERT INTO coins values(?, ?, ?, ?, ?,?,?)";
             PreparedStatement ps = connection.prepareStatement(sql);
 
             for (Coin coin : coins) {
@@ -164,6 +188,7 @@ public class ManageCoinDAO {
                 ps.setInt(4, coin.getCmc_id());
                 ps.setString(5, coin.getSlug());
                 ps.setBigDecimal(6, coin.getMarket_cap());
+                ps.setInt(7, coin.getCmc_rank());
                 ps.addBatch();
             }
 
@@ -203,6 +228,7 @@ public class ManageCoinDAO {
                 coin.setCoin_name(rs.getString("coin_name"));
                 coin.setCoin_symbol(rs.getString("coin_symbol"));
                 coin.setMarket_cap(rs.getBigDecimal("market_cap"));
+                coin.setCmc_rank(rs.getInt("cmc_rank"));
 
                 currentCoins.add(coin);
 
@@ -217,6 +243,36 @@ public class ManageCoinDAO {
         }
 
         return currentCoins;
+    }
+
+    public Coin getCoinByCmcId(int cmcId){
+        Coin coin = new Coin();
+        try{
+            DBManager db = new DBManager();
+            Connection connection = db.createConnection();
+            String sql = "SELECT * FROM coins WHERE cmc_id=?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, cmcId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                coin.setCoin_id(rs.getInt("coin_id"));
+                coin.setCoin_name(rs.getString("coin_name"));
+                coin.setCoin_symbol(rs.getString("coin_symbol"));
+                coin.setCmc_id(rs.getInt("cmc_id"));
+                coin.setSlug(rs.getString("slug"));
+                coin.setMarket_cap(rs.getBigDecimal("market_cap"));
+                coin.setCmc_rank(rs.getInt(rs.getInt("cmc_rank")));
+            }
+
+            rs.close();
+            ps.close();
+            connection.close();
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return coin;
     }
 
     public Coin getCoinFromDatabase(int coinId){
@@ -235,6 +291,7 @@ public class ManageCoinDAO {
                 coin.setCmc_id(rs.getInt("cmc_id"));
                 coin.setSlug(rs.getString("slug"));
                 coin.setMarket_cap(rs.getBigDecimal("market_cap"));
+                coin.setCmc_rank(rs.getInt(rs.getInt("cmc_rank")));
             }
 
             rs.close();
@@ -248,15 +305,15 @@ public class ManageCoinDAO {
         return coin;
     }
 
-    public Boolean checkIfCoinExists(Coin coin) {
-        Boolean doesExist = false;
+    public Boolean checkIfCoinExists(int cmc_id) {
+        boolean doesExist = false;
 
         try {
             DBManager db = new DBManager();
             Connection connection = db.createConnection();
             String sql = "SELECT * FROM coins WHERE cmc_id =?";
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, coin.getCmc_id());
+            ps.setInt(1, cmc_id);
 
             ResultSet rs = ps.executeQuery();
             if (!rs.isBeforeFirst()) {
@@ -274,6 +331,28 @@ public class ManageCoinDAO {
         }
         return doesExist;
 
+    }
+
+    public int updateCoin(Coin coin) {
+        int status = 0;
+
+        try {
+            DBManager db = new DBManager();
+            Connection connection = db.createConnection();
+            String sql = "UPDATE coins SET market_cap=?, cmc_rank=? WHERE cmc_id=?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setBigDecimal(1, coin.getMarket_cap());
+            ps.setInt(2, coin.getCmc_rank());
+            ps.setInt(3, coin.getCmc_id());
+            status = ps.executeUpdate();
+            ps.close();
+            connection.close();
+
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+
+        return status;
     }
 
     // NOTE this is TEMPORARY

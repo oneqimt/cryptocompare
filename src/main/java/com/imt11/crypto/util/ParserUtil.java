@@ -67,7 +67,7 @@ public class ParserUtil {
                     }
 
                     cryptos.add(btcCrypto);
-                    System.out.println("BTC CryptoValue is:" + " " + btcCrypto.toString());
+
                 }
 
             }
