@@ -113,8 +113,9 @@ public class CryptoCompareServlet extends HttpServlet {
 
         } else if (action.equalsIgnoreCase(CryptoUtil.DELETE_HOLDING)) {
 
-            //call delete
-            status = holdingsDAO.deleteHolding(coinHolding.getHoldings());
+            int coinId = coin.getCoin_id();
+            int personId = coinHolding.getHoldings().getPerson_id();
+            status = holdingsDAO.deleteHolding(coinId, personId);
             if (status > 0) {
                 System.out.println("HOLDING DELETED");
                 String str = gson.toJson(coinHolding.getHoldings());
@@ -123,7 +124,7 @@ public class CryptoCompareServlet extends HttpServlet {
 
         } else if (action.equalsIgnoreCase(CryptoUtil.UPDATE_HOLDING)) {
 
-            System.out.println("WE are in UPDATE HOLDING  and coinHolding obj is: "+" "+coinHolding.toString());
+            //System.out.println("WE are in UPDATE HOLDING  and coinHolding obj is: "+" "+coinHolding.toString());
             Coin mycoin = manageCoinDAO.getCoinByCmcId(coinHolding.getCoin().getCmc_id());
             coin.setCoin_id(mycoin.getCoin_id());
             holdings.setCoin_id(mycoin.getCoin_id());
@@ -131,27 +132,40 @@ public class CryptoCompareServlet extends HttpServlet {
             // get the quantity and cost from the Holdings object passed in
             double quantity = coinHolding.getHoldings().getQuantity();
             double cost = coinHolding.getHoldings().getCost();
+            System.out.println("QUANTITY passed in: "+" "+quantity);
+            System.out.println("COST passed in: "+" "+cost);
 
             // get the holding from the database - coin_id and person_id
             Holdings dbHolding = holdingsDAO.getExistingHolding(holdings);
             double dbquantity = dbHolding.getQuantity();
             double dbcost = dbHolding.getCost();
+            System.out.println("DATABASE QUANTITY result: "+" "+dbquantity);
+            System.out.println("DATABASE COST result: "+" "+dbcost);
 
             Holdings holdingToUpdate = new Holdings();
             holdingToUpdate.setHolding_id(dbHolding.getHolding_id());
             holdingToUpdate.setCoin_id(dbHolding.getCoin_id());
             holdingToUpdate.setPerson_id(dbHolding.getPerson_id());
 
-            double newquantity = quantity + dbquantity;
-            double newcost = cost + dbcost;
+            //Find average - NOTE cost is per coin
+            // TODO - divide by the quantity
+            double quantityRawTotal = (quantity + dbquantity);
+            double costRawTotal = (cost + dbcost);
+            double newcost = costRawTotal / 2;
+            System.out.println("quantityRawTotal: "+" "+quantityRawTotal);
+            System.out.println("costRawTotal: "+" "+costRawTotal);
+            System.out.println("newcost: "+" "+newcost);
 
-            BigDecimal bdquantity = new BigDecimal(newquantity);
+            // ROUNDING to 2 decimal places
+            BigDecimal bdquantity = new BigDecimal(quantityRawTotal);
             bdquantity = bdquantity.setScale(2, RoundingMode.HALF_UP);
+            System.out.println("bdquantity is : "+" "+bdquantity);
 
             BigDecimal bdcost = new BigDecimal(newcost);
-            // round to 2 decimal places
             bdcost = bdcost.setScale(2, RoundingMode.HALF_UP);
-            // maybe set these as BigDecimal on the Holdings object
+            System.out.println("bdcost is: "+" "+bdcost);
+
+            // maybe set these as BigDecimal type on the Holdings object
             holdingToUpdate.setQuantity(bdquantity.doubleValue());
             holdingToUpdate.setCost(bdcost.doubleValue());
 
@@ -163,7 +177,7 @@ public class CryptoCompareServlet extends HttpServlet {
                 String str = gson.toJson(holdingToUpdate);
                 out.print(str);
             }else{
-                response.sendError(400, "There was a problem updating that holding");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "There was a problem updating that holding");
             }
 
         } else {

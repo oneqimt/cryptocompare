@@ -261,7 +261,7 @@ public class ManageCoinDAO {
                 coin.setCmc_id(rs.getInt("cmc_id"));
                 coin.setSlug(rs.getString("slug"));
                 coin.setMarket_cap(rs.getBigDecimal("market_cap"));
-                coin.setCmc_rank(rs.getInt(rs.getInt("cmc_rank")));
+                coin.setCmc_rank(rs.getInt("cmc_rank"));
             }
 
             rs.close();

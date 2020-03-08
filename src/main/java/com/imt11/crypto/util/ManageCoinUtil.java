@@ -96,7 +96,9 @@ public class ManageCoinUtil {
                             JsonObject quoteObj = (JsonObject) quoteEntry.getValue();
                             JsonObject usdobj = (JsonObject) quoteObj.get("USD");
                             JsonElement marketCap = usdobj.get("market_cap");
+                            JsonElement price = usdobj.get("price");
                             coin.setMarket_cap(marketCap.getAsBigDecimal());
+                            coin.setCurrentPrice(price.getAsBigDecimal());
                         }
                     }
 

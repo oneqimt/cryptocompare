@@ -66,7 +66,7 @@ public class HoldingsDAO {
         return maxId;
     }
 
-    public int deleteHolding(Holdings holding) {
+    public int deleteHolding(int coinId, int personId) {
         int status = 0;
 
         try {
@@ -74,8 +74,8 @@ public class HoldingsDAO {
             Connection connection = db.createConnection();
             String sql = "DELETE FROM holdings WHERE coin_id=? and person_id = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, holding.getCoin_id());
-            ps.setInt(2, holding.getPerson_id());
+            ps.setInt(1, coinId);
+            ps.setInt(2, personId);
 
             status = ps.executeUpdate();
             ps.close();

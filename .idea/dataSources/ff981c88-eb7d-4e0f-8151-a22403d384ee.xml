@@ -1202,6 +1202,7 @@
     <column id="313" parent="230" name="cmc_rank">
       <Position>7</Position>
       <DataType>int(11)|0s</DataType>
+      <DefaultExpression>0</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
     <index id="314" parent="230" name="coin_id">

@@ -107,10 +107,10 @@ public class ManageCoinsServlet extends HttpServlet {
                 coin.setCoin_symbol(coinMarketCapCoin.getSymbol());
                 coin.setCoin_name(coinMarketCapCoin.getName());
                 coin.setCmc_rank(coinMarketCapCoin.getCmc_rank());
+                coin.setCurrentPrice((coinMarketCapCoin.getQuote().getUSD().getPrice()));
 
                 ourcoins.add(coin);
             }
-
 
             String latestcoins = gson.toJson(ourcoins);
             out.print(latestcoins);

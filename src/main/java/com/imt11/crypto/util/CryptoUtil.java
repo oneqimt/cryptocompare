@@ -259,18 +259,6 @@ public class CryptoUtil {
         double totaldbl = 0.0;
 
         for (CryptoValue val : combinedList) {
-            // TODO find out why I used hard-coded values here?
-            // update holding value and percentage to include BTG
-           /* if (val.getCoin().getCoin_name().equalsIgnoreCase(CryptoUtil.BTC_SYMBOL)) {
-                PercentageDTO btcdto = CryptoUtil.getPercentage(CryptoUtil.BTC, 600.00, aggregate);
-                val.setPercentage(btcdto.getValueString());
-                if (btcdto.getValueDouble() >= 0.0) {
-                    val.setIncreaseDecrease(CryptoUtil.INCREASE);
-                } else {
-                    val.setIncreaseDecrease(CryptoUtil.DECREASE);
-                }
-            }*/
-
             try {
                 totalCost = cf.parse(val.getCost());
                 totalValue = cf.parse(val.getHoldingValue());

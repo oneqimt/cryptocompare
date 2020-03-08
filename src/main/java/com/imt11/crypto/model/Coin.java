@@ -15,6 +15,16 @@ public class Coin {
     private String slug;
     private BigDecimal market_cap;
     private int cmc_rank;
+    // we may just use the quote object sent back from coin market cap
+    private BigDecimal currentPrice;
+
+    public BigDecimal getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(BigDecimal currentPrice) {
+        this.currentPrice = currentPrice;
+    }
 
     public Coin() {
     }
@@ -104,6 +114,7 @@ public class Coin {
                 ", slug='" + slug + '\'' +
                 ", market_cap=" + market_cap +
                 ", cmc_rank=" + cmc_rank +
+                ", currentPrice=" + currentPrice +
                 '}';
     }
 }
