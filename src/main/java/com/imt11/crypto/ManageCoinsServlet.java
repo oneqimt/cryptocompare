@@ -74,7 +74,6 @@ public class ManageCoinsServlet extends HttpServlet {
         String action = request.getParameter("action");
         String slug = request.getParameter("slug");
         String coinid = request.getParameter("coinid");
-       int person_id = Integer.parseInt(request.getParameter("person_id"));
 
         String responseStr = "";
         ManageCoinDAO manageCoinDAO = new ManageCoinDAO();
@@ -129,6 +128,10 @@ public class ManageCoinsServlet extends HttpServlet {
         } else if (action.equalsIgnoreCase(CryptoUtil.PERSON_CMC_COINS)) {
 
             System.out.println("PERSON CMC COINS");
+            int person_id = 0;
+            if (request.getParameter("person_id") != null){
+                person_id = Integer.parseInt(request.getParameter("person_id"));
+            }
 
             // Get Person coins from database
             DBManager dbManager = new DBManager();
@@ -188,7 +191,10 @@ public class ManageCoinsServlet extends HttpServlet {
 
                 String cryptosJsonString = gson.toJson(cryptos);
                 out.print(cryptosJsonString);
-
+                // FOR WEB just in case...
+                /*request.setAttribute("cryptos", cryptos);
+                request.setAttribute("grandtotals", grandTotals);
+                request.getRequestDispatcher("cryptoresponse.jsp").forward(request, response);*/
             }else {
 
                 if (persons != null && persons.size() == 1){

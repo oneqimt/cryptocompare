@@ -3,7 +3,6 @@ package com.imt11.crypto.util;
 import com.imt11.crypto.LoginServlet;
 import com.imt11.crypto.model.CryptoValue;
 import com.imt11.crypto.model.PercentageDTO;
-import com.imt11.crypto.model.Person;
 import com.imt11.crypto.model.TotalValues;
 
 import org.json.simple.JSONObject;
@@ -14,14 +13,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.net.URL;
-import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -56,10 +50,9 @@ public class CryptoUtil {
     public static String LTC_SYMBOL = "LTC";
     public static String BCH_SYMBOL = "BCH";
     public static String BTG_SYMBOL = "BTG";
-    private static DecimalFormat df2 = new DecimalFormat(".##");
-
     public static int PROD_FLAG = 1;
     public static int TEST_FLAG = 2;
+    private static DecimalFormat df2 = new DecimalFormat(".##");
     /*400 = Bad Request
     401 = Unauthorized
     402 = Payment Required
@@ -70,103 +63,48 @@ public class CryptoUtil {
     }
 
     public static void loadBaselineData() throws IOException, ParseException {
-		InputStream resourceAsStream = LoginServlet.class.getResourceAsStream("/baseline.json");
-		if (resourceAsStream != null) {
-			InputStreamReader streamReader = new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8);
-			BufferedReader reader = new BufferedReader(streamReader);
-			StringBuilder sb = new StringBuilder();
-			for (String line; (line = reader.readLine()) != null; ) {
-				sb.append(line);
-			}
-			JSONParser parser = new JSONParser();
-			JSONObject baseline = (JSONObject) parser.parse(sb.toString());
-			String host = (String) baseline.get("host");
-			String username = (String) baseline.get("username");
-			String password = (String) baseline.get("password");
-			String driver = (String) baseline.get("driver");
-			String cryptoControlApiKey = (String) baseline.get("crypto_control_api_key");
-			String cryptoCompareApiKey = (String) baseline.get("crypto_compare_api_key");
-			String smtpHost = (String) baseline.get("smtp_host");
-			String smtpPort = (String) baseline.get("smtp_port");
-			String smtpPassword = (String) baseline.get("smtp_password");
-			String smtpSenderEmail = (String) baseline.get("smtp_sender_email");
-			String coinMarketCapProdApiKey = (String)baseline.get("coin_market_cap_prod_api_key");
-			String coinMarketCapTestApiKey = (String)baseline.get("coin_market_cap_test_api_key");
-			SecurityUtil.getInstance().setCoinMarketCapProdApiKey(coinMarketCapProdApiKey);
-			SecurityUtil.getInstance().setCoinMarketCapTestApiKey(coinMarketCapTestApiKey);
-			SecurityUtil.getInstance().setSmtpHost(smtpHost);
-			SecurityUtil.getInstance().setSmtpPort(smtpPort);
-			SecurityUtil.getInstance().setSmtpPassword(smtpPassword);
-			SecurityUtil.getInstance().setSmtpSenderEmail(smtpSenderEmail);
-			SecurityUtil.getInstance().setDriver(driver);
-			SecurityUtil.getInstance().setHost(host);
-			SecurityUtil.getInstance().setPassword(password);
-			SecurityUtil.getInstance().setUsername(username);
-			SecurityUtil.getInstance().setCryptoControlApi(cryptoControlApiKey);
-			SecurityUtil.getInstance().setCryptoCompareApi(cryptoCompareApiKey);
-			// SET PROD or TEST API flag here only
-			SecurityUtil.getInstance().setFlag(PROD_FLAG);
-		}
-	}
-
-    public static String getMainCryptoEndpoint(List<Person> persons) {
-
-        String main = "https://min-api.cryptocompare.com/data/pricemulti?fsyms=";
-        String coinstr;
-        String coda = "&tsyms=USD&e=Coinbase";
-        String apiKey = "&apiKey=" + SecurityUtil.getInstance().getCryptoCompareApi();
-        List<String> symbols = new ArrayList<>();
-        for (Person person : persons) {
-            String symbol = person.getCoin().getCoin_symbol();
-            if (symbol.equalsIgnoreCase(CryptoUtil.BTC_SYMBOL)) {
-                symbols.add(symbol);
+        InputStream resourceAsStream = LoginServlet.class.getResourceAsStream("/baseline.json");
+        if (resourceAsStream != null) {
+            InputStreamReader streamReader = new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8);
+            BufferedReader reader = new BufferedReader(streamReader);
+            StringBuilder sb = new StringBuilder();
+            for (String line; (line = reader.readLine()) != null; ) {
+                sb.append(line);
             }
-            if (symbol.equalsIgnoreCase(CryptoUtil.BCH_SYMBOL)) {
-                symbols.add(symbol);
-            }
-            if (symbol.equalsIgnoreCase(CryptoUtil.ETH_SYMBOL)) {
-                symbols.add(symbol);
-            }
-            if (symbol.equalsIgnoreCase(CryptoUtil.LTC_SYMBOL)) {
-                symbols.add(symbol);
-            }
+            JSONParser parser = new JSONParser();
+            JSONObject baseline = (JSONObject) parser.parse(sb.toString());
+            String host = (String) baseline.get("host");
+            String username = (String) baseline.get("username");
+            String password = (String) baseline.get("password");
+            String driver = (String) baseline.get("driver");
+            String cryptoControlApiKey = (String) baseline.get("crypto_control_api_key");
+            String cryptoCompareApiKey = (String) baseline.get("crypto_compare_api_key");
+            String smtpHost = (String) baseline.get("smtp_host");
+            String smtpPort = (String) baseline.get("smtp_port");
+            String smtpPassword = (String) baseline.get("smtp_password");
+            String smtpSenderEmail = (String) baseline.get("smtp_sender_email");
+            String coinMarketCapProdApiKey = (String) baseline.get("coin_market_cap_prod_api_key");
+            String coinMarketCapTestApiKey = (String) baseline.get("coin_market_cap_test_api_key");
+            SecurityUtil.getInstance().setCoinMarketCapProdApiKey(coinMarketCapProdApiKey);
+            SecurityUtil.getInstance().setCoinMarketCapTestApiKey(coinMarketCapTestApiKey);
+            SecurityUtil.getInstance().setSmtpHost(smtpHost);
+            SecurityUtil.getInstance().setSmtpPort(smtpPort);
+            SecurityUtil.getInstance().setSmtpPassword(smtpPassword);
+            SecurityUtil.getInstance().setSmtpSenderEmail(smtpSenderEmail);
+            SecurityUtil.getInstance().setDriver(driver);
+            SecurityUtil.getInstance().setHost(host);
+            SecurityUtil.getInstance().setPassword(password);
+            SecurityUtil.getInstance().setUsername(username);
+            SecurityUtil.getInstance().setCryptoControlApi(cryptoControlApiKey);
+            SecurityUtil.getInstance().setCryptoCompareApi(cryptoCompareApiKey);
+            // SET PROD or TEST API flag here only
+            SecurityUtil.getInstance().setFlag(PROD_FLAG);
         }
-
-        coinstr = String.join(",", symbols);
-
-        return main + coinstr + coda + apiKey;
-    }
-
-    public static String getAltCryptoEndpoint(List<Person> persons) {
-        String main = "https://min-api.cryptocompare.com/data/pricemulti?fsyms=";
-        String coinstr;
-        String coda = "&tsyms=BTC,USD";
-        String apiKey = "&apiKey=" + SecurityUtil.getInstance().getCryptoCompareApi();
-        List<String> symbols = new ArrayList<>();
-        for (Person person : persons) {
-            // don't add the main coins in
-            String symbol = person.getCoin().getCoin_symbol();
-            if (!symbol.equalsIgnoreCase(CryptoUtil.BTC_SYMBOL)
-                    && !symbol.equalsIgnoreCase(CryptoUtil.BCH_SYMBOL)
-                    && !symbol.equalsIgnoreCase(CryptoUtil.ETH_SYMBOL)
-                    && !symbol.equalsIgnoreCase(CryptoUtil.LTC_SYMBOL)) {
-                symbols.add(symbol);
-            }
-
-        }
-        coinstr = String.join(",", symbols);
-
-        return main + coinstr + coda + apiKey;
     }
 
     public static NumberFormat getCurrencyFormat() {
         Locale locale = new Locale("en", "US");
         return NumberFormat.getCurrencyInstance(locale);
-    }
-
-    public static NumberFormat getNumberFormat() {
-        Locale locale = new Locale("en", "US");
-        return NumberFormat.getInstance(locale);
     }
 
     public static String formatDoubleValue(Double val, Double factor) {
@@ -177,29 +115,6 @@ public class CryptoUtil {
         double roundedDbl = bd.doubleValue();*/
 
         return currencyFormat.format(dbl);
-    }
-
-    public static double getCost(double val, double factor) {
-        //String mycost = getCurrencyFormat().format(cost);
-
-        // TEST
-        double dbl = val * factor;
-        BigDecimal bd = new BigDecimal(Double.toString(dbl));
-        bd = bd.setScale(2, RoundingMode.HALF_UP);
-        //String test = df2.format(dbl);
-        //System.out.println("DJM cost double is: "+" "+test);
-
-        return bd.doubleValue();
-    }
-
-    public static String getAltCost(Double cost, Double factor) {
-
-        double dbl = cost * factor;
-        BigDecimal bd = new BigDecimal(Double.toString(dbl));
-        bd = bd.setScale(2, RoundingMode.HALF_UP);
-        double roundedDbl = bd.doubleValue();
-
-        return getCurrencyFormat().format(roundedDbl);
     }
 
     public static PercentageDTO getPercentage(Double quantityHeld, Double costPerUnit, Double currentValue) {
@@ -224,7 +139,7 @@ public class CryptoUtil {
 
     }
 
-    public static TotalValues getNewGrandTotals(List<CryptoValue> cryptoValues){
+    public static TotalValues getNewGrandTotals(List<CryptoValue> cryptoValues) {
 
         TotalValues grandTotals = new TotalValues();
         NumberFormat cf = CryptoUtil.getCurrencyFormat();
@@ -233,7 +148,7 @@ public class CryptoUtil {
         double costdbl = 0.0;
         double totaldbl = 0.0;
 
-        for (CryptoValue cv : cryptoValues){
+        for (CryptoValue cv : cryptoValues) {
             try {
                 totalCost = cf.parse(cv.getCost());
                 totalValue = cf.parse(cv.getHoldingValue());
@@ -253,10 +168,10 @@ public class CryptoUtil {
         grandTotals.setTotalCost(cf.format(costdbl));
         grandTotals.setTotalValue(cf.format(totaldbl));
 
-        System.out.println("TOTAL COST is: "+" "+costdbl);
-        System.out.println("TOTAL VALUE is: "+" "+totaldbl);
+        System.out.println("TOTAL COST is: " + " " + costdbl);
+        System.out.println("TOTAL VALUE is: " + " " + totaldbl);
         double percentage = ((totaldbl - costdbl) / costdbl) * 100;
-        System.out.println("PERCENTAGE is : "+" "+percentage);
+        System.out.println("PERCENTAGE is : " + " " + percentage);
 
         if (percentage >= 0.0) {
             grandTotals.setIncreaseDecrease(CryptoUtil.INCREASE);
@@ -271,114 +186,5 @@ public class CryptoUtil {
         return grandTotals;
 
     }
-
-    @Deprecated
-    public static TotalValues getGrandTotals(List<CryptoValue> combinedList) {
-
-        // AGGREGATE VALUES
-        double aggregate = 0.0;
-        double btgval = 0.0;
-        double btcval = 0.0;
-        NumberFormat cf = CryptoUtil.getCurrencyFormat();
-        Number btgnum = null;
-        Number btcnum = null;
-        for (CryptoValue val : combinedList) {
-            if (val.getCoin().getCoin_name().equalsIgnoreCase(CryptoUtil.BTG_SYMBOL)) {
-                try {
-                    btgnum = cf.parse(val.getHoldingValue());
-                } catch (java.text.ParseException e) {
-                    e.printStackTrace();
-                }
-                if (btgnum != null) {
-                    btgval = btgnum.doubleValue();
-                }
-            }
-            if (val.getCoin().getCoin_name().equalsIgnoreCase(CryptoUtil.BTC_SYMBOL)) {
-                try {
-                    btcnum = cf.parse(val.getUSD());
-                } catch (java.text.ParseException e) {
-                    e.printStackTrace();
-                }
-                if (btcnum != null) {
-                    btcval = btcnum.doubleValue();
-                }
-            }
-        }
-        // add BTG to total BTC
-        aggregate = btgval + btcval;
-
-        Number totalCost = null;
-        Number totalValue = null;
-        double costdbl = 0.0;
-        double totaldbl = 0.0;
-
-        for (CryptoValue val : combinedList) {
-            try {
-                totalCost = cf.parse(val.getCost());
-                totalValue = cf.parse(val.getHoldingValue());
-            } catch (java.text.ParseException e) {
-                e.printStackTrace();
-            }
-            if (totalCost != null) {
-                costdbl += totalCost.doubleValue();
-            }
-            if (totalValue != null) {
-                totaldbl += totalValue.doubleValue();
-            }
-
-        }
-
-        TotalValues grandTotals = new TotalValues();
-        grandTotals.setTotalCost(cf.format(costdbl));
-        grandTotals.setTotalValue(cf.format(totaldbl));
-        double perc = (totaldbl / costdbl);
-        perc *= 100;
-        if (perc >= 0.0) {
-            grandTotals.setIncreaseDecrease(CryptoUtil.INCREASE);
-        } else {
-            grandTotals.setIncreaseDecrease(CryptoUtil.DECREASE);
-        }
-        String finalPercStr = df2.format(perc);
-
-        String display = finalPercStr + PERCENT;
-        grandTotals.setTotalPercentageIncreaseDecrease(display);
-
-
-		/*System.out.println("TOTAL COST is: "+" "+costdbl);
-		System.out.println("TOTAL VALUE is:"+" "+totaldbl);
-		System.out.println("TOTAL PERCENTAGE INCREASE/DECREASE :"+" "+display);
-		System.out.println("TOTALINCREASE/DECREASE :"+" "+grandTotals.getIncreaseDecrease());*/
-
-        return grandTotals;
-
-    }
-
-    public static String getStringJson(String endpoint) {
-
-        StringBuilder sb = new StringBuilder();
-
-        try {
-
-            URL url = new URL(endpoint);
-
-            URLConnection mainurlConnection = url.openConnection();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(mainurlConnection.getInputStream()));
-
-            String mainLine;
-
-            while ((mainLine = bufferedReader.readLine()) != null) {
-                sb.append(mainLine).append("\n");
-            }
-
-            bufferedReader.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return sb.toString();
-
-    }
-
 
 }

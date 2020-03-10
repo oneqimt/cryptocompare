@@ -1,30 +1,19 @@
 package com.imt11.crypto;
 
 import com.google.gson.Gson;
-import com.imt11.crypto.database.DBManager;
 import com.imt11.crypto.database.HoldingsDAO;
 import com.imt11.crypto.database.ManageCoinDAO;
 import com.imt11.crypto.model.Coin;
 import com.imt11.crypto.model.CoinHolding;
 import com.imt11.crypto.model.CryptoError;
-import com.imt11.crypto.model.CryptoValue;
 import com.imt11.crypto.model.Holdings;
-import com.imt11.crypto.model.Person;
-import com.imt11.crypto.model.TotalValues;
 import com.imt11.crypto.util.CryptoUtil;
-import com.imt11.crypto.util.ParserUtil;
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
@@ -40,7 +29,6 @@ import javax.servlet.http.HttpServletResponse;
         initParams = {@WebInitParam(name = "person_id", value = "0")})
 
 public class CryptoCompareServlet extends HttpServlet {
-    private Gson gson = new Gson();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
@@ -82,7 +70,7 @@ public class CryptoCompareServlet extends HttpServlet {
                 holdings.setCoin_id(mycoin.getCoin_id());
                 // update market_cap and cmc_rank
                 int updatestatus = manageCoinDAO.updateCoin(coin);
-                if (updatestatus > 0){
+                if (updatestatus > 0) {
                     System.out.println("COIN updated success");
                 }
 
@@ -132,15 +120,15 @@ public class CryptoCompareServlet extends HttpServlet {
             // get the quantity and cost from the Holdings object passed in
             double quantity = coinHolding.getHoldings().getQuantity();
             double cost = coinHolding.getHoldings().getCost();
-            System.out.println("QUANTITY passed in: "+" "+quantity);
-            System.out.println("COST passed in: "+" "+cost);
+            System.out.println("QUANTITY passed in: " + " " + quantity);
+            System.out.println("COST passed in: " + " " + cost);
 
             // get the holding from the database - coin_id and person_id
             Holdings dbHolding = holdingsDAO.getExistingHolding(holdings);
             double dbquantity = dbHolding.getQuantity();
             double dbcost = dbHolding.getCost();
-            System.out.println("DATABASE QUANTITY result: "+" "+dbquantity);
-            System.out.println("DATABASE COST result: "+" "+dbcost);
+            System.out.println("DATABASE QUANTITY result: " + " " + dbquantity);
+            System.out.println("DATABASE COST result: " + " " + dbcost);
 
             Holdings holdingToUpdate = new Holdings();
             holdingToUpdate.setHolding_id(dbHolding.getHolding_id());
@@ -151,31 +139,31 @@ public class CryptoCompareServlet extends HttpServlet {
             double quantityRawTotal = (quantity + dbquantity);
             double costRawTotal = (cost + dbcost);
             double newcost = costRawTotal / 2;
-            System.out.println("quantityRawTotal: "+" "+quantityRawTotal);
-            System.out.println("costRawTotal: "+" "+costRawTotal);
-            System.out.println("newcost: "+" "+newcost);
+            System.out.println("quantityRawTotal: " + " " + quantityRawTotal);
+            System.out.println("costRawTotal: " + " " + costRawTotal);
+            System.out.println("newcost: " + " " + newcost);
 
             // ROUNDING to 2 decimal places
             BigDecimal bdquantity = new BigDecimal(quantityRawTotal);
             bdquantity = bdquantity.setScale(2, RoundingMode.HALF_UP);
-            System.out.println("bdquantity is : "+" "+bdquantity);
+            System.out.println("bdquantity is : " + " " + bdquantity);
 
             BigDecimal bdcost = new BigDecimal(newcost);
             bdcost = bdcost.setScale(2, RoundingMode.HALF_UP);
-            System.out.println("bdcost is: "+" "+bdcost);
+            System.out.println("bdcost is: " + " " + bdcost);
 
             // maybe set these as BigDecimal type on the Holdings object
             holdingToUpdate.setQuantity(bdquantity.doubleValue());
             holdingToUpdate.setCost(bdcost.doubleValue());
 
-            System.out.println("HOLDING TO UPDATE is: "+" "+holdingToUpdate.toString());
+            System.out.println("HOLDING TO UPDATE is: " + " " + holdingToUpdate.toString());
 
             status = holdingsDAO.updateHolding(holdingToUpdate);
             if (status > 0) {
                 System.out.println("HOLDING UPDATED");
                 String str = gson.toJson(holdingToUpdate);
                 out.print(str);
-            }else{
+            } else {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "There was a problem updating that holding");
             }
 
@@ -189,62 +177,6 @@ public class CryptoCompareServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        // arg passed in from client
-        int person_id = Integer.parseInt(request.getParameter("person_id"));
-
-        // get database info first
-        DBManager dbManager = new DBManager();
-        // GET PERSON COINS
-        List<Person> persons = dbManager.getPersonCoins(person_id);
-
-        // MAIN
-        String mainjson = CryptoUtil.getStringJson(CryptoUtil.getMainCryptoEndpoint(persons));
-
-        JSONParser mainparser = new JSONParser();
-        List<CryptoValue> maincryptos = new ArrayList<>();
-        try {
-
-            JSONObject mainjsonObject = (JSONObject) mainparser.parse(mainjson);
-            maincryptos = ParserUtil.parseMainCryptos(mainjsonObject, persons);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        // ALTS
-        String altjson = CryptoUtil.getStringJson(CryptoUtil.getAltCryptoEndpoint(persons));
-        JSONParser altparser = new JSONParser();
-        List<CryptoValue> altcryptos = new ArrayList<>();
-        try {
-            JSONObject altjsonObject = (JSONObject) altparser.parse(altjson);
-            altcryptos = ParserUtil.parseAltCryptos(altjsonObject, persons);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        List<CryptoValue> combinedList = new ArrayList<>();
-        combinedList.addAll(maincryptos);
-        combinedList.addAll(altcryptos);
-
-        // Store grandTotals to Database
-        TotalValues grandTotals = CryptoUtil.getGrandTotals(combinedList);
-        dbManager.updateGrandTotals(person_id, grandTotals);
-
-
-        String testjson = this.gson.toJson(combinedList);
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        out.print(testjson);
-        out.flush();
-        out.close();
-
-
-        // FOR WEB
-            /*request.setAttribute("cryptos", combinedList);
-            request.setAttribute("grandtotals", grandTotals);
-            request.getRequestDispatcher("cryptoresponse.jsp").forward(request, response);*/
 
     }
 
