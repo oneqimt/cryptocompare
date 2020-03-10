@@ -32,12 +32,12 @@ import static com.imt11.crypto.util.ManageCoinUtil.checkUpdateCounts;
  */
 public class ManageCoinDAO {
 
-    public String getLatestFromCoinMarketCap(int flag) throws URISyntaxException, IOException {
+    // ************* COIN MARKET CAP API calls *************************
+    public String getLatestFromCoinMarketCap() throws URISyntaxException, IOException {
         String responseContent;
         String testApiKey = SecurityUtil.getInstance().getCoinMarketCapTestApiKey();
         String prodApiKey = SecurityUtil.getInstance().getCoinMarketCapProdApiKey();
 
-        int prodOrTest = 0;
         String apiKey = "";
 
         List<NameValuePair> parameters = new ArrayList<>();
@@ -45,28 +45,26 @@ public class ManageCoinDAO {
         parameters.add(new BasicNameValuePair("limit", "199"));
         parameters.add(new BasicNameValuePair("convert", "USD"));
 
-        switch (flag) {
+        switch (SecurityUtil.getInstance().getFlag()) {
             case 1:
-                prodOrTest = 1;
                 apiKey = prodApiKey;
                 break;
 
             case 2:
-                prodOrTest = 2;
                 apiKey = testApiKey;
                 break;
 
         }
 
-        String uri = ManageCoinUtil.getCoinMarketCapEndpoint(prodOrTest);
+        String uri = ManageCoinUtil.getLatestCoinMarketCapEndpoint();
         URIBuilder query = new URIBuilder(uri);
         query.addParameters(parameters);
 
         CloseableHttpClient client = HttpClients.createDefault();
         HttpGet request = new HttpGet(query.build());
 
-        request.setHeader(HttpHeaders.ACCEPT, "application/json");
-        request.addHeader("X-CMC_PRO_API_KEY", apiKey);
+        request.setHeader(HttpHeaders.ACCEPT, ManageCoinUtil.APPLICATION_JSON);
+        request.addHeader(ManageCoinUtil.X_CMC_PRO_API_KEY, apiKey);
 
         try (CloseableHttpResponse response = client.execute(request)) {
             System.out.println("LATEST FROM COINMARKETCAP RESPONSE IS: " + " " + response.getStatusLine());
@@ -78,38 +76,34 @@ public class ManageCoinDAO {
         return responseContent;
     }
 
-    public String getCoinFromCoinMarketCap(int flag, String slug) throws URISyntaxException, IOException {
+    public String getCoinFromCoinMarketCap( String slug) throws URISyntaxException, IOException {
         String responseContent;
         String testApiKey = SecurityUtil.getInstance().getCoinMarketCapTestApiKey();
         String prodApiKey = SecurityUtil.getInstance().getCoinMarketCapProdApiKey();
-        int prodOrTest = 0;
         String apiKey = "";
 
         List<NameValuePair> parameters = new ArrayList<>();
         parameters.add(new BasicNameValuePair("slug", slug));
 
-        switch (flag) {
+        switch (SecurityUtil.getInstance().getFlag()) {
             case 1:
-                prodOrTest = 1;
                 apiKey = prodApiKey;
                 break;
 
             case 2:
-                prodOrTest = 2;
                 apiKey = testApiKey;
                 break;
 
         }
 
-        String uri = ManageCoinUtil.getSingleCoinCoinMarketCapEndpoint(prodOrTest);
+        String uri = ManageCoinUtil.getQuotesCoinMarketCapEndpoint();
         URIBuilder query = new URIBuilder(uri);
         query.addParameters(parameters);
 
         CloseableHttpClient client = HttpClients.createDefault();
         HttpGet request = new HttpGet(query.build());
-
-        request.setHeader(HttpHeaders.ACCEPT, "application/json");
-        request.addHeader("X-CMC_PRO_API_KEY", apiKey);
+        request.setHeader(HttpHeaders.ACCEPT, ManageCoinUtil.APPLICATION_JSON);
+        request.addHeader(ManageCoinUtil.X_CMC_PRO_API_KEY, apiKey);
 
         try (CloseableHttpResponse response = client.execute(request)) {
             System.out.println("SINGLE COIN FROM COINMARKETCAP RESPONSE IS: " + " " + response.getStatusLine());
@@ -121,6 +115,48 @@ public class ManageCoinDAO {
         return responseContent;
     }
 
+    public String getPersonCoinListFromCoinMarketCap(List<String> coinSymbols) throws URISyntaxException, IOException{
+        String responseContent;
+        String testApiKey = SecurityUtil.getInstance().getCoinMarketCapTestApiKey();
+        String prodApiKey = SecurityUtil.getInstance().getCoinMarketCapProdApiKey();
+        String symbolsToSend = String.join(",", coinSymbols);
+
+
+        String apiKey = "";
+        List<NameValuePair> parameters = new ArrayList<>();
+        parameters.add(new BasicNameValuePair("symbol", symbolsToSend));
+
+        switch (SecurityUtil.getInstance().getFlag()) {
+            case 1:
+                apiKey = prodApiKey;
+                break;
+
+            case 2:
+                apiKey = testApiKey;
+                break;
+
+        }
+
+        String uri = ManageCoinUtil.getQuotesCoinMarketCapEndpoint();
+        URIBuilder query = new URIBuilder(uri);
+        query.addParameters(parameters);
+
+        CloseableHttpClient client = HttpClients.createDefault();
+        HttpGet request = new HttpGet(query.build());
+        request.setHeader(HttpHeaders.ACCEPT, ManageCoinUtil.APPLICATION_JSON);
+        request.addHeader(ManageCoinUtil.X_CMC_PRO_API_KEY, apiKey);
+
+        try (CloseableHttpResponse response = client.execute(request)) {
+            System.out.println("getPersonCoinListFromCoinMarketCap  FROM COINMARKETCAP RESPONSE IS: " + " " + response.getStatusLine());
+            HttpEntity entity = response.getEntity();
+            responseContent = EntityUtils.toString(entity);
+            EntityUtils.consume(entity);
+        }
+
+        return responseContent;
+    }
+
+    // ************** DATABASE *********************
     // SINGLE INSERT
     public int insertCoin(Coin coin){
         int status = 0;
@@ -355,7 +391,7 @@ public class ManageCoinDAO {
         return status;
     }
 
-    // NOTE this is TEMPORARY
+    // NOTE ADMIN call ONLY
     public int[] updateCurrentCoins(List<Coin> coins) {
         int[] updateCounts = new int[0];
 

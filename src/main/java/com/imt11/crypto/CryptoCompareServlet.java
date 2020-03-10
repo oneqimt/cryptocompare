@@ -148,7 +148,6 @@ public class CryptoCompareServlet extends HttpServlet {
             holdingToUpdate.setPerson_id(dbHolding.getPerson_id());
 
             //Find average - NOTE cost is per coin
-            // TODO - divide by the quantity
             double quantityRawTotal = (quantity + dbquantity);
             double costRawTotal = (cost + dbcost);
             double newcost = costRawTotal / 2;

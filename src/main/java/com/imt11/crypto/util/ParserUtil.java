@@ -112,8 +112,13 @@ public class ParserUtil {
                     bchCrypto.setCoin(bchcoin);
                     bchCrypto.setCoin(bchcoin);
                     bchCrypto.setUSD(currencyFormat.format(bch.get(CryptoUtil.USD)));
+
+
                     Double bchDbl = Double.valueOf(bch.get(CryptoUtil.USD).toString());
                     bchCrypto.setHoldingValue(CryptoUtil.formatDoubleValue(bchDbl, person.getHoldings().getQuantity()));
+
+
+
                     bchCrypto.setCost(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), person.getHoldings().getCost()));
                     bchCrypto.setIncreaseDecrease(CryptoUtil.INCREASE);
                     bchCrypto.setPercentage("SEE BITCOIN");
@@ -137,6 +142,7 @@ public class ParserUtil {
                     ltcCrypto.setUSD(currencyFormat.format(ltc.get(CryptoUtil.USD)));
                     Double ltcDbl = Double.valueOf(ltc.get(CryptoUtil.USD).toString());
                     ltcCrypto.setHoldingValue(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), ltcDbl));
+
                     ltcCrypto.setCost(CryptoUtil.formatDoubleValue(person.getHoldings().getQuantity(), person.getHoldings().getCost()));
                     ltcCrypto.setQuantity(person.getHoldings().getQuantity());
 

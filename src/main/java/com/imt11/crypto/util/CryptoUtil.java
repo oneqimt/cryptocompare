@@ -46,6 +46,7 @@ public class CryptoUtil {
 
     public static final String CMC_COINS = "cmccoins";
     public static final String SINGLE_CMC_COIN = "singlecmccoin";
+    public static final String PERSON_CMC_COINS = "personcmccoins";
     public static final String DB_COINS = "dbcoins";
     public static final String SINGLE_DB_COIN = "singledbcoin";
 
@@ -56,6 +57,9 @@ public class CryptoUtil {
     public static String BCH_SYMBOL = "BCH";
     public static String BTG_SYMBOL = "BTG";
     private static DecimalFormat df2 = new DecimalFormat(".##");
+
+    public static int PROD_FLAG = 1;
+    public static int TEST_FLAG = 2;
     /*400 = Bad Request
     401 = Unauthorized
     402 = Payment Required
@@ -100,6 +104,8 @@ public class CryptoUtil {
 			SecurityUtil.getInstance().setUsername(username);
 			SecurityUtil.getInstance().setCryptoControlApi(cryptoControlApiKey);
 			SecurityUtil.getInstance().setCryptoCompareApi(cryptoCompareApiKey);
+			// SET PROD or TEST API flag here only
+			SecurityUtil.getInstance().setFlag(PROD_FLAG);
 		}
 	}
 
@@ -166,35 +172,12 @@ public class CryptoUtil {
     public static String formatDoubleValue(Double val, Double factor) {
         NumberFormat currencyFormat = getCurrencyFormat();
         double dbl = val * factor;
-        BigDecimal bd = new BigDecimal(Double.toString(dbl));
+       /* BigDecimal bd = new BigDecimal(Double.toString(dbl));
         bd = bd.setScale(2, RoundingMode.HALF_UP);
-        double roundedDbl = bd.doubleValue();
+        double roundedDbl = bd.doubleValue();*/
 
-        return currencyFormat.format(roundedDbl);
+        return currencyFormat.format(dbl);
     }
-
-    public static PercentageDTO getPercentage(Double quantityHeld, Double costPerUnit, Double currentValue) {
-
-        double cost = Math.round(quantityHeld * costPerUnit);
-
-        double value = Math.round(quantityHeld * currentValue);
-
-        double testdbl = value - cost;
-
-        double perc = (testdbl / cost);
-        perc *= 100;
-        String finalPercStr = df2.format(perc);
-
-        String display = finalPercStr + PERCENT;
-
-        PercentageDTO dto = new PercentageDTO();
-        dto.setValueString(display);
-        dto.setValueDouble(perc);
-
-        return dto;
-
-    }
-
 
     public static double getCost(double val, double factor) {
         //String mycost = getCurrencyFormat().format(cost);
@@ -219,6 +202,77 @@ public class CryptoUtil {
         return getCurrencyFormat().format(roundedDbl);
     }
 
+    public static PercentageDTO getPercentage(Double quantityHeld, Double costPerUnit, Double currentValue) {
+
+        double cost = Math.round(quantityHeld * costPerUnit);
+
+        double value = Math.round(quantityHeld * currentValue);
+
+        double testdbl = value - cost;
+
+        double perc = (testdbl / cost);
+        perc *= 100;
+        String finalPercStr = df2.format(perc);
+
+        String display = finalPercStr + PERCENT;
+
+        PercentageDTO dto = new PercentageDTO();
+        dto.setValueString(display);
+        dto.setValueDouble(perc);
+
+        return dto;
+
+    }
+
+    public static TotalValues getNewGrandTotals(List<CryptoValue> cryptoValues){
+
+        TotalValues grandTotals = new TotalValues();
+        NumberFormat cf = CryptoUtil.getCurrencyFormat();
+        Number totalCost = null;
+        Number totalValue = null;
+        double costdbl = 0.0;
+        double totaldbl = 0.0;
+
+        for (CryptoValue cv : cryptoValues){
+            try {
+                totalCost = cf.parse(cv.getCost());
+                totalValue = cf.parse(cv.getHoldingValue());
+            } catch (java.text.ParseException e) {
+                e.printStackTrace();
+            }
+            if (totalCost != null) {
+
+                costdbl += totalCost.doubleValue();
+            }
+            if (totalValue != null) {
+
+                totaldbl += totalValue.doubleValue();
+            }
+
+        }
+        grandTotals.setTotalCost(cf.format(costdbl));
+        grandTotals.setTotalValue(cf.format(totaldbl));
+
+        System.out.println("TOTAL COST is: "+" "+costdbl);
+        System.out.println("TOTAL VALUE is: "+" "+totaldbl);
+        double percentage = ((totaldbl - costdbl) / costdbl) * 100;
+        System.out.println("PERCENTAGE is : "+" "+percentage);
+
+        if (percentage >= 0.0) {
+            grandTotals.setIncreaseDecrease(CryptoUtil.INCREASE);
+        } else {
+            grandTotals.setIncreaseDecrease(CryptoUtil.DECREASE);
+        }
+        String finalPercStr = df2.format(percentage);
+
+        String display = finalPercStr + PERCENT;
+        grandTotals.setTotalPercentageIncreaseDecrease(display);
+
+        return grandTotals;
+
+    }
+
+    @Deprecated
     public static TotalValues getGrandTotals(List<CryptoValue> combinedList) {
 
         // AGGREGATE VALUES

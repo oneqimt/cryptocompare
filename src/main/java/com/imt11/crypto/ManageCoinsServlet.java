@@ -1,17 +1,26 @@
 package com.imt11.crypto;
 
 import com.google.gson.Gson;
+import com.imt11.crypto.database.DBManager;
 import com.imt11.crypto.database.ManageCoinDAO;
 import com.imt11.crypto.model.Coin;
 import com.imt11.crypto.model.CoinMarketCapCoin;
 import com.imt11.crypto.model.CoinMarketCapLatest;
+import com.imt11.crypto.model.CryptoValue;
+import com.imt11.crypto.model.Holdings;
+import com.imt11.crypto.model.PercentageDTO;
+import com.imt11.crypto.model.Person;
+import com.imt11.crypto.model.TotalValues;
 import com.imt11.crypto.util.CryptoUtil;
 import com.imt11.crypto.util.ManageCoinUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URISyntaxException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +74,7 @@ public class ManageCoinsServlet extends HttpServlet {
         String action = request.getParameter("action");
         String slug = request.getParameter("slug");
         String coinid = request.getParameter("coinid");
+       int person_id = Integer.parseInt(request.getParameter("person_id"));
 
         String responseStr = "";
         ManageCoinDAO manageCoinDAO = new ManageCoinDAO();
@@ -77,7 +87,7 @@ public class ManageCoinsServlet extends HttpServlet {
             // GETS a SINGLE COIN FROM COINMARKETCAP
             System.out.println("GET SINGLE CMC COIN and slug is: " + " " + slug);
             try {
-                responseStr = manageCoinDAO.getCoinFromCoinMarketCap(1, slug);
+                responseStr = manageCoinDAO.getCoinFromCoinMarketCap(slug);
             } catch (URISyntaxException | IOException e) {
                 e.printStackTrace();
             }
@@ -90,15 +100,15 @@ public class ManageCoinsServlet extends HttpServlet {
         } else if (action.equalsIgnoreCase(CryptoUtil.CMC_COINS)) {
             // GET the LATEST COINS FROM COINMARKETCAP
             try {
-                responseStr = manageCoinDAO.getLatestFromCoinMarketCap(1);
-            } catch (URISyntaxException e) {
+                responseStr = manageCoinDAO.getLatestFromCoinMarketCap();
+            } catch (URISyntaxException | IOException e) {
                 e.printStackTrace();
             }
 
             CoinMarketCapLatest coinMarketCapLatest = gson.fromJson(responseStr, CoinMarketCapLatest.class);
             List<CoinMarketCapCoin> coinMarketCapCoins = coinMarketCapLatest.getData();
             List<Coin> ourcoins = new ArrayList<>();
-            for (CoinMarketCapCoin coinMarketCapCoin : coinMarketCapCoins){
+            for (CoinMarketCapCoin coinMarketCapCoin : coinMarketCapCoins) {
                 Coin coin = new Coin();
                 coin.setCoin_id(0);
                 coin.setMarket_cap(coinMarketCapCoin.getQuote().getUSD().getMarket_cap());
@@ -114,6 +124,94 @@ public class ManageCoinsServlet extends HttpServlet {
 
             String latestcoins = gson.toJson(ourcoins);
             out.print(latestcoins);
+
+
+        } else if (action.equalsIgnoreCase(CryptoUtil.PERSON_CMC_COINS)) {
+
+            System.out.println("PERSON CMC COINS");
+
+            // Get Person coins from database
+            DBManager dbManager = new DBManager();
+            List<Person> persons = dbManager.getPersonCoins(person_id);
+            // don't call this, call single coin
+            if (persons != null && persons.size() > 1){
+                // Create a list of coinSymbols to send to CoinMarketCap
+                List<String> personCoins = new ArrayList<>();
+                for (Person person : persons){
+                    String coinSymbol = person.getCoin().getCoin_symbol();
+                    personCoins.add(coinSymbol);
+                }
+
+                try {
+                    responseStr = manageCoinDAO.getPersonCoinListFromCoinMarketCap(personCoins);
+                } catch (URISyntaxException | IOException e) {
+                    e.printStackTrace();
+                }
+
+                List<Coin> coins = ManageCoinUtil.parsePersonCoinList(responseStr);
+                List<CryptoValue> cryptos = new ArrayList<>();
+                NumberFormat currencyFormat = CryptoUtil.getCurrencyFormat();
+                for (Coin coin : coins){
+                    CryptoValue cryptoValue = new CryptoValue();
+                    cryptoValue.setCoin(coin);
+                    cryptoValue.setUSD(currencyFormat.format(coin.getCurrentPrice()));
+                    cryptos.add(cryptoValue);
+                }
+                for (Person person : persons){
+                    Holdings holdings = person.getHoldings();
+                    for (CryptoValue cryptoValue : cryptos){
+
+                        if (person.getCoin().getCmc_id() == cryptoValue.getCoin().getCmc_id()){
+                            cryptoValue.setQuantity(holdings.getQuantity());
+                            BigDecimal bd = new BigDecimal(String.valueOf(cryptoValue.getCoin().getCurrentPrice()));
+                            bd = bd.setScale(2, RoundingMode.HALF_UP);
+                            double roundedDbl = bd.doubleValue();
+                            cryptoValue.setHoldingValue(String.valueOf(CryptoUtil.formatDoubleValue(roundedDbl, holdings.getQuantity())));
+                            cryptoValue.setCost(CryptoUtil.formatDoubleValue(holdings.getQuantity(), holdings.getCost()));
+
+                            PercentageDTO dto = CryptoUtil.getPercentage(holdings.getQuantity(), holdings.getCost(), roundedDbl);
+                            cryptoValue.setPercentage(dto.getValueString());
+                            if (dto.getValueDouble() >= 0.0) {
+                                cryptoValue.setIncreaseDecrease(CryptoUtil.INCREASE);
+                            } else {
+                                cryptoValue.setIncreaseDecrease(CryptoUtil.DECREASE);
+                            }
+                        }
+                    }
+
+                }
+
+                // Store grandTotals to Database
+                TotalValues grandTotals = CryptoUtil.getNewGrandTotals(cryptos);
+                System.out.println("GRAND TOTALS is: "+" "+grandTotals.toString());
+                dbManager.updateGrandTotals(person_id, grandTotals);
+
+                String cryptosJsonString = gson.toJson(cryptos);
+                out.print(cryptosJsonString);
+
+            }else {
+
+                if (persons != null && persons.size() == 1){
+
+                    String myslug = persons.get(0).getCoin().getSlug();
+                    System.out.println("PERSON HAS 1 coin only SLUG is: "+" "+myslug);
+
+                    try {
+                        responseStr = manageCoinDAO.getCoinFromCoinMarketCap(myslug);
+                    } catch (URISyntaxException | IOException e) {
+                        e.printStackTrace();
+                    }
+                    // we can parse this ourselves
+                    // the reason for this is that the "data" object has the id as the node
+                    Coin coin = ManageCoinUtil.parseSingleCoin(responseStr);
+                    String coinstr = gson.toJson(coin);
+                    out.print(coinstr);
+                }else{
+                    System.out.println("PERSON has NO coins yet");
+                    response.sendError(400, "Person does not have ony coins yet.");
+                }
+
+            }
 
 
         } else if (action.equalsIgnoreCase(CryptoUtil.DB_COINS)) {

@@ -19,6 +19,7 @@ public class SecurityUtil {
     private String smtpSenderEmail;
     private String coinMarketCapProdApiKey;
     private String coinMarketCapTestApiKey;
+    private int flag;
 
     private SecurityUtil(){
 
@@ -127,4 +128,13 @@ public class SecurityUtil {
     public void setCoinMarketCapTestApiKey(String coinMarketCapTestApiKey) {
         this.coinMarketCapTestApiKey = coinMarketCapTestApiKey;
     }
+
+    public int getFlag() {
+        return flag;
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
+
 }
