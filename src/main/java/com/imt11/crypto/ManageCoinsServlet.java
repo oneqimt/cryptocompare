@@ -162,9 +162,10 @@ public class ManageCoinsServlet extends HttpServlet {
                 }
                 for (Person person : persons){
                     Holdings holdings = person.getHoldings();
+                    System.out.println("HOLDINGS Are : "+" "+holdings.toString());
                     for (CryptoValue cryptoValue : cryptos){
-
-                        if (person.getCoin().getCmc_id() == cryptoValue.getCoin().getCmc_id()){
+                        //person.getCoin().getCmc_id() == cryptoValue.getCoin().getCmc_id()
+                        if (person.getCoin().getCoin_symbol().equalsIgnoreCase(cryptoValue.getCoin().getCoin_symbol())){
                             cryptoValue.setQuantity(holdings.getQuantity());
                             BigDecimal bd = new BigDecimal(String.valueOf(cryptoValue.getCoin().getCurrentPrice()));
                             bd = bd.setScale(2, RoundingMode.HALF_UP);

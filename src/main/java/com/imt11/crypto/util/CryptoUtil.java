@@ -149,6 +149,8 @@ public class CryptoUtil {
         double totaldbl = 0.0;
 
         for (CryptoValue cv : cryptoValues) {
+            System.out.println("COST is : "+" "+cv.getCost());
+            System.out.println("HOLDING VALUE is : "+" "+cv.getHoldingValue());
             try {
                 totalCost = cf.parse(cv.getCost());
                 totalValue = cf.parse(cv.getHoldingValue());
