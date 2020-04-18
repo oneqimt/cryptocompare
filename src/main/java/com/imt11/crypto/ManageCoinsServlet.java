@@ -18,7 +18,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.net.URISyntaxException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -162,18 +161,17 @@ public class ManageCoinsServlet extends HttpServlet {
                 }
                 for (Person person : persons){
                     Holdings holdings = person.getHoldings();
-                    System.out.println("HOLDINGS Are : "+" "+holdings.toString());
                     for (CryptoValue cryptoValue : cryptos){
-                        //person.getCoin().getCmc_id() == cryptoValue.getCoin().getCmc_id()
+
                         if (person.getCoin().getCoin_symbol().equalsIgnoreCase(cryptoValue.getCoin().getCoin_symbol())){
                             cryptoValue.setQuantity(holdings.getQuantity());
                             BigDecimal bd = new BigDecimal(String.valueOf(cryptoValue.getCoin().getCurrentPrice()));
-                            bd = bd.setScale(2, RoundingMode.HALF_UP);
-                            double roundedDbl = bd.doubleValue();
-                            cryptoValue.setHoldingValue(String.valueOf(CryptoUtil.formatDoubleValue(roundedDbl, holdings.getQuantity())));
+                            // don't set scale here
+                            double dbl = bd.doubleValue();
+                            cryptoValue.setHoldingValue(String.valueOf(CryptoUtil.formatDoubleValue(dbl, holdings.getQuantity())));
                             cryptoValue.setCost(CryptoUtil.formatDoubleValue(holdings.getQuantity(), holdings.getCost()));
 
-                            PercentageDTO dto = CryptoUtil.getPercentage(holdings.getQuantity(), holdings.getCost(), roundedDbl);
+                            PercentageDTO dto = CryptoUtil.getPercentage(holdings.getQuantity(), holdings.getCost(), dbl);
                             cryptoValue.setPercentage(dto.getValueString());
                             if (dto.getValueDouble() >= 0.0) {
                                 cryptoValue.setIncreaseDecrease(CryptoUtil.INCREASE);

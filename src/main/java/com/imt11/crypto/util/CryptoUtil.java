@@ -43,13 +43,6 @@ public class CryptoUtil {
     public static final String PERSON_CMC_COINS = "personcmccoins";
     public static final String DB_COINS = "dbcoins";
     public static final String SINGLE_DB_COIN = "singledbcoin";
-
-    public static String USD = "USD";
-    public static String BTC_SYMBOL = "BTC";
-    public static String ETH_SYMBOL = "ETH";
-    public static String LTC_SYMBOL = "LTC";
-    public static String BCH_SYMBOL = "BCH";
-    public static String BTG_SYMBOL = "BTG";
     public static int PROD_FLAG = 1;
     public static int TEST_FLAG = 2;
     private static DecimalFormat df2 = new DecimalFormat(".##");
@@ -149,11 +142,10 @@ public class CryptoUtil {
         double totaldbl = 0.0;
 
         for (CryptoValue cv : cryptoValues) {
-            System.out.println("COST is : "+" "+cv.getCost());
-            System.out.println("HOLDING VALUE is : "+" "+cv.getHoldingValue());
             try {
                 totalCost = cf.parse(cv.getCost());
                 totalValue = cf.parse(cv.getHoldingValue());
+
             } catch (java.text.ParseException e) {
                 e.printStackTrace();
             }
@@ -170,10 +162,10 @@ public class CryptoUtil {
         grandTotals.setTotalCost(cf.format(costdbl));
         grandTotals.setTotalValue(cf.format(totaldbl));
 
-        System.out.println("TOTAL COST is: " + " " + costdbl);
-        System.out.println("TOTAL VALUE is: " + " " + totaldbl);
+        /*System.out.println("TOTAL COST is: " + " " + costdbl);
+        System.out.println("TOTAL VALUE is: " + " " + totaldbl);*/
         double percentage = ((totaldbl - costdbl) / costdbl) * 100;
-        System.out.println("PERCENTAGE is : " + " " + percentage);
+        //System.out.println("PERCENTAGE is : " + " " + percentage);
 
         if (percentage >= 0.0) {
             grandTotals.setIncreaseDecrease(CryptoUtil.INCREASE);
