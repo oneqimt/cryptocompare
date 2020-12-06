@@ -24,7 +24,7 @@ public class AuthServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        int status =0;
+        int status;
         String action = request.getParameter("action");
 
         BufferedReader reader = request.getReader();

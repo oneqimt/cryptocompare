@@ -9,7 +9,7 @@ Build Project -> Build Artifacts
 Project build configuration set to automatically do this.
 Or of course do manually with IDE or GRADLE
 
-#DEPOLY to Jelastic CLOUD
+#DEPLOY to Jelastic CLOUD
 Install Jelastic plugin
 
 
