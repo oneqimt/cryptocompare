@@ -162,10 +162,10 @@ public class CryptoUtil {
         grandTotals.setTotalCost(cf.format(costdbl));
         grandTotals.setTotalValue(cf.format(totaldbl));
 
-        /*System.out.println("TOTAL COST is: " + " " + costdbl);
-        System.out.println("TOTAL VALUE is: " + " " + totaldbl);*/
+        System.out.println("TOTAL COST is: " + " " + costdbl);
+        System.out.println("TOTAL VALUE is: " + " " + totaldbl);
         double percentage = ((totaldbl - costdbl) / costdbl) * 100;
-        //System.out.println("PERCENTAGE is : " + " " + percentage);
+        System.out.println("PERCENTAGE is : " + " " + percentage);
 
         if (percentage >= 0.0) {
             grandTotals.setIncreaseDecrease(CryptoUtil.INCREASE);
