@@ -10,16 +10,17 @@
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/build/libs/exploded/cryptocompare-1.0-SNAPSHOT.war/META-INF/MANIFEST.MF" />
       </element>
-      <element id="javaee-facet-resources" facet="cryptocompare_main/web/Web Gradle : cryptocompare-1.0-SNAPSHOT.war" />
+      <element id="javaee-facet-resources" facet="cryptocompare.main/web/Web Gradle : cryptocompare-1.0-SNAPSHOT.war" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
-          <element id="module-output" name="cryptocompare_main" />
+          <element id="module-output" name="cryptocompare.main" />
           <element id="dir-copy" path="$PROJECT_DIR$/build/resources/main" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Gradle: com.googlecode.json-simple:json-simple:1.1.1" />
           <element id="library" level="project" name="Gradle: io.cryptocontrol:crypto-news-api:2.5.0" />
           <element id="library" level="project" name="Gradle: javax.mail:mail:1.4.7" />
+          <element id="library" level="project" name="Gradle: org.apache.commons:commons-lang3:3.9" />
           <element id="library" level="project" name="Gradle: com.google.code.gson:gson:2.8.5" />
           <element id="library" level="project" name="Gradle: junit:junit:4.10" />
           <element id="library" level="project" name="Gradle: org.apache.httpcomponents:httpclient:4.5.5" />
@@ -28,7 +29,6 @@
           <element id="library" level="project" name="Gradle: org.apache.httpcomponents:httpcore:4.4.9" />
           <element id="library" level="project" name="Gradle: commons-logging:commons-logging:1.2" />
           <element id="library" level="project" name="Gradle: commons-codec:commons-codec:1.10" />
-          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.9/122c7cee69b53ed4a7681c03d4ee4c0e2765da5/commons-lang3-3.9.jar" />
         </element>
       </element>
     </root>

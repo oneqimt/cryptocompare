@@ -6,6 +6,8 @@
       <excludeFolder url="file://$MODULE_DIR$/../../.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/../../build" />
       <excludeFolder url="file://$MODULE_DIR$/../../out" />
+      <excludeFolder url="file://$MODULE_DIR$/../dataSources/ff981c88-eb7d-4e0f-8151-a22403d384ee" />
+      <excludeFolder url="file://$MODULE_DIR$/../inspectionProfiles" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
