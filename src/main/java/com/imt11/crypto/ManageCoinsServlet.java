@@ -22,6 +22,7 @@ import java.net.URISyntaxException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -153,8 +154,11 @@ public class ManageCoinsServlet extends HttpServlet {
                 List<Coin> coins = ManageCoinUtil.parsePersonCoinList(responseStr);
                 List<CryptoValue> cryptos = new ArrayList<>();
                 NumberFormat currencyFormat = CryptoUtil.getCurrencyFormat();
+
                 for (Coin coin : coins){
                     CryptoValue cryptoValue = new CryptoValue();
+                    String id = UUID.randomUUID().toString();
+                    cryptoValue.setId(id);
                     cryptoValue.setCoin(coin);
                     cryptoValue.setUSD(currencyFormat.format(coin.getCurrentPrice()));
                     cryptos.add(cryptoValue);

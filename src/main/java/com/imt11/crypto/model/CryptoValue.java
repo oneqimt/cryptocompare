@@ -5,6 +5,7 @@ package com.imt11.crypto.model;
  */
 public class CryptoValue {
 
+	private String id;
 	private String USD;
 	private Coin coin;
 	private String holdingValue;
@@ -69,10 +70,19 @@ public class CryptoValue {
 		this.quantity = quantity;
 	}
 
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	@Override
 	public String toString() {
 		return "CryptoValue{" +
-				"USD='" + USD + '\'' +
+				"id=" + id +
+				", USD='" + USD + '\'' +
 				", coin=" + coin +
 				", holdingValue='" + holdingValue + '\'' +
 				", percentage='" + percentage + '\'' +
