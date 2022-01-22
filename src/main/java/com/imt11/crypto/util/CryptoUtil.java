@@ -71,7 +71,6 @@ public class CryptoUtil {
             String username = (String) baseline.get("username");
             String password = (String) baseline.get("password");
             String driver = (String) baseline.get("driver");
-            String cryptoControlApiKey = (String) baseline.get("crypto_control_api_key");
             String cryptoCompareApiKey = (String) baseline.get("crypto_compare_api_key");
             String smtpHost = (String) baseline.get("smtp_host");
             String smtpPort = (String) baseline.get("smtp_port");
@@ -89,7 +88,6 @@ public class CryptoUtil {
             SecurityUtil.getInstance().setHost(host);
             SecurityUtil.getInstance().setPassword(password);
             SecurityUtil.getInstance().setUsername(username);
-            SecurityUtil.getInstance().setCryptoControlApi(cryptoControlApiKey);
             SecurityUtil.getInstance().setCryptoCompareApi(cryptoCompareApiKey);
             // SET PROD or TEST API flag here only
             SecurityUtil.getInstance().setFlag(PROD_FLAG);
@@ -132,7 +130,7 @@ public class CryptoUtil {
         return dto;
 
     }
-
+    //TODO : check the efficiency of the algo
     public static TotalValues getNewGrandTotals(List<CryptoValue> cryptoValues) {
 
         TotalValues grandTotals = new TotalValues();
