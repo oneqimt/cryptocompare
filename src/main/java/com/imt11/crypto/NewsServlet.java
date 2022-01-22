@@ -1,12 +1,8 @@
 package com.imt11.crypto;
 
 import com.google.gson.Gson;
-import com.imt11.crypto.util.SecurityUtil;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
@@ -14,8 +10,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import io.cryptocontrol.cryptonewsapi.CryptoControlApi;
 
 /**
  * @author Dennis Miller
@@ -36,20 +30,23 @@ public class NewsServlet extends HttpServlet {
         System.out.println("IN NEWS SERVLET and coin_name is: " + " " + coin_name);
 
         // Connect to the CryptoControl API
-        CryptoControlApi api = new CryptoControlApi(SecurityUtil.getInstance().getCryptoControlApi());
+       // CryptoControlApi api = new CryptoControlApi(SecurityUtil.getInstance().getCryptoControlApi());
 
-        List<io.cryptocontrol.cryptonewsapi.models.Article> articles = new ArrayList<>();
+       // List<io.cryptocontrol.cryptonewsapi.models.Article> articles = new ArrayList<>();
 
         if (coin_name != null) {
-            api.getTopNewsByCoin(coin_name, new CryptoControlApi.OnResponseHandler<List<io.cryptocontrol.cryptonewsapi.models.Article>>() {
+
+            // WE NEED A NEW NEWS API form somwhere
+        }
+            /*api.getTopNewsByCoin(coin_name, new CryptoControlApi.OnResponseHandler<List<io.cryptocontrol.cryptonewsapi.models.Article>>() {
 
                 @Override
                 public void onSuccess(List<io.cryptocontrol.cryptonewsapi.models.Article> body) {
 
                     articles.addAll(body);
-                    /*for (io.cryptocontrol.cryptonewsapi.models.Article article : body) {
+                    *//*for (io.cryptocontrol.cryptonewsapi.models.Article article : body) {
 
-                    }*/
+                    }*//*
                 }
 
                 @Override
@@ -70,7 +67,7 @@ public class NewsServlet extends HttpServlet {
 
             System.out.println("NO COINS FOR THAT NAME!");
 
-        }
+        }*/
 
         /*if (articles.size() > 0) {
             for (Article article : articles) {
