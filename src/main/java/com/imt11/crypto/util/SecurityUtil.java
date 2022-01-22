@@ -11,7 +11,6 @@ public class SecurityUtil {
     private String username;
     private String password;
     private String driver;
-    private String cryptoControlApi;
     private String cryptoCompareApi;
     private String smtpHost;
     private String smtpPort;
@@ -63,14 +62,6 @@ public class SecurityUtil {
 
     public void setDriver(String driver) {
         this.driver = driver;
-    }
-
-    public String getCryptoControlApi() {
-        return cryptoControlApi;
-    }
-
-    public void setCryptoControlApi(String cryptoControlApi) {
-        this.cryptoControlApi = cryptoControlApi;
     }
 
     public String getCryptoCompareApi() {
