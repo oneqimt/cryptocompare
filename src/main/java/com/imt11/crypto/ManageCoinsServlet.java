@@ -162,6 +162,8 @@ public class ManageCoinsServlet extends HttpServlet {
                     cryptoValue.setCoin(coin);
                     cryptoValue.setUSD(currencyFormat.format(coin.getCurrentPrice()));
                     cryptos.add(cryptoValue);
+
+
                 }
                 for (Person person : persons){
                     Holdings holdings = person.getHoldings();
