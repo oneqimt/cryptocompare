@@ -58,6 +58,7 @@ public class CryptoUtil {
 
     public static void loadBaselineData() throws IOException, ParseException {
         InputStream resourceAsStream = LoginServlet.class.getResourceAsStream("/baseline.json");
+        System.out.println("LOAD BASELINE DATA CALLED");
         if (resourceAsStream != null) {
             InputStreamReader streamReader = new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8);
             BufferedReader reader = new BufferedReader(streamReader);

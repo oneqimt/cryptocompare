@@ -30,16 +30,22 @@ public class LoginServlet extends HttpServlet {
     private Gson gson = new Gson();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("In Login Servlet");
+        System.out.println("In Login Servlet!!! ");
         // LOAD BASELINE DATA first
         try {
             CryptoUtil.loadBaselineData();
         } catch (ParseException e) {
             e.printStackTrace();
+            System.out.println("In Login Servlet and ParseException is " + e.getLocalizedMessage());
+        } catch(IOException e){
+            e.printStackTrace();
+            System.out.println("In Login Servlet and IOException is " + e.getLocalizedMessage());
         }
 
         String un = request.getParameter("uname");
         String pwd = request.getParameter("pass");
+        System.out.println("In Login Servlet and uname is " + un.toString());
+        System.out.println("In Login Servlet and pass is " + pwd.toString());
         String cleanusername = un.replaceAll("\\s", "");
         String cleanpassword = pwd.replaceAll("\\s", "");
 
@@ -49,7 +55,7 @@ public class LoginServlet extends HttpServlet {
         PersonDAO personDAO = new PersonDAO();
         AuthDAO authDAO = new AuthDAO();
         try {
-            auth = authDAO.getCredentials(cleanusername, cleanpassword);
+            auth = authDAO.getCredentials(cleanusername, pwd);
         } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
         }

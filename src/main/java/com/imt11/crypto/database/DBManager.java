@@ -33,7 +33,12 @@ public class DBManager {
         String password = SecurityUtil.getInstance().getPassword();
         String driver = SecurityUtil.getInstance().getDriver();
 
-        Class.forName(driver);
+        try{
+            Class.forName(driver);
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println("DATABASE DRIVER ERROR: is: " + e.getLocalizedMessage());
+        }
 
         connection = DriverManager.getConnection(host, username, password);
 
