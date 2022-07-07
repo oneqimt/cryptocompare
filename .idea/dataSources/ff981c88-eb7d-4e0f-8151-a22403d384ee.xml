@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="MySQL - crypto@185.44.64.238">
-  <database-model serializer="dbm" dbms="MYSQL" family-id="MYSQL" format-version="4.32">
+  <database-model serializer="dbm" dbms="MYSQL" family-id="MYSQL" format-version="4.39">
     <root id="1"/>
     <collation id="2" parent="1" name="armscii8_bin">
       <Charset>armscii8</Charset>
@@ -1215,10 +1215,10 @@
       <System>1</System>
     </view>
     <column id="370" parent="285" name="auth_id">
+      <AutoIncrement>1</AutoIncrement>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <SequenceIdentity>null</SequenceIdentity>
     </column>
     <column id="371" parent="285" name="username">
       <DataType>varchar(100)|0s</DataType>
@@ -1271,10 +1271,10 @@
       <UnderlyingIndexName>person_index</UnderlyingIndexName>
     </key>
     <column id="381" parent="286" name="coin_id">
+      <AutoIncrement>1</AutoIncrement>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <SequenceIdentity>null</SequenceIdentity>
     </column>
     <column id="382" parent="286" name="coin_name">
       <DataType>varchar(100)|0s</DataType>
@@ -1314,10 +1314,10 @@
       <UnderlyingIndexName>coin_id</UnderlyingIndexName>
     </key>
     <column id="390" parent="287" name="grand_total_id">
+      <AutoIncrement>1</AutoIncrement>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <SequenceIdentity>null</SequenceIdentity>
     </column>
     <column id="391" parent="287" name="total_cost">
       <DataType>varchar(30)|0s</DataType>
@@ -1360,10 +1360,10 @@
       <Primary>1</Primary>
     </key>
     <column id="399" parent="288" name="holding_id">
+      <AutoIncrement>1</AutoIncrement>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <SequenceIdentity>null</SequenceIdentity>
     </column>
     <column id="400" parent="288" name="coin_id">
       <DataType>int|0s</DataType>
@@ -1418,10 +1418,10 @@ person_id</ColNames>
       <UnderlyingIndexName>holding_id</UnderlyingIndexName>
     </key>
     <column id="410" parent="289" name="person_id">
+      <AutoIncrement>1</AutoIncrement>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <SequenceIdentity>null</SequenceIdentity>
     </column>
     <column id="411" parent="289" name="first_name">
       <DataType>varchar(100)|0s</DataType>

@@ -38,14 +38,16 @@ public class PersonServlet extends HttpServlet {
         PersonDAO dao = new PersonDAO();
 
         if (action.equalsIgnoreCase(CryptoUtil.UPDATE)){
-
-            // call update
-            status = dao.updatePerson(person);
-            if (status > 0){
-                System.out.println("UPDATE PERSON");
-                String str = gson.toJson(person);
-                out.print(str);
+            if (person.getPerson_id() != 0){
+                // call update
+                status = dao.updatePerson(person);
+                if (status > 0){
+                    System.out.println("UPDATE PERSON");
+                    String str = gson.toJson(person);
+                    out.print(str);
+                }
             }
+
 
         }else if (action.equalsIgnoreCase(CryptoUtil.DELETE)){
             //call delete

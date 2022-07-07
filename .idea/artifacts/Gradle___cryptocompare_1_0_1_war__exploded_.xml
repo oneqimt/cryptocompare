@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="Gradle : cryptocompare-1.0.0.war (exploded)">
-    <output-path>$PROJECT_DIR$/build/libs/exploded/cryptocompare-1.0.0.war</output-path>
+  <artifact type="exploded-war" name="Gradle : cryptocompare-1.0.1.war (exploded)">
+    <output-path>$PROJECT_DIR$/build/libs/exploded/cryptocompare-1.0.1.war</output-path>
     <properties id="gradle-properties">
       <options external-project-path="$PROJECT_DIR$">
         <buildTaskPath>:war_exploded</buildTaskPath>
@@ -10,9 +10,9 @@
     </properties>
     <root id="root">
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/build/libs/exploded/cryptocompare-1.0.0.war/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/build/libs/exploded/cryptocompare-1.0.1.war/META-INF/MANIFEST.MF" />
       </element>
-      <element id="javaee-facet-resources" facet="cryptocompare.main/web/Web Gradle : cryptocompare-1.0.0.war" />
+      <element id="javaee-facet-resources" facet="cryptocompare.main/web/Web Gradle : cryptocompare-1.0.1.war" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="cryptocompare.main" />

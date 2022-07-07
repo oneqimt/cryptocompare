@@ -30,7 +30,12 @@ public class PersonDAO {
             ps.setString(5, person.getPhone());
             ps.setString(6, person.getAddress());
             ps.setString(7, person.getCity());
-            ps.setInt(8, person.getState().getId());
+            if (person.getState() != null){
+                ps.setInt(8, person.getState().getId());
+            }else {
+                ps.setInt(8, 0);
+            }
+
             ps.setString(9, person.getZip());
 
             status = ps.executeUpdate();

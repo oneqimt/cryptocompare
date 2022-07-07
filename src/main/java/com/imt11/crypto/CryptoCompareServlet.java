@@ -111,7 +111,7 @@ public class CryptoCompareServlet extends HttpServlet {
 
         } else if (action.equalsIgnoreCase(CryptoUtil.UPDATE_HOLDING)) {
 
-            //System.out.println("WE are in UPDATE HOLDING  and coinHolding obj is: "+" "+coinHolding.toString());
+            System.out.println("WE are in UPDATE HOLDING  and coinHolding obj is: "+" "+coinHolding.toString());
             Coin mycoin = manageCoinDAO.getCoinByCmcId(coinHolding.getCoin().getCmc_id());
             coin.setCoin_id(mycoin.getCoin_id());
             holdings.setCoin_id(mycoin.getCoin_id());

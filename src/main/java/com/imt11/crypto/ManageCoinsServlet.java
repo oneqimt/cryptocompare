@@ -219,7 +219,7 @@ public class ManageCoinsServlet extends HttpServlet {
                     out.print(coinstr);
                 }else{
                     System.out.println("PERSON has NO coins yet");
-                    response.sendError(400, "Person does not have ony coins yet.");
+                    response.sendError(400, "Person does not have any coins yet.");
                 }
 
             }

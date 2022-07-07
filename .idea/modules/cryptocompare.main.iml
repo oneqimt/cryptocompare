@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="cryptocompare:main" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="" external.system.module.type="sourceSet" external.system.module.version="1.0.0" type="JAVA_MODULE" version="4">
+<module external.linked.project.id="cryptocompare:main" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="" external.system.module.type="sourceSet" external.system.module.version="1.0.1" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
-    <facet type="web" name="Web Gradle : cryptocompare-1.0.0.war">
+    <facet type="web" name="Web Gradle : cryptocompare-1.0.1.war">
       <configuration>
         <webroots>
           <root url="file://$MODULE_DIR$/../../src/main/webapp" relative="/" />
@@ -15,6 +15,7 @@
     <content url="file://$MODULE_DIR$/../../src/main">
       <sourceFolder url="file://$MODULE_DIR$/../../src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../src/main/resources" type="java-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/../../src/main/webapp/WEB-INF/classes" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
