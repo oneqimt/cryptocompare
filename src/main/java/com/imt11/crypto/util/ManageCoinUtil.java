@@ -75,8 +75,7 @@ public class ManageCoinUtil {
 
     public static List<Coin> parsePersonCoinList(String responseStr){
         List<Coin> coins = new ArrayList<>();
-        JsonParser parser = new JsonParser();
-        JsonElement jsonTree = parser.parse(responseStr);
+        JsonElement jsonTree = JsonParser.parseString(responseStr);
 
         if (jsonTree.isJsonObject()){
             JsonObject jsonObject = jsonTree.getAsJsonObject();
@@ -124,8 +123,7 @@ public class ManageCoinUtil {
 
     public static Coin parseSingleCoin(String responseStr){
         Coin coin = new Coin();
-        JsonParser parser = new JsonParser();
-        JsonElement jsonTree = parser.parse(responseStr);
+        JsonElement jsonTree =JsonParser.parseString(responseStr);
 
         if (jsonTree.isJsonObject()) {
             JsonObject jsonObject = jsonTree.getAsJsonObject();

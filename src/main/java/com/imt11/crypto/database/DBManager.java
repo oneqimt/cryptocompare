@@ -96,7 +96,35 @@ public class DBManager {
         return totalValues;
     }
 
+    public List<State> getStates(){
+        List<State> states = new ArrayList<>();
+        try{
+            Connection connection = createConnection();
+            String query = "SELECT state.id, state.name, state.abbreviation FROM state ORDER BY abbreviation ASC";
+            // create java statement
+            Statement st = connection.createStatement();
+            //  result set
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                State state = new State();
+                state.setId(rs.getInt("id"));
+                state.setName(rs.getString("name"));
+                state.setAbbreviation(rs.getString("abbreviation"));
 
+                states.add(state);
+            }
+
+            st.close();
+            rs.close();
+            connection.close();
+
+
+        }catch(ClassNotFoundException | SQLException ex){
+            ex.printStackTrace();
+        }
+
+        return states;
+    }
 
     public List<Person> getPersonCoins(int personId) {
         List<Person> persons = new ArrayList<>();

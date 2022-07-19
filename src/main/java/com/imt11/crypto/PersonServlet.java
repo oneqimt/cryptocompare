@@ -1,13 +1,16 @@
 package com.imt11.crypto;
 
 import com.google.gson.Gson;
+import com.imt11.crypto.database.DBManager;
 import com.imt11.crypto.database.PersonDAO;
 import com.imt11.crypto.model.Person;
+import com.imt11.crypto.model.State;
 import com.imt11.crypto.util.CryptoUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -91,6 +94,18 @@ public class PersonServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        DBManager dbManager = new DBManager();
+        List<State> states = dbManager.getStates();
+
+        Gson gson = new Gson();
+
+        String statesJson = gson.toJson(states);
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        out.print(statesJson);
+        out.flush();
 
     }
 }
